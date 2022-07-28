@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
+
+import Button from "./components/Button/Button";
+import QuestionList from "./containers/QuestionList/QuestionList";
+import QuestionScreen from "./containers/QuestionScreen/QuestionScreen";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div className="app-wrapper">
+			<div id="left-sidebar">
+				<div id="main-logo">KUIZ</div>
+
+				<div id="side-nav">
+					<Button>Create Stem</Button>
+					<Button>Create Option</Button>
+					<Button>Question List</Button>
+				</div>
+			</div>
+			<main>
+				<QuestionScreen />
+			</main>
+		</div>
+	);
 }
 
 export default App;
