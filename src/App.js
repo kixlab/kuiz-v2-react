@@ -1,26 +1,15 @@
-import "./App.scss";
+import Home from './pages/Home'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Button from "./components/Button/Button";
-import QuestionList from "./containers/QuestionList/QuestionList";
-import QuestionScreen from "./containers/QuestionScreen/QuestionScreen";
 
 function App() {
-	return (
-		<div className="app-wrapper">
-			<div id="left-sidebar">
-				<div id="main-logo">KUIZ</div>
-
-				<div id="side-nav">
-					<Button>Create Stem</Button>
-					<Button>Create Option</Button>
-					<Button>Question List</Button>
-				</div>
-			</div>
-			<main>
-				<QuestionScreen />
-			</main>
-		</div>
-	);
+  return(
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;
