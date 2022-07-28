@@ -17,7 +17,7 @@ function Home() {
 				</div>
 			</div>
 			<main>
-				<QuestionScreen />
+				<QuestionList />
 			</main>
 		</div>
 	);

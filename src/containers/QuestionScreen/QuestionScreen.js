@@ -16,15 +16,15 @@ class QuestionScreen extends React.Component {
 				<div id="question-nav">Question List &gt; #123</div>
 				<div id="question-screen">
 					<div id="return-button" onClick={() => this.returnToList()}>
-						<i class="fa-solid fa-arrow-left"></i> Back to Question List
+						<i className="fa-solid fa-arrow-left"></i> Back to Question List
 					</div>
 
 					<div id="question-stem">Question Stem here</div>
 					<div id="question-options">
-						<div class="question-option-item">Question Options Here</div>
-						<div class="question-option-item">Question Options Here</div>
-						<div class="question-option-item">Question Options Here</div>
-						<div class="question-option-item">Question Options Here</div>
+						<div clclassNameass="question-option-item">Question Options Here</div>
+						<div className="question-option-item">Question Options Here</div>
+						<div className="question-option-item">Question Options Here</div>
+						<div className="question-option-item">Question Options Here</div>
 					</div>
 
 					<div id="question-explanation">
