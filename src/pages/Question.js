@@ -1,9 +1,11 @@
 import "./Home.scss";
-
+import { useParams } from "react-router";
 import Button from "../components/Button/Button";
 import QuestionScreen from "../containers/QuestionScreen/QuestionScreen";
 
-function Question() {
+function Question(props) {
+
+	const qid = useParams();
 	return (
 		<div className="app-wrapper">
 			<div id="left-sidebar">
@@ -16,7 +18,7 @@ function Question() {
 				</div>
 			</div>
 			<main>
-				<QuestionScreen />
+				<QuestionScreen qid={qid.id}/>
 			</main>
 		</div>
 	);
