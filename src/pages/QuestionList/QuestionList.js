@@ -29,7 +29,8 @@ const QuestionList = () => {
 				<div id="searchbar">
 					<input></input>
 				</div>
-				<Button>Create Stem</Button>
+				<Link to="/createstem"style={{ textDecoration: 'none', color:'#000000' }}><Button>Create Stem</Button></Link>
+				
 			</div>
 			<div id="question-list-header">
 				<div> No.</div>
