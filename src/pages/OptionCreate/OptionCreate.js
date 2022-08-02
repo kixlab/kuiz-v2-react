@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 import axios from 'axios';
-import OptionItem from "../../components/OptionItem/OptionItem";
+import OptionList from '../../components/OptionList/OptionList'
 import OptionInput from "../../components/OptionInput/OptionInput";
 
 
@@ -15,7 +15,6 @@ const OptionCreate = (props) => {
     const [ansList, setAnsList] = useState([])
     const [disList, setDistList] = useState([])
 	const [qinfo, setQinfo] = useState([])
-    const [optionInfo, setOptionInfo] = useState({})
 	const getOptionList = (qid) => {
 		axios.get("http://localhost:4000/question/option/load?qid="+qid).then(
 			(res)=> {
@@ -43,10 +42,7 @@ const OptionCreate = (props) => {
 					</div>
 				</Link>
 				<div id="question-stem">{qinfo.stem_text}</div>
-                ANSLIST
-                {ansList.map((option)=><OptionItem option_text={option.option_text} is_answer={option.is_answer}/>)}
-                disList
-                {disList.map((option)=><OptionItem option_text={option.option_text} is_answer={option.is_answer}/>)}
+                <OptionList qinfo={qinfo} ansList={ansList} disList={disList}/>
 				<OptionInput/>
 
 				

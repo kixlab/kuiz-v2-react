@@ -3,12 +3,19 @@ import React from "react";
 import "./OptionItem.scss";
 
 const OptionItem = (props) => {
-    console.log("PROPS:",props)
-    const isAnswer = props.is_answer
-    const text = props.option_text
+    const isAnswer = props.optionInfo.is_answer
+    const text = props.optionInfo.option_text
+    const oid = props.optionInfo._id
+    const showDetail = ()=> {
+        console.log("EXP:",props.optionInfo.explanation)
+    }
+
 	return (
 		<div>
-			{isAnswer?"answer":"distractor"}, {text}
+            <div onClick={showDetail}>
+              {isAnswer?"answer":"distractor"}, {text}
+            </div>
+			
 		</div>
 	);
 }

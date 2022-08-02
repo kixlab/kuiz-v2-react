@@ -15,12 +15,10 @@ const QuestionList = () => {
 	const getQuestionList = (cid) => { //TODO : add cid in request url
 		axios.get("http://localhost:4000/question/list/load").then(
 			(res)=> {
-				// console.log("DATA:",res.data.qstems.problemList)
 				setQuestionList(res.data.qstems.problemList)
 			}
 		)
 	}
-	//console.log(getQuestionList("test101"))
 	useEffect(()=> {getQuestionList(classId)},[])
 
 	return (
@@ -29,7 +27,7 @@ const QuestionList = () => {
 				<div id="searchbar">
 					<input></input>
 				</div>
-				<Link to="/createstem"style={{ textDecoration: 'none', color:'#000000' }}><Button>Create Stem</Button></Link>
+				<Link to="/createstem" style={{ textDecoration: 'none', color:'#000000' }}><Button>Create Stem</Button></Link>
 				
 			</div>
 			<div id="question-list-header">
