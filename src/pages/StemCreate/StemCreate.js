@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import "./StemCreate.scss";
 
 
 const StemCreate = () => {
+    const textareaRef = useRef()
 
     const dispatch = useDispatch()
     const keywords = useSelector((state)=> state.objective.keywords)
@@ -40,6 +41,21 @@ const StemCreate = () => {
         setNewKeyword("")
     }
 
+    const updateContent = () => {
+
+    }
+
+    const insertMaterial = (m) => {
+        const selectionStart = textareaRef.current.selectionStart;
+        const selectionEnd = textareaRef.current.selectionEnd;
+
+        let newValue =
+            stem.substring(0, selectionStart) +
+            m +
+            stem.substring(selectionEnd, stem.length);
+        setStem(newValue)     
+    }
+
 	return (
 		<div id="question-screen-wrapper">
 			<div id="question-nav">Question List &gt; #123</div>
@@ -65,16 +81,23 @@ const StemCreate = () => {
                     </div>  
                     <div>
                         <h3>Supplementary Content</h3>
-                        <input placeholder="Supplementary Content"/>
+                        <textarea placeholder="Supplementary Content"/>
                     </div> 
                 </div> 
                 <div>
                     <div><h2>Construct Question Stem</h2></div>  
                     <div><h3>Your Question</h3></div>
-                    <div><input placeholder="Construct your queestion here using material below..."/></div>
+                    <div>
+                        <textarea 
+                            ref={textareaRef}
+                            placeholder="Construct your question here using material below..."
+                            value={stem}
+                            onChange={({ target }) => setStem(target.value)}
+                        />
+                    </div>
                     <div>
                         <div><h3>Materials</h3></div>
-                        <div>{keywords.concat(verbs).map(x=><MaterialItem item={x}/>)}</div>
+                        <div>{keywords.concat(verbs).map(x=><div><MaterialItem item={x}/><button onClick={(e)=> insertMaterial(x)}>Add</button></div>)}</div>
                     </div>
                     <button>SUBMIT</button>
                 </div>      
