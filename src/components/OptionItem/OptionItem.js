@@ -16,19 +16,13 @@ const OptionItem = (props) => {
         dispatch(changeOptionSelection(props.optionInfo._id))
         dispatch(changePageStat(false))
     }
-    // const getOptionInfo = (_oid) => {
-    //   axios.get("http://localhost:4000/question/optiondetail/load?oid="+_oid).then(
-    //       (res)=> {
-    //           console.log("DATA:",res.data.optionDetail)
-    //           setOptionInfo(res.data.optionDetail)
-    //       }
-    //   )
-    // }
+
 
 	return (
 		<div>
-            <div onClick={showDetail}>
+            <div >
               {isAnswer?"answer":"distractor"}, {text}
+              <button onClick={showDetail}>See Detail</button>
             </div>
 			
 		</div>

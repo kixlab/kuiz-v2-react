@@ -19,7 +19,7 @@ const StemCreate = () => {
     const verbs = useSelector((state) => state.objective.verbs)
 
 
-    const [materials, setMaterials] = useState([])
+    const [msg, setMsg] = useState("")
     const [newKeyword, setNewKeyword] = useState("")
     const [newVerb, setNewVerb] = useState("")
     const [content, setContent] = useState("")
@@ -70,7 +70,8 @@ const StemCreate = () => {
         }
         axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj}).then(
             (res)=>{
-                console.log("Success!")
+                setContent("")
+                setMsg("Successfuly made question stem!")
             }
         )
     }
@@ -120,6 +121,7 @@ const StemCreate = () => {
                         {content && <div><MaterialItem item={content}/><button onClick={(e)=> insertMaterial(content)}>Add</button></div>}
                     </div>
                     <button onClick={submitStem}>SUBMIT</button>
+                    {msg}
                 </div>      
 			</div>
 		</div>
