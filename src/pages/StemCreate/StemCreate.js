@@ -5,8 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { addVerb, addKeyword, removeKeyword, removeVerb } from "../../features/questionStem/objectiveSlice";
 import ObjectiveWord from "../../components/ObjectiveWord/ObjectiveWord";
 import MaterialItem  from "../../components/MaterialItem/MaterialItem";
-
 import "./StemCreate.scss";
+
+var ObjectID = require("bson-objectid")
+
 
 
 const StemCreate = () => {
@@ -41,8 +43,8 @@ const StemCreate = () => {
         setNewKeyword("")
     }
 
-    const updateContent = () => {
-
+    const updateContent = (e) => {
+        setContent(e.target.value)
     }
 
     const insertMaterial = (m) => {
@@ -54,6 +56,23 @@ const StemCreate = () => {
             m +
             stem.substring(selectionEnd, stem.length);
         setStem(newValue)     
+    }
+
+    const submitStem = () => {
+        const qstemObj = {
+            author: ObjectID("62e246e9587f5eebd882bc32"), //TODO: generalize
+            stem_text: stem,
+            action_verb: verbs,
+            keyword: keywords,
+            class: ObjectID("62e2467a587f5eebd882bc2d"),//TODO:generalize
+            options:[],
+            optionSets:[],
+        }
+        axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj}).then(
+            (res)=>{
+                console.log("Success!")
+            }
+        )
     }
 
 	return (
@@ -81,7 +100,7 @@ const StemCreate = () => {
                     </div>  
                     <div>
                         <h3>Supplementary Content</h3>
-                        <textarea placeholder="Supplementary Content"/>
+                        <textarea value ={content} onChange={updateContent}placeholder="Supplementary Content"/>
                     </div> 
                 </div> 
                 <div>
@@ -98,8 +117,9 @@ const StemCreate = () => {
                     <div>
                         <div><h3>Materials</h3></div>
                         <div>{keywords.concat(verbs).map(x=><div><MaterialItem item={x}/><button onClick={(e)=> insertMaterial(x)}>Add</button></div>)}</div>
+                        {content && <div><MaterialItem item={content}/><button onClick={(e)=> insertMaterial(content)}>Add</button></div>}
                     </div>
-                    <button>SUBMIT</button>
+                    <button onClick={submitStem}>SUBMIT</button>
                 </div>      
 			</div>
 		</div>
