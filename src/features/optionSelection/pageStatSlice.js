@@ -8,7 +8,6 @@ export const pageStatSlice = createSlice({
   reducers: {
     changePageStat: (state, action) => {
       state.value = action.payload
-      console.log("STAT",action.payload)
     },
   },
 })

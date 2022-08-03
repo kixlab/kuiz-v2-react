@@ -14,14 +14,11 @@ export const objectiveSlice = createSlice({
       state.verbs = [...state.verbs, action.payload]
     },
     removeKeyword:(state, action) => {
-      console.log("PAYLOAD:", action.payload)
       const newKeywords = state.keywords.filter(x=>x!==action.payload)
-      console.log("NEWK", newKeywords)
       state.keywords = newKeywords
     },
     removeVerb: (state, action) => {
       const newVerbs = state.verbs.filter(x=>x!==action.payload)
-      console.log("NEWV:", newVerbs)
       state.verbs = newVerbs
     },
     // updateKeywords: (state, action) => {

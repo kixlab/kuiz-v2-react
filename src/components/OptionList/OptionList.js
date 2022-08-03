@@ -15,7 +15,6 @@ const OptionList = (props) => {
     const optionInfo = props.optionInfo
     const changeStat = () => {
         dispatch(changePageStat(true))
-        console.log("stat:",stat)
     }
 
     return(

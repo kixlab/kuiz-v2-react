@@ -25,7 +25,6 @@ const OptionCreate = (props) => {
 
 
 	const changeOid = (oid) => {
-		console.log("OID:",oid)
 		setOid(oid)
 	}
 	const getOptionList = (qid) => {
@@ -45,7 +44,6 @@ const OptionCreate = (props) => {
 	// getQinfo(qid)
 	useEffect(()=>{
 		getOptionList(qid)
-        console.log("SELECTED:",selected)
 	},[])
     useEffect(()=> {
 
