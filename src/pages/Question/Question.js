@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 import axios from 'axios';
+import draftToHtml from 'draftjs-to-html';
+
 
 
 import Button from "../../components/Button/Button";
@@ -12,13 +14,14 @@ const Question = (props) => {
 	props.funcNav(true);
 	const qid = useParams().id 
 	const [options, setOptions] = useState([])
-	const [qinfo, setQinfo] = useState([])
+	const [qinfo, setQinfo] = useState()
+	const [stem, setStem] = useState()
 	const [ansVisible, setAnsVisible] = useState(false)
 	const getQinfo = (qid) => {
 		axios.get("http://localhost:4000/question/detail/load?qid="+qid).then(
 			(res)=> {
 				setOptions(res.data.data.options)
-				setQinfo(res.data.data.qinfo)	
+				setQinfo(res.data.data.qinfo)
 			}
 		)
 	}
@@ -26,7 +29,6 @@ const Question = (props) => {
 	useEffect(()=>{
 		getQinfo(qid)
 	},[])
-	// getQinfo(qid);
 
 	return (
 		<div id="question-screen-wrapper">
@@ -37,9 +39,12 @@ const Question = (props) => {
 						<i className="fa-solid fa-arrow-left" ></i> Back to Question List
 					</div>
 				</Link>
-				<div id="question-stem">{qinfo && qinfo.raw_string}</div>
+				
+				{qinfo && <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}} className="introduce-content"/>}
+				{/* <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(stem))}} className="introduce-content"/> */}
+				
 				<div id="question-options">
-					{options.map((option)=><div className="question-option-item">{option.option_text}</div>)}
+					{options && options.map((option)=><div className="question-option-item">{option.option_text}</div>)}
 				</div>
 
 				<div id="question-explanation">
