@@ -4,11 +4,13 @@ import Button from "../../components/Button/Button";
 import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
 import axios from 'axios';
 import { NavLink, Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 
 import "./QuestionList.scss";
 
-const QuestionList = () => {
+const QuestionList = (props) => {
+	props.funcNav(true);
 	const [questionList, setQuestionList] = useState([])
 	const classId = "test101"
 
@@ -19,7 +21,9 @@ const QuestionList = () => {
 			}
 		)
 	}
-	useEffect(()=> {getQuestionList(classId)},[])
+	useEffect(()=> {
+		getQuestionList(classId)
+	},[])
 
 	return (
 		<div id="question-list">

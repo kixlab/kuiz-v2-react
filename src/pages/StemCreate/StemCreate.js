@@ -11,7 +11,8 @@ var ObjectID = require("bson-objectid")
 
 
 
-const StemCreate = () => {
+const StemCreate = (props) => {
+    props.funcNav(true);
     const textareaRef = useRef()
 
     const dispatch = useDispatch()
@@ -71,6 +72,7 @@ const StemCreate = () => {
         axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj}).then(
             (res)=>{
                 setContent("")
+                setStem("")
                 setMsg("Successfuly made question stem!")
             }
         )

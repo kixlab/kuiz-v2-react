@@ -9,6 +9,7 @@ import Button from "../../components/Button/Button";
 import "./Question.scss";
 
 const Question = (props) => {
+	props.funcNav(true);
 	const qid = useParams().id 
 	const [options, setOptions] = useState([])
 	const [qinfo, setQinfo] = useState([])

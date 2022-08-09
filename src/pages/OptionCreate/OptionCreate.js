@@ -15,6 +15,7 @@ import Button from "../../components/Button/Button";
 import "./OptionCreate.scss";
 
 const OptionCreate = (props) => {
+	props.funcNav(true);
     const selected = useSelector((state)=>state.option.value)
 	const qid = useParams().id 
     const [ansList, setAnsList] = useState([])

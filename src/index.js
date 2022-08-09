@@ -6,19 +6,13 @@ import store from './app/store'
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Navbar from './components/Navbar/Navbar'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
     <Provider store={store}>
-      <div className="app-wrapper">
-        <Navbar/>
-        <main>
-          <App />
-        </main>
-      </div>
+      <App />
     </Provider>
   // </React.StrictMode>
 );
