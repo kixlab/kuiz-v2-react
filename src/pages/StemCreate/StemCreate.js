@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { addVerb, addKeyword, removeKeyword, removeVerb } from "../../features/questionStem/objectiveSlice";
+import { showAllPosts } from '../../features/post/postSlice'
 import ObjectiveWord from "../../components/ObjectiveWord/ObjectiveWord";
 import MaterialItem  from "../../components/MaterialItem/MaterialItem";
 import "./StemCreate.scss";
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import { Row, Col, Form, Input, Button, notification } from 'antd';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg'
+import QstemEditor from "../../components/QstemEditor/QstemEditor";
+
+
+
 
 var ObjectID = require("bson-objectid")
-
-
 
 const StemCreate = (props) => {
     props.funcNav(true);
@@ -59,24 +66,26 @@ const StemCreate = (props) => {
         setStem(newValue)     
     }
 
-    const submitStem = () => {
-        const qstemObj = {
-            author: ObjectID("62e246e9587f5eebd882bc32"), //TODO: generalize
-            stem_text: stem,
-            action_verb: verbs,
-            keyword: keywords,
-            class: ObjectID("62e2467a587f5eebd882bc2d"),//TODO:generalize
-            options:[],
-            optionSets:[],
-        }
-        axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj}).then(
-            (res)=>{
-                setContent("")
-                setStem("")
-                setMsg("Successfuly made question stem!")
-            }
-        )
-    }
+    // const submitStem = () => {
+    //     const qstemObj = {
+    //         author: ObjectID("62e246e9587f5eebd882bc32"), //TODO: generalize
+    //         stem_text: stem,
+    //         action_verb: verbs,
+    //         keyword: keywords,
+    //         class: ObjectID("62e2467a587f5eebd882bc2d"),//TODO:generalize
+    //         options:[],
+    //         optionSets:[],
+    //     }
+    //     axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj}).then(
+    //         (res)=>{
+    //             setContent("")
+    //             setStem("")
+    //             setMsg("Successfuly made question stem!")
+    //         }
+    //     )
+    // }
+
+
 
 	return (
 		<div id="question-screen-wrapper">
@@ -110,19 +119,20 @@ const StemCreate = (props) => {
                     <div><h2>Construct Question Stem</h2></div>  
                     <div><h3>Your Question</h3></div>
                     <div>
-                        <textarea 
+                        {/* <textarea 
                             ref={textareaRef}
                             placeholder="Construct your question here using material below..."
                             value={stem}
                             onChange={({ target }) => setStem(target.value)}
-                        />
+                        /> */}
+                        <QstemEditor verbs={verbs} keywords={keywords} setContent={setContent} setMsg={setMsg}/>
                     </div>
                     <div>
                         <div><h3>Materials</h3></div>
                         <div>{keywords.concat(verbs).map(x=><div><MaterialItem item={x}/><button onClick={(e)=> insertMaterial(x)}>Add</button></div>)}</div>
                         {content && <div><MaterialItem item={content}/><button onClick={(e)=> insertMaterial(content)}>Add</button></div>}
                     </div>
-                    <button onClick={submitStem}>SUBMIT</button>
+                    {/* <button onClick={submitStem}>SUBMIT</button> */}
                     {msg}
                 </div>      
 			</div>

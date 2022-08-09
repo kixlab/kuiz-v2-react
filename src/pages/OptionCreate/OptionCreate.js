@@ -60,7 +60,7 @@ const OptionCreate = (props) => {
 						<i className="fa-solid fa-arrow-left" ></i> Back to Question List
 					</div>
 				</Link>
-				<div id="question-stem">{qinfo.stem_text}</div>
+				<div id="question-stem">{qinfo.raw_string}</div>
                 <OptionList qinfo={qinfo} ansList={ansList} disList={disList} changeOid={changeOid}/>
                 {pageStat?<OptionInput/>:oid && <OptionDetail option={options.find(op => op._id === oid)}/>}
 			</div>

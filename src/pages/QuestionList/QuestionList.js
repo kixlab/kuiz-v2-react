@@ -46,7 +46,7 @@ const QuestionList = (props) => {
 					<QuestionListItem
 						id={question._id}
 						number={13}
-						title={question.stem_text}
+						title={question.raw_string}
 						options={question.options}
 						date={question.options.createdAt}
 					/>

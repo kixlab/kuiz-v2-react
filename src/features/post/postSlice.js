@@ -10,12 +10,12 @@ export const postSlice = createSlice({
     showAllPosts: (state, action) => {
       state.posts = [...state.posts, action.payload]
     },
-    notification: (state, action) => {
+    showNotification: (state, action) => {
         state.notification = [...state.notification, action.payload]
     }
   },
 })
 
-export const { showAllPosts, notification } = postSlice.actions
+export const { showAllPosts, showNotification } = postSlice.actions
 
 export default postSlice.reducer

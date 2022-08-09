@@ -37,7 +37,7 @@ const Question = (props) => {
 						<i className="fa-solid fa-arrow-left" ></i> Back to Question List
 					</div>
 				</Link>
-				<div id="question-stem">{qinfo && qinfo.stem_text}</div>
+				<div id="question-stem">{qinfo && qinfo.raw_string}</div>
 				<div id="question-options">
 					{options.map((option)=><div className="question-option-item">{option.option_text}</div>)}
 				</div>
