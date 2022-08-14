@@ -1,32 +1,87 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 //draft js part
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw, Modifier } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { Editor } from 'react-draft-wysiwyg';
 //actions
 //ant part
 import { Row, Col, Form, Input, Button, notification } from 'antd';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+
 import axios from 'axios';
 import './QstemEditor.scss'
-var ObjectID = require("bson-objectid")
+import { useNavigate } from 'react-router-dom';
 
-
-const addPost = (postData) => {
-    axios
-        .post("http://localhost:4000/question/qstem/create",{qstemObj:postData})
-        .then(res => {
-            console.log("RES:",res.data)
-        })
-        .catch( err => {
-            console.log("ERR:",err)
-        })
-}
+var ObjectID = require("bson-objectid");
 
 
 function QstemEditor(props) {
-    // const post = props.location.state ? props.location.state.post : "";
+    const navigate = useNavigate()
+    const [uploadImages, setUploadImages] = useState([])
+    const cid = props.cid
+    const [template, setTemplate] = useState([])
+    const templateList = [
+        "What might occur if … ?",
+        "What is the difference between … and … ?",
+        "How are … and … similar?",
+        "… is a problem because …. . What is a possible solution for this?",
+        "How does … affect …?",
+        "What is the meaning of … ?",
+        "Why is …. important?",
+        "How is … related to …. ?",
+        "What causes …. ?",
+        "What is an example of … ?"    
+    ]
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+    PaperProps: {
+        style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+        },
+    },
+    };
+    function uploadCallback(file) {
+        let uploadedImages = uploadImages
+        const imageObject = {
+            file: file,
+            localSrc: URL.createObjectURL(file)
+        }
+        uploadedImages.push(imageObject)
+        setUploadImages(uploadedImages)
+        return new Promise(
+          (resolve, reject) => {
+            resolve({ data: { link: imageObject.localSrc } });
+          }
+        );
+    }
+
+    const selectTemplate = (e) => {
+        setTemplate(e.target.value)
+        setEditorState({editorState: insertTemplate(e.target.value[0],editorState)})
+    };
+
+    function insertTemplate(templateToInsert, editorState) {
+        const currentContent = editorState.editorState.getCurrentContent(),
+              currentSelection = editorState.editorState.getSelection();
+        const newContent = Modifier.replaceText(
+          currentContent,
+          currentSelection,
+          templateToInsert
+        );
+        const newEditorState = EditorState.push(editorState.editorState, newContent, 'insert-characters');
+        return  EditorState.forceSelection(newEditorState, newContent.getSelectionAfter());
+    }
+
     const post = ""
 
     const description = post ? post.description : ""
@@ -38,28 +93,58 @@ function QstemEditor(props) {
     const handleEditorChange = (editorState) => {
         setEditorState({ editorState });
       }
+    const uid = useSelector((state)=>state.userInfo.userInfo._id)
     
-    const setContent = props.setContent
+    const setObjective = props.setObjective
     const setMsg = props.setMsg
     const submitStem = () => {
+        console.log("UID:",uid)
         const qstemObj = {
-            author: ObjectID("62e246e9587f5eebd882bc32"), //TODO: generalize
+            author: ObjectID(uid), 
             stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
             raw_string: editorState.editorState.getCurrentContent().getPlainText('\u0001'),
             action_verb: props.verbs,
             keyword: props.keywords,
-            class: ObjectID("62e2467a587f5eebd882bc2d"),//TODO:generalize
+            class: ObjectID(cid),
             options:[],
             optionSets:[],
         }
-        axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj}).then(
+        console.log("obj:",qstemObj)
+        axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj, cid:cid}).then(
             (res)=>{
-                setContent("")
+                setObjective("")
                 setMsg("Successfuly made question stem!")
+                navigate("/"+cid)
+                console.log("CID2:",cid)
+                
             }
         )
     }
     return(
+        <div>
+        <div>
+      <FormControl>
+        <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={template}
+          onChange={selectTemplate}
+          input={<OutlinedInput label="Tag" />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {templateList.map((t) => (
+            <MenuItem key={t} value={t}>
+              {/* <Checkbox checked={template.indexOf(t) > -1} /> */}
+              <ListItemText primary={t} />
+              <div>Import</div>
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
         <div>
             <Row justify='center'>
                 <Col span='12'>
@@ -85,7 +170,8 @@ function QstemEditor(props) {
                                     textAlign: { inDropdown: true },
                                     link: { inDropdown: true },
                                     history: { inDropdown: false },
-                                  }} 
+                                    image: { uploadCallback:uploadCallback }
+                                }}  
                             />
                             </div>
                         </Form.Item>
@@ -100,6 +186,7 @@ function QstemEditor(props) {
                             
                             <Button onClick={submitStem} type="primary" htmlType='submit'>Add Qstem</Button>
                         </div>
+        </div>
         </div>
     )
 }
