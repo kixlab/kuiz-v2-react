@@ -7,25 +7,27 @@ import OptionInput from "../../components/OptionInput/OptionInput";
 import OptionDetail  from "../../components/OptionDetail/OptionDetail";
 import { useSelector, useDispatch } from 'react-redux'
 import {changepageStat} from '../../features/optionSelection/pageStatSlice'
+import {useNavigate} from "react-router-dom"
 import draftToHtml from 'draftjs-to-html';
-
-
-
-
+import OptionDependency from '../../components/OptionDependency/OptionDependency';
 import Button from "../../components/Button/Button";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import "./OptionCreate.scss";
 
 const OptionCreate = (props) => {
+	const navigate = useNavigate()
 	props.funcNav(true);
     const selected = useSelector((state)=>state.option.value)
 	const qid = useParams().id 
-    const [ansList, setAnsList] = useState([])
-    const [disList, setDistList] = useState([])
+    const [ansList, setAnsList] = useState()
+    const [disList, setDistList] = useState()
 	const [qinfo, setQinfo] = useState()
 	const [oid, setOid] = useState()
 	const [options, setOptions] = useState()
 	const cid = useParams().cid;
+	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
 
 
 	const changeOid = (oid) => {
@@ -47,11 +49,14 @@ const OptionCreate = (props) => {
     // stat : true -> create option, false -> option detail
 	// getQinfo(qid)
 	useEffect(()=>{
-		getOptionList(qid)
+		if(isLoggedIn) {
+			getOptionList(qid)
+			console.log("Anslist:",ansList)
+		} else {
+			navigate("/login")
+		}
+		
 	},[])
-    useEffect(()=> {
-
-    })
 	// getQinfo(qid);
 
 	return (
@@ -64,8 +69,17 @@ const OptionCreate = (props) => {
 					</div>
 				</Link>
 				{qinfo && <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}} className="introduce-content"/>}
-                <OptionList qinfo={qinfo} ansList={ansList} disList={disList} changeOid={changeOid}/>
-                {pageStat?<OptionInput/>:oid && <OptionDetail option={options.find(op => op._id === oid)}/>}
+				<DndProvider backend={HTML5Backend}>
+					{(ansList && disList) && 
+					<div>
+						<OptionList qinfo={qinfo} ansList={ansList} disList={disList} changeOid={changeOid}/>
+						<OptionDependency optionList={ansList.concat(disList)} label={"same"}/>
+						<OptionDependency optionList={ansList.concat(disList)} label={"contradictory"}/>
+					</div>
+					}
+                	
+                	{pageStat?<OptionInput/>:oid && <OptionDetail option={options.find(op => op._id === oid)}/>}
+				</DndProvider>
 			</div>
 		</div>
 	);

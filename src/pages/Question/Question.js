@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 import axios from 'axios';
 import draftToHtml from 'draftjs-to-html';
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 
 
@@ -11,6 +13,7 @@ import Button from "../../components/Button/Button";
 import "./Question.scss";
 
 const Question = (props) => {
+	const navigate = useNavigate()
 	props.funcNav(true);
 	const qid = useParams().id 
 	const [options, setOptions] = useState([])
@@ -27,8 +30,14 @@ const Question = (props) => {
 		)
 	}
 	// getQinfo(qid)
+	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
 	useEffect(()=>{
-		getQinfo(qid)
+		if(isLoggedIn) {
+			getQinfo(qid)
+		} else {
+			navigate("/login")
+		}
+		
 	},[])
 
 	return (

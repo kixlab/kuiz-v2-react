@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const Enroll = (props) => {
     props.funcNav(false);
     const navigate = useNavigate()
+    const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
     const [code, setCode] = useState("")
     const uid = useSelector((state)=> state.userInfo.userInfo._id)
     const email = useSelector((state) => state.userInfo.userInfo.email)
@@ -23,7 +24,9 @@ const Enroll = (props) => {
         )
     }
     useEffect(()=>{
-        console.log("UID:",uid)
+        if(!isLoggedIn) {
+            navigate("/login")
+        }
     },[])
     return(
         <div>

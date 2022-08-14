@@ -1,30 +1,27 @@
 import React, {useEffect, useState, useRef} from "react";
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { addVerb, addKeyword, removeKeyword, removeVerb } from "../../features/questionStem/objectiveSlice";
-import { showAllPosts } from '../../features/post/postSlice'
-import ObjectiveWord from "../../components/ObjectiveWord/ObjectiveWord";
-import MaterialItem  from "../../components/MaterialItem/MaterialItem";
-import "./StemCreate.scss";
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import { Row, Col, Form, Input, Button, notification } from 'antd';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg'
 import QstemEditor from "../../components/QstemEditor/QstemEditor";
 import { useParams } from "react-router";
+import { useNavigate } from 'react-router-dom';
+
 
 const StemCreate = (props) => {
+    const navigate = useNavigate()
     props.funcNav(true);
     const keywords = useSelector((state)=> state.objective.keywords)
     const verbs = useSelector((state) => state.objective.verbs)
+    const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
 
     const cid = useParams().cid
 
     const [msg, setMsg] = useState("")
-
-
-
+    useEffect(()=> {
+        if(!isLoggedIn) {
+            navigate("/login")
+        }
+    },[])
 
 	return (
 		<div id="question-screen-wrapper">

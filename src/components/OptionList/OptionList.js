@@ -21,9 +21,9 @@ const OptionList = (props) => {
         <div>
             <button onClick={changeStat}>Add Option</button>
             [ANSLIST]
-                {ansList.map((option)=><div id={option._id} onClick={(e)=>(props.changeOid)(option._id)}><OptionItem optionInfo={option} /></div>)}
+                {ansList.map((option)=><div id={option._id} onClick={(e)=>(props.changeOid)(option._id)}><OptionItem optionInfo={option} id={option._id}/></div>)}
                 [DISLIST]
-                {disList.map((option)=><div id={option._id} onClick={(e)=>(props.changeOid)(option._id)}><OptionItem optionInfo={option} /></div>)}
+                {disList.map((option)=><div id={option._id} onClick={(e)=>(props.changeOid)(option._id)}><OptionItem optionInfo={option} id={option._id} /></div>)}
         </div>
     );
 }

@@ -6,11 +6,13 @@ import axios from 'axios';
 import { NavLink, Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 
 import "./QuestionList.scss";
 
 const QuestionList = (props) => {
+	const navigate = useNavigate()
 	props.funcNav(true);
 	const cid = useParams().cid 
 	const [questionList, setQuestionList] = useState([])
@@ -24,8 +26,14 @@ const QuestionList = (props) => {
 			}
 		)
 	}
+	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
 	useEffect(()=> {
-		getQuestionList()
+		if(isLoggedIn) {
+			getQuestionList()
+		} else {
+			navigate("/login")
+		}
+		
 	},[])
 
 	return (
