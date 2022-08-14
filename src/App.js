@@ -5,6 +5,7 @@ import StemCreate from './pages/StemCreate/StemCreate';
 import OptionCreate from './pages/OptionCreate/OptionCreate'
 import Login from './pages/Login/Login'
 import Navbar from './components/Navbar/Navbar';
+import Enroll   from './pages/Enroll/Enroll';
 import './App.scss'
 import React, {useState} from 'react';
 
@@ -18,11 +19,12 @@ function App() {
       {showNav && <Navbar/>}
       <main>
       <Routes>
-          <Route path="/" element={<QuestionList funcNav={setShowNav}/>}/>
-          <Route path="/question/:id" element={<Question funcNav={setShowNav}/>}/>
-          <Route path="/createstem" element={<StemCreate funcNav={setShowNav}/>}/>
-          <Route path="/question/:id/create" element={<OptionCreate funcNav={setShowNav}/>}/>
+          <Route path="/:cid" element={<QuestionList funcNav={setShowNav}/>}/>
+          <Route path="/:cid/question/:id" element={<Question funcNav={setShowNav}/>}/>
+          <Route path="/:cid/createstem" element={<StemCreate funcNav={setShowNav}/>}/>
+          <Route path="/:cid/question/:id/create" element={<OptionCreate funcNav={setShowNav}/>}/>
           <Route path="/login" element={<Login funcNav={setShowNav}/>} />
+          <Route path="/enroll" element={<Enroll funcNav={setShowNav}/>}/>
         </Routes>
         </main>
       </div>
