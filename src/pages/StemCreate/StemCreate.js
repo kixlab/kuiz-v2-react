@@ -23,11 +23,7 @@ const StemCreate = (props) => {
 
     const [msg, setMsg] = useState("")
 
-    const [objective, setObjective] = useState("")
 
-    const updateObjective = (e) => {
-        setObjective(e.target.value)
-    }
 
 
 	return (
@@ -40,12 +36,10 @@ const StemCreate = (props) => {
 					</div>
 				</Link>
                 <div>
-                    <h3>Learning Objective</h3>
-                    <textarea value ={objective} onChange={updateObjective}placeholder="Learning Objective"/>
+                    
                     <div><h2>Construct Question Stem</h2></div>  
-                    <div><h3>Your Question</h3></div>
                     <div>
-                        <QstemEditor verbs={verbs} keywords={keywords} setObjective={setObjective} setMsg={setMsg} cid={cid}/>
+                        <QstemEditor verbs={verbs} keywords={keywords} setMsg={setMsg} cid={cid}/>
                     </div>
                     {msg}
                 </div>   

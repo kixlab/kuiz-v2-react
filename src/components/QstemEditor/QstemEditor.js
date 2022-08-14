@@ -24,6 +24,10 @@ var ObjectID = require("bson-objectid");
 
 
 function QstemEditor(props) {
+    const [objective, setObjective] = useState()
+    const updateObjective = (e) => {
+        setObjective(e.target.value)
+    }
     const navigate = useNavigate()
     const [uploadImages, setUploadImages] = useState([])
     const cid = props.cid
@@ -95,7 +99,6 @@ function QstemEditor(props) {
       }
     const uid = useSelector((state)=>state.userInfo.userInfo._id)
     
-    const setObjective = props.setObjective
     const setMsg = props.setMsg
     const submitStem = () => {
         console.log("UID:",uid)
@@ -108,11 +111,11 @@ function QstemEditor(props) {
             class: ObjectID(cid),
             options:[],
             optionSets:[],
+            learning_objective:objective
         }
         console.log("obj:",qstemObj)
         axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj, cid:cid}).then(
             (res)=>{
-                setObjective("")
                 setMsg("Successfuly made question stem!")
                 navigate("/"+cid)
                 console.log("CID2:",cid)
@@ -122,7 +125,10 @@ function QstemEditor(props) {
     }
     return(
         <div>
+            <h3>Learning Objective</h3>
+            <textarea value ={objective} onChange={updateObjective} placeholder="Learning Objective"/>
         <div>
+        <h3>Your Question</h3>
       <FormControl>
         <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
         <Select
