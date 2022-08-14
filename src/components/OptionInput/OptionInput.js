@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from "react";
 import { useParams } from "react-router";
+import { useSelector } from "react-redux";
 
 import axios from "axios";
 import './OptionInput.scss'
@@ -25,15 +26,17 @@ const OptionInput = () => {
         setIsAnswer()
         setExplanation("")
     }
+    const cid = useParams().cid
+    const uid = useSelector((state)=>state.userInfo.userInfo._id)
 
     const submit = () => {
 
         const optionData = {
-            author:ObjectID("62e246e9587f5eebd882bc32"),//TODO: generally modify, adopt redux
+            author:ObjectID(uid),//TODO: generally modify, adopt redux
             option_text:option,
             is_answer:isAnswer,
             explanation:explanation,
-            class:ObjectID("62e2467a587f5eebd882bc2d"),//TODO:generally modify
+            class:ObjectID(cid),//TODO:generally modify
             qstem:ObjectID(qid)
         }
         reset()

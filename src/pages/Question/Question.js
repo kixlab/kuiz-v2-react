@@ -17,6 +17,7 @@ const Question = (props) => {
 	const [qinfo, setQinfo] = useState()
 	const [stem, setStem] = useState()
 	const [ansVisible, setAnsVisible] = useState(false)
+	const cid = useParams().cid
 	const getQinfo = (qid) => {
 		axios.get("http://localhost:4000/question/detail/load?qid="+qid).then(
 			(res)=> {
@@ -34,7 +35,7 @@ const Question = (props) => {
 		<div id="question-screen-wrapper">
 			<div id="question-nav">Question List &gt; #123</div>
 			<div id="question-screen">
-				<Link to="/" style={{ textDecoration: 'none', color:'#000000' }}>
+				<Link to={"/"+cid} style={{ textDecoration: 'none', color:'#000000' }}>
 					<div id="return-button" >
 						<i className="fa-solid fa-arrow-left" ></i> Back to Question List
 					</div>
@@ -53,7 +54,7 @@ const Question = (props) => {
 					</div>
 					{ansVisible && 
 						<div id="answer-wrapper">
-							{options.map((option)=>
+							{options && options.map((option)=>
 								<div className="answer-option">
 									<div className="option-text">{option.option_text}</div>
 									<div className="option-exp">{option.explanation}</div>
@@ -61,7 +62,7 @@ const Question = (props) => {
 							}
 						</div>
 					}
-					<Link to={"/question/"+qid+"/create"}><div>MAKE MORE OPTIONS</div></Link>
+					<Link to={"/"+cid+"/question/"+qid+"/create"}><div>MAKE MORE OPTIONS</div></Link>
 					
 				</div>
 			</div>

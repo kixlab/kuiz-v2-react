@@ -5,24 +5,27 @@ import QuestionListItem from "../../components/QuestionListItem/QuestionListItem
 import axios from 'axios';
 import { NavLink, Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 
 import "./QuestionList.scss";
 
 const QuestionList = (props) => {
 	props.funcNav(true);
+	const cid = useParams().cid 
 	const [questionList, setQuestionList] = useState([])
-	const classId = "test101"
-
-	const getQuestionList = (cid) => { //TODO : add cid in request url
-		axios.get("http://localhost:4000/question/list/load").then(
+	const uid = useSelector((state)=>state.userInfo.userInfo._id)
+	console.log("UID:",uid)
+	const getQuestionList = () => { //TODO : add cid in request url
+		console.log("CID:",cid)
+		axios.get("http://localhost:4000/question/list/load?cid="+cid).then(
 			(res)=> {
 				setQuestionList(res.data.qstems.problemList)
 			}
 		)
 	}
 	useEffect(()=> {
-		getQuestionList(classId)
+		getQuestionList()
 	},[])
 
 	return (
@@ -31,7 +34,7 @@ const QuestionList = (props) => {
 				<div id="searchbar">
 					<input></input>
 				</div>
-				<Link to="/createstem" style={{ textDecoration: 'none', color:'#000000' }}><Button>Create Stem</Button></Link>
+				<Link to={"/"+cid+"/createstem"} style={{ textDecoration: 'none', color:'#000000' }}><Button>Create Stem</Button></Link>
 				
 			</div>
 			<div id="question-list-header">
@@ -41,7 +44,7 @@ const QuestionList = (props) => {
 				<div>Last Updated</div>
 			</div>
 			{questionList.map(question => (
-				<Link to={"/question/" + question._id } style={{ textDecoration: 'none', color:'#000000' }}>
+				<Link to={"/"+cid+"/question/" + question._id } style={{ textDecoration: 'none', color:'#000000' }}>
 					<div id="question-list-wrapper">
 					<QuestionListItem
 						id={question._id}

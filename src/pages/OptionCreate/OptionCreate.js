@@ -7,6 +7,8 @@ import OptionInput from "../../components/OptionInput/OptionInput";
 import OptionDetail  from "../../components/OptionDetail/OptionDetail";
 import { useSelector, useDispatch } from 'react-redux'
 import {changepageStat} from '../../features/optionSelection/pageStatSlice'
+import draftToHtml from 'draftjs-to-html';
+
 
 
 
@@ -20,9 +22,10 @@ const OptionCreate = (props) => {
 	const qid = useParams().id 
     const [ansList, setAnsList] = useState([])
     const [disList, setDistList] = useState([])
-	const [qinfo, setQinfo] = useState([])
+	const [qinfo, setQinfo] = useState()
 	const [oid, setOid] = useState()
 	const [options, setOptions] = useState()
+	const cid = useParams().cid;
 
 
 	const changeOid = (oid) => {
@@ -55,12 +58,12 @@ const OptionCreate = (props) => {
 		<div id="question-screen-wrapper">
 			<div id="question-nav">Question List &gt; #123</div>
 			<div id="question-screen">
-				<Link to="/" style={{ textDecoration: 'none', color:'#000000' }}>
+				<Link to={"/"+cid} style={{ textDecoration: 'none', color:'#000000' }}>
 					<div id="return-button" >
 						<i className="fa-solid fa-arrow-left" ></i> Back to Question List
 					</div>
 				</Link>
-				<div id="question-stem">{qinfo.raw_string}</div>
+				{qinfo && <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}} className="introduce-content"/>}
                 <OptionList qinfo={qinfo} ansList={ansList} disList={disList} changeOid={changeOid}/>
                 {pageStat?<OptionInput/>:oid && <OptionDetail option={options.find(op => op._id === oid)}/>}
 			</div>
