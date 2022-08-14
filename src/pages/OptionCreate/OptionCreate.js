@@ -13,10 +13,14 @@ import OptionDependency from '../../components/OptionDependency/OptionDependency
 import Button from "../../components/Button/Button";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
 import "./OptionCreate.scss";
+var ObjectID = require("bson-objectid");
+
+
+
 
 const OptionCreate = (props) => {
+	const [pageStat, setPageStat] = useState(true)
 	const navigate = useNavigate()
 	props.funcNav(true);
     const selected = useSelector((state)=>state.option.value)
@@ -28,11 +32,11 @@ const OptionCreate = (props) => {
 	const [options, setOptions] = useState()
 	const cid = useParams().cid;
 	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
+	const [same, setSame] = useState([])
+	const [contradictory, setContradictory] = useState([])
+	const [myOption, setMyOption] = useState()
 
 
-	const changeOid = (oid) => {
-		setOid(oid)
-	}
 	const getOptionList = (qid) => {
 		axios.get("http://localhost:4000/question/option/load?qid="+qid).then(
 			(res)=> {
@@ -45,19 +49,26 @@ const OptionCreate = (props) => {
 			}
 		)
 	}
-    const pageStat = useSelector((state)=>state.pageStat.value)
-    // stat : true -> create option, false -> option detail
-	// getQinfo(qid)
+	const submitDependency = () => {
+		axios.post("http://localhost:4000/question/option/dependency",{oid:myOption._id, dependency:{same:same.map(o=> ObjectID(o._id)), contradictory: contradictory.map(o=>ObjectID(o._id))}})
+		.then((res)=> {
+			reset()
+		})
+	}
+
+	const reset = () => {
+		setSame([])
+		setContradictory([])
+		setPageStat(true)
+	}
+
 	useEffect(()=>{
 		if(isLoggedIn) {
 			getOptionList(qid)
-			console.log("Anslist:",ansList)
 		} else {
 			navigate("/login")
 		}
-		
 	},[])
-	// getQinfo(qid);
 
 	return (
 		<div id="question-screen-wrapper">
@@ -70,15 +81,21 @@ const OptionCreate = (props) => {
 				</Link>
 				{qinfo && <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}} className="introduce-content"/>}
 				<DndProvider backend={HTML5Backend}>
-					{(ansList && disList) && 
-					<div>
-						<OptionList qinfo={qinfo} ansList={ansList} disList={disList} changeOid={changeOid}/>
-						<OptionDependency optionList={ansList.concat(disList)} label={"same"}/>
-						<OptionDependency optionList={ansList.concat(disList)} label={"contradictory"}/>
-					</div>
-					}
+				<OptionList qinfo={qinfo} ansList={ansList} disList={disList}/>
                 	
-                	{pageStat?<OptionInput/>:oid && <OptionDetail option={options.find(op => op._id === oid)}/>}
+                	{pageStat?<OptionInput setMyOption={setMyOption} setPageStat={setPageStat}/>:
+					<div>{<div>
+							{(ansList && disList) && 
+								<div>
+									<div>My Option</div>
+									{myOption && myOption.option_text}
+									<OptionDependency optionList={ansList.concat(disList)} label={"same"} setDependency={setSame}/>
+									<OptionDependency optionList={ansList.concat(disList)} label={"contradictory"} setDependency={setContradictory}/>
+									<button onClick={submitDependency}>submit</button>
+								</div>
+							}
+						</div>}
+					</div>}
 				</DndProvider>
 			</div>
 		</div>

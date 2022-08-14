@@ -1,6 +1,7 @@
 import React,{useState, useEffect, useRef} from "react";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {changePageStat} from '../../features/optionSelection/pageStatSlice'
 import { Cancel, Tag } from "@mui/icons-material";
 import { FormControl, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
@@ -10,7 +11,7 @@ import axios from "axios";
 import './OptionInput.scss'
 var ObjectID = require("bson-objectid");
 
-const OptionInput = () => {
+const OptionInput = ({setMyOption, setPageStat}) => {
     const [option, setOption] = useState("")
     const [isAnswer, setIsAnswer] = useState()
     const [explanation, setExplanation] = useState("")
@@ -31,6 +32,7 @@ const OptionInput = () => {
         setDifference([...difference, difRef.current.value]);
     };
 
+    const dispatch = useDispatch()
     const qid = useParams().id
     const setAnswer = (e) => {
         setIsAnswer(e.target.value)
@@ -69,6 +71,8 @@ const OptionInput = () => {
         axios.post("http://localhost:4000/question/option/create",{optionData:optionData}).then(
             (res)=>{
                 console.log("SUCCESS?",res.data.success)
+                setMyOption(res.data.option)
+                setPageStat(false)
                 reset()
             }
         )

@@ -5,6 +5,7 @@ export const userSlice = createSlice({
   initialState: {
     userInfo:{},
     cid:"",
+    cType:false,
     isLoggedIn:false
   },
   reducers: {
@@ -18,9 +19,9 @@ export const userSlice = createSlice({
     },
     enrollClass:(state, action) => {
       if(state.isLoggedIn){
-        state.cid=action.payload
+        state.cid=action.payload.cid
+        state.cType=action.payload.cType
       }
-      
     }
   },
 })

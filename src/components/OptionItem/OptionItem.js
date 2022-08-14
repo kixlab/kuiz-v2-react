@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {useSelector, useDispatch} from 'react-redux'
 import { changeOptionSelection} from "../../features/optionSelection/optionSlice";
 import { changePageStat } from "../../features/optionSelection/pageStatSlice";
@@ -11,10 +11,13 @@ const OptionItem = ({optionInfo, id}) => {
     const stat = useSelector((state)=> state.pageStat.value)
     const isAnswer = optionInfo.is_answer
     const text = optionInfo.option_text
+    const similar = optionInfo.plausible.similar
+    const difference = optionInfo.plausible.difference
+    const explanation = optionInfo.explanation
     const oid = optionInfo._id
-    const showDetail = ()=> {
-        dispatch(changeOptionSelection(optionInfo._id))
-        dispatch(changePageStat(false))
+    const [detail, setDetail] = useState(false)
+    const changeDetailView = ()=> {
+        setDetail(!detail)
     }
     const [{isDragging}, drag] = useDrag(()=> ({
       type: "option",
@@ -31,8 +34,10 @@ const OptionItem = ({optionInfo, id}) => {
             ref={drag}
             style={{ border: isDragging ? "5px solid pink" : "0px" }}
             >
-              {isAnswer?"answer":"distractor"}, {text}
-              <button onClick={showDetail}>See Detail</button>
+              {isAnswer?"<answer>":"<distractor>"}, {text}
+              <div>{similar.map(option => {return <a className="similarTag tag">{option}</a>})}</div>
+              <div>{difference.map(option => {return <a className="differenceTag tag">{option}</a>})}</div>
+              {detail?<div>{explanation}<button onClick={changeDetailView}>hide</button></div>:<button onClick={changeDetailView}>See Detail</button>}
             </div>
 			
 		</div>
