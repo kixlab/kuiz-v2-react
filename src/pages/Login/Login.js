@@ -21,7 +21,7 @@ const Login = (props) => {
                     dispatch(loginUser(res.data.user))
                     if(res.data.user.classes.length!=0){
                         console.log("cid:",res.data.user.classes[0])
-                        dispatch(enrollClass({cid:res.data.user.classes[0], cType:false}))
+                        dispatch(enrollClass({cid:res.data.user.classes[0], cType:res.data.cType}))
                         navigate('/'+res.data.user.classes[0])
                     } else {
                         navigate('/enroll')

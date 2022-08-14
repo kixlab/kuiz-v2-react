@@ -1,13 +1,15 @@
 import React,{useState, useEffect} from "react";
 import './Enroll.scss'
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
+import { enrollClass } from "../../features/authentication/userSlice";
 
 
 const Enroll = (props) => {
     props.funcNav(false);
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
     const [code, setCode] = useState("")
     const uid = useSelector((state)=> state.userInfo.userInfo._id)
@@ -19,6 +21,7 @@ const Enroll = (props) => {
         axios.post("http://localhost:4000/auth/class/join",{code:code,_id:uid, userEmail:email}).then(
             (res)=>{
                 console.log("res.data.cid", res.data.cid)
+                dispatch(enrollClass({cid: res.data.cid, cType:res.data.cType}))
                 navigate('/'+res.data.cid)
             }
         )
