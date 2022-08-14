@@ -4,17 +4,23 @@ export const userSlice = createSlice({
   name: 'setKeyword',
   initialState: {
     userInfo:{},
-    cid:""
+    cid:"",
+    isLoggedIn:false
   },
   reducers: {
     loginUser: (state, action) => {
       state.userInfo = action.payload
+      state.isLoggedIn = true
     },
     logoutUser: (state, action) => {
         state.userInfo = action.payload
+        state.isLoggedIn = false
     },
     enrollClass:(state, action) => {
-      state.cid=action.payload
+      if(state.isLoggedIn){
+        state.cid=action.payload
+      }
+      
     }
   },
 })
