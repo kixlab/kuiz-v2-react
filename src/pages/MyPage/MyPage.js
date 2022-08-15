@@ -11,6 +11,7 @@ const MyPage = (props) => {
     const uid = useSelector((state) => state.userInfo.userInfo._id)
     const cType = useSelector((state) => state.userInfo.cType)
     const [madeStem, setMadeStem] = useState()
+    const [madeOption, setMadeOption] = useState()
 
     const getMadeStem = () => {
         console.log("UID:",uid)
@@ -21,22 +22,37 @@ const MyPage = (props) => {
         )
     }
 
+    const getMadeOption = () => {
+        axios.post("http://localhost:4000/question/made/option",{uid, uid}).then(
+            (res) => {
+                setMadeOption(res.data.madeOption)
+            }
+        )
+    }
+
+    const getSolvedOption = () => {
+        
+    }
+
     useEffect(()=>{
         if(!isLoggedIn){
             navigate("/login")
         } else {
             getMadeStem()
+            getMadeOption()
         }
     },[])
 
     return(
         <div>
-            <h3>Created Stem</h3>
+            <h3>Created Questions</h3>
             {madeStem && (madeStem.map((stem) => {
                 return <div>{stem.raw_string}</div>
             }))}
             <h3>Made Options</h3>
-            <h3>Made Questions</h3>
+            {madeOption && (madeOption.map((option) => {
+                return <div>{option.option_text}</div>
+            }))}
             <h3>Solved Questions</h3>
 
         </div>
