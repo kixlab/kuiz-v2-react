@@ -7,12 +7,7 @@ import './OptionCreate2.scss'
 const OptionCreate2 = ({optionList, updateOptionList, updateExplanation}) => {
     const navigate = useNavigate()
     const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
-    // const [optionList, setOptionList] = useState([
-    //     {option_text:"", is_answer:false},
-    //     {option_text:"", is_answer:false},
-    //     {option_text:"", is_answer:false},
-    //     {option_text:"", is_answer:false}
-    // ])
+
     const [answer, setAnswer] = useState(null)
     const handleAnswer = (index) => {
         const newList = optionList.map((o, i) => {
