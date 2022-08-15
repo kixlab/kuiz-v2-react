@@ -23,6 +23,7 @@ function App() {
       <main>
       <Routes>
           <Route path="/:cid" element={<QuestionList funcNav={setShowNav}/>}/>
+          <Route path="/:cid/qlist" element={<QuestionList funcNav={setShowNav}/>}/>
           <Route path="/:cid/question/:id" element={<Question funcNav={setShowNav}/>}/>
           <Route path="/:cid/createstem" element={cType?<StemCreate funcNav={setShowNav}/>:<StemCreate2 funcNav={setShowNav}/>}/>
           <Route path="/:cid/question/:id/create" element={<OptionCreate funcNav={setShowNav}/>}/>
