@@ -13,6 +13,7 @@ function Navbar() {
     const profile = useSelector((state)=>state.userInfo.userInfo.imageUrl)
     const cid = useSelector((state) => state.userInfo.cid)
     const navigate = useNavigate()
+    const cType = useSelector((state) => state.userInfo.cType)
     const moveToCreateStem = () => {
         navigate("/"+cid+"/createstem")
     }
@@ -29,8 +30,8 @@ function Navbar() {
             <div id="main-logo">KUIZ</div>
             {cid}
             <div id="side-nav">
-                <Button navigateBy={moveToCreateStem} text="Create Stem"/>
-                <Button navigateBy={moveToCreateOption}text="Create Option"/>
+                <Button navigateBy={moveToCreateStem} text={cType?"Create Stem":"Make Question"}/>
+                {cType?<Button navigateBy={moveToCreateOption}text="Create Option"/>:null}
                 <Button navigateBy={moveToQlist}text="Question List"/>
             </div>
             <div className="profile"><img src={profile}/></div>
