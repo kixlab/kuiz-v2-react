@@ -29,11 +29,29 @@ const Question = (props) => {
 	const cType = useSelector((state) => state.userInfo.cType)
 	const [answer, setAnswer] = useState()
 	const uid = useSelector((state) => state.userInfo.userInfo._id)
+	const [isOptionValid, setIsOptionValid] = useState(true)
 	const getQinfo = (qid) => {
 		axios.get("http://localhost:4000/question/detail/load?qid="+qid).then(
 			(res)=> {
 				console.log("Qinfo:",res.data.data)
-				setOptions(res.data.data.options)
+				if(false){
+					setOptions(res.data.data.options)
+				} else {
+					if(res.data.data.options.length>1) {
+						const ansList = res.data.data.options.filter((o) => o.is_answer===true)
+						const disList = res.data.data.options.filter((o) => o.is_answer === false)
+						if(ansList.length>0 && disList.length>0){
+							const optionList = [ansList[0]].concat(disList)
+							if(disList.length>4){
+								setOptions(optionList.slice(0,4))
+							} else {
+								setOptions(optionList)
+							}
+						} else {
+							setIsOptionValid(false)
+						}
+					}
+				}
 				setQinfo(res.data.data.qinfo)
 				res.data.data.options.map((o, i) => {
 					if(o.is_answer) setAnswer(i)
