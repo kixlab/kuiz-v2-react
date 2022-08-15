@@ -29,28 +29,28 @@ const Question = (props) => {
 	const cType = useSelector((state) => state.userInfo.cType)
 	const [answer, setAnswer] = useState()
 	const uid = useSelector((state) => state.userInfo.userInfo._id)
-	const [isOptionValid, setIsOptionValid] = useState(true)
+	const [isOptionValid, setIsOptionValid] = useState()
 	const getQinfo = (qid) => {
+		console.log("QID:",qid)
 		axios.get("http://localhost:4000/question/detail/load?qid="+qid).then(
 			(res)=> {
 				console.log("Qinfo:",res.data.data)
-				if(false){
-					setOptions(res.data.data.options)
-				} else {
-					if(res.data.data.options.length>1) {
-						const ansList = res.data.data.options.filter((o) => o.is_answer===true)
-						const disList = res.data.data.options.filter((o) => o.is_answer === false)
-						if(ansList.length>0 && disList.length>0){
-							const optionList = [ansList[0]].concat(disList)
-							if(disList.length>4){
-								setOptions(optionList.slice(0,4))
-							} else {
-								setOptions(optionList)
-							}
+				if(res.data.data.options.length>1) {
+					const ansList = res.data.data.options.filter((o) => o.is_answer===true)
+					const disList = res.data.data.options.filter((o) => o.is_answer === false)
+					if(ansList.length>0 && disList.length>0){
+						const optionList = [ansList[0]].concat(disList)
+						if(disList.length>4){
+							setOptions(optionList.slice(0,4))
 						} else {
-							setIsOptionValid(false)
+							setOptions(optionList)
 						}
+					} else {
+						setIsOptionValid(false)
 					}
+				} else {
+					console.log("Not enough")
+					setIsOptionValid(false)
 				}
 				setQinfo(res.data.data.qinfo)
 				res.data.data.options.map((o, i) => {
@@ -63,7 +63,6 @@ const Question = (props) => {
 	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
 	const checkAnswer = () => {
 		if(!ansVisible){
-
 			axios.post("http://localhost:4000/question/solve",{qid:qid, uid:uid, initAns: options[selected]._id, isCorrect:(selected === answer),optionSet:options.map((o)=>ObjectID(o._id))}).then(
 			(res)=>{
 				console.log("success:",res.data.success)
@@ -92,24 +91,28 @@ const Question = (props) => {
 				</Link>
 				
 				{qinfo && <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}} className="introduce-content"/>}
-				
+				{isOptionValid?
 				<div id="question-options">
 					{options && options.map((option, index)=><div className="question-option-item"><input checked={selected === index} type="radio" onChange={(e) => setSelected(index)}/>{option.option_text}</div>)}
-				</div>
+				</div>:
+				<div>Not enough options yet</div>
+				}
+				
 
+				{isOptionValid?
 				<div id="question-explanation">
 					<div id="hide-answer" onClick={() => checkAnswer()}>
 						{ansVisible?"Hide":"Show"} Answer
 					</div>
 					{ansVisible && (cType?
 						<div id="answer-wrapper">
-							{options && options.map((option)=>
-								<div className="answer-option">
-									<div className="option-text">{option.option_text}</div>
-									<div className="option-exp">{option.explanation}</div>
-								</div>)
-							}
-						</div>:
+								{options && options.map((option)=>
+									<div className="answer-option">
+										<div className="option-text">{option.option_text}</div>
+										<div className="option-exp">{option.explanation}</div>
+									</div>)
+								}
+							</div>:
 						<div className="explanation">
 							<div>
 								answer : {options[answer].option_text}
@@ -117,10 +120,9 @@ const Question = (props) => {
 							explanation : {qinfo.explanation}
 						</div>)
 					}
-
-					{cType?<Link to={"/"+cid+"/question/"+qid+"/create"}><div>MAKE MORE OPTIONS</div></Link>:<></>}
 					
-				</div>
+				</div>:<div></div>}
+				{cType?<Link to={"/"+cid+"/question/"+qid+"/create"}><div>MAKE MORE OPTIONS</div></Link>:<></>}
 			</div>
 		</div>
 	);
