@@ -26,6 +26,7 @@ const StemCreate2 = (props) => {
         {option_text:"", is_answer:false},
         {option_text:"", is_answer:false}
     ])
+    const [explanation, setExplanation] = useState("")
     const [qObj, setQobj] = useState({})
 
     const [msg, setMsg] = useState("")
@@ -40,7 +41,7 @@ const StemCreate2 = (props) => {
         const newQobj = await childRef.current.submitStem();
         console.log("submitstem2")
         console.log("qobj:",newQobj)
-        axios.post("http://localhost:4000/question/organic/question/create",{optionList:optionList, qInfo:newQobj, cid:cid})
+        axios.post("http://localhost:4000/question/organic/question/create",{optionList:optionList, qInfo:newQobj, cid:cid, explanation:explanation})
         .then((res) => {
             if(res.data.success) {
                 console.log("success!")
@@ -67,7 +68,7 @@ const StemCreate2 = (props) => {
                     </div>
                     <div>
                         <h3> Options </h3>
-                        <OptionCreate2 updateOptionList={setOptionList} optionList={optionList}/>
+                        <OptionCreate2 updateOptionList={setOptionList} optionList={optionList} updateExplanation={setExplanation}/>
                     </div>
                     <button onClick={onSubmit}>sumbit</button>
                     {msg}

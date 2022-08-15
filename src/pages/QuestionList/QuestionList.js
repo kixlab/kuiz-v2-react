@@ -26,6 +26,9 @@ const QuestionList = (props) => {
 			}
 		)
 	}
+	const moveToCreateStem = () => {
+		navigate("/"+cid+"/createstem")
+	}
 	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
 	useEffect(()=> {
 		if(isLoggedIn) {
@@ -42,7 +45,7 @@ const QuestionList = (props) => {
 				<div id="searchbar">
 					<input></input>
 				</div>
-				<Link to={"/"+cid+"/createstem"} style={{ textDecoration: 'none', color:'#000000' }}><Button>Create Stem</Button></Link>
+				<div style={{ textDecoration: 'none', color:'#000000' }}><Button navigateBy={moveToCreateStem}text="Create Stem"/></div>
 				
 			</div>
 			<div id="question-list-header">

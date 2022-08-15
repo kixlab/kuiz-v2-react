@@ -4,10 +4,9 @@ import { useNavigate } from "react-router"
 import './OptionCreate2.scss'
 
 
-const OptionCreate2 = ({optionList, updateOptionList}) => {
+const OptionCreate2 = ({optionList, updateOptionList, updateExplanation}) => {
     const navigate = useNavigate()
     const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
-    const [explanation, setExplanation] = useState("")
     // const [optionList, setOptionList] = useState([
     //     {option_text:"", is_answer:false},
     //     {option_text:"", is_answer:false},
@@ -24,7 +23,7 @@ const OptionCreate2 = ({optionList, updateOptionList}) => {
     }
 
     const explanationHandler = (e) => {
-        setExplanation(e.target.value)
+        updateExplanation(e.target.value)
     }
     const addOption = (e) => {
         if(optionList.length<5) {
@@ -78,7 +77,7 @@ const OptionCreate2 = ({optionList, updateOptionList}) => {
             </div>
             <div>
                 <h3>Explanation</h3>
-                <textarea value={explanation} placeholder="Explanation"
+                <textarea placeholder="Explanation"
                   rows="4" onChange={explanationHandler}/>
             </div>
             
