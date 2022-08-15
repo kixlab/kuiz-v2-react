@@ -63,7 +63,8 @@ const Question = (props) => {
 	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
 	const checkAnswer = () => {
 		if(!ansVisible){
-			axios.post("http://localhost:4000/question/solve",{qid:qid, uid:uid, initAns: options[selected]._id, optionSet:options.map((o)=>ObjectID(o._id))}).then(
+
+			axios.post("http://localhost:4000/question/solve",{qid:qid, uid:uid, initAns: options[selected]._id, isCorrect:(selected === answer),optionSet:options.map((o)=>ObjectID(o._id))}).then(
 			(res)=>{
 				console.log("success:",res.data.success)
 			}
@@ -84,7 +85,7 @@ const Question = (props) => {
 		<div id="question-screen-wrapper">
 			<div id="question-nav">Question List &gt; #123</div>
 			<div id="question-screen">
-				<Link to={"/"+cid} style={{ textDecoration: 'none', color:'#000000' }}>
+				<Link to={"/"+cid+(cType?"":"/qlist")} style={{ textDecoration: 'none', color:'#000000' }}>
 					<div id="return-button" >
 						<i className="fa-solid fa-arrow-left" ></i> Back to Question List
 					</div>

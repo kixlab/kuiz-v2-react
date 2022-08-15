@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, useSearchParams } from "react-router-dom"
 import StemCreate from './pages/StemCreate/StemCreate';
 import StemCreate2 from './organicPages/CreateStem2/CreateStem2';
 import OptionCreate from './pages/OptionCreate/OptionCreate'
+import QuestionListOption from './pages/QuestionListOption/QuestionListOption';
 import Login from './pages/Login/Login'
 import Navbar from './components/Navbar/Navbar';
 import Enroll   from './pages/Enroll/Enroll';
@@ -22,11 +23,11 @@ function App() {
       {showNav && <Navbar/>}
       <main>
       <Routes>
-          <Route path="/:cid" element={<QuestionList funcNav={setShowNav}/>}/>
+          {cType && <Route path="/:cid" element={<QuestionListOption funcNav={setShowNav}/>}/>}
           <Route path="/:cid/qlist" element={<QuestionList funcNav={setShowNav}/>}/>
           <Route path="/:cid/question/:id" element={<Question funcNav={setShowNav}/>}/>
           <Route path="/:cid/createstem" element={cType?<StemCreate funcNav={setShowNav}/>:<StemCreate2 funcNav={setShowNav}/>}/>
-          <Route path="/:cid/question/:id/create" element={<OptionCreate funcNav={setShowNav}/>}/>
+          {cType && <Route path="/:cid/question/:id/create" element={<OptionCreate funcNav={setShowNav}/>}/>}
           <Route path="/login" element={<Login funcNav={setShowNav}/>} />
           <Route path="/enroll" element={<Enroll funcNav={setShowNav}/>}/>
         </Routes>

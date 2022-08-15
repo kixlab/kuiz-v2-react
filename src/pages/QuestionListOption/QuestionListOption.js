@@ -9,9 +9,9 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 
 
-import "./QuestionList.scss";
+import "./QuestionListOption.scss";
 
-const QuestionList = (props) => {
+const QuestionListOption = (props) => {
 	const navigate = useNavigate()
 	props.funcNav(true);
 	const cid = useParams().cid 
@@ -55,7 +55,7 @@ const QuestionList = (props) => {
 				<div>Last Updated</div>
 			</div>
 			{questionList.map((question, i) => (
-				<Link to={"/"+cid+"/question/" + question._id } style={{ textDecoration: 'none', color:'#000000' }}>
+				<Link to={"/"+cid+"/question/" + question._id+"/create" } style={{ textDecoration: 'none', color:'#000000' }}>
 					<div id="question-list-wrapper">
 					<QuestionListItem
 						id={question._id}
@@ -73,4 +73,4 @@ const QuestionList = (props) => {
 	);
 }
 
-export default QuestionList;
+export default QuestionListOption;
