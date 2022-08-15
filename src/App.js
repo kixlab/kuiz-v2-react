@@ -6,16 +6,24 @@ import StemCreate2 from './organicPages/CreateStem2/CreateStem2';
 import OptionCreate from './pages/OptionCreate/OptionCreate'
 import QuestionListOption from './pages/QuestionListOption/QuestionListOption';
 import Login from './pages/Login/Login'
+import Admin from './pages/Admin/Admin';
+import MyPage from './pages/MyPage/MyPage';
 import Navbar from './components/Navbar/Navbar';
 import Enroll   from './pages/Enroll/Enroll';
 import './App.scss'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSelector } from 'react-redux';
 
 function App() {
 
   const [showNav, setShowNav] = useState(true);
   const cType = useSelector((state) => state.userInfo.cType)
+  const isAdmin = useSelector((state) => state.userInfo.userInfo.isAdmin)
+  const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
+  useEffect(() => {
+    
+    console.log("ISADMIN!!:",isAdmin)
+  },[])
 
   return(
     <BrowserRouter>
@@ -30,6 +38,8 @@ function App() {
           {cType && <Route path="/:cid/question/:id/create" element={<OptionCreate funcNav={setShowNav}/>}/>}
           <Route path="/login" element={<Login funcNav={setShowNav}/>} />
           <Route path="/enroll" element={<Enroll funcNav={setShowNav}/>}/>
+          <Route path="/:cid/mypage" element={<MyPage funcNav={setShowNav}/>}/>
+          {isAdmin && <Route path="/:cid/admin" element={<Admin funcNav={setShowNav}/>}/>}
         </Routes>
         </main>
       </div>

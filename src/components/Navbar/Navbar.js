@@ -12,18 +12,19 @@ function Navbar() {
     // if (withouSidebarRoutes.some((item) => pathname.includes(item))) return null;
     const profile = useSelector((state)=>state.userInfo.userInfo.imageUrl)
     const cid = useSelector((state) => state.userInfo.cid)
+    const isAdmin = useSelector((state) => state.userInfo.userInfo)
     const navigate = useNavigate()
     const cType = useSelector((state) => state.userInfo.cType)
     const moveToCreateStem = () => {
         navigate("/"+cid+"/createstem")
     }
     const moveToCreateOption = () => {
-        console.log("optionC")
         navigate("/"+cid)
     }
     const moveToQlist = () => {
         navigate("/"+cid+"/qlist")
     }
+
 
 	return (
         <div id="left-sidebar">
@@ -34,7 +35,7 @@ function Navbar() {
                 {cType?<Button navigateBy={moveToCreateOption}text="Create Option"/>:null}
                 <Button navigateBy={moveToQlist}text="Question List"/>
             </div>
-            <div className="profile"><img src={profile}/></div>
+            <div className="profile" onClick={e => navigate("/"+cid+"/mypage")}><img src={profile}/></div>
         </div>
 	);
 }
