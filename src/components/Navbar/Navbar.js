@@ -17,10 +17,11 @@ function Navbar() {
         navigate("/"+cid+"/createstem")
     }
     const moveToCreateOption = () => {
+        console.log("optionC")
         navigate("/"+cid)
     }
     const moveToQlist = () => {
-        navigate("/"+cid+"qlist")
+        navigate("/"+cid+"/qlist")
     }
 
 	return (
@@ -28,9 +29,9 @@ function Navbar() {
             <div id="main-logo">KUIZ</div>
             {cid}
             <div id="side-nav">
-                <Button onClick={moveToCreateStem}>Create Stem</Button>
-                <Button onClick={moveToCreateOption}>Create Option</Button>
-                <Button onClick={moveToQlist}>Question List</Button>
+                <Button navigateBy={moveToCreateStem} text="Create Stem"/>
+                <Button navigateBy={moveToCreateOption}text="Create Option"/>
+                <Button navigateBy={moveToQlist}text="Question List"/>
             </div>
             <div className="profile"><img src={profile}/></div>
         </div>

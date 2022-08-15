@@ -59,7 +59,7 @@ const QuestionList = (props) => {
 						number={13}
 						title={question.raw_string}
 						options={question.options}
-						date={question.options.createdAt}
+						// date={question.options.createdAt}
 					/>
 					</div>
 				</Link>

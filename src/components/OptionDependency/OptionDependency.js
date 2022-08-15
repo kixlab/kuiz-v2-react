@@ -4,6 +4,7 @@ import './OptionDependency.scss'
 import axios from "axios";
 import { update } from "draft-js/lib/DefaultDraftBlockRenderMap";
 
+
 const OptionDependency = ({optionList, label, setDependency}) => {
 
     const [board, setBoard] = useState([])

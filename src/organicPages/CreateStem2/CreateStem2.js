@@ -37,10 +37,10 @@ const StemCreate2 = (props) => {
 
     async function onSubmit () {
         console.log("CHildref",childRef)
-        await childRef.current.submitStem();
+        const newQobj = await childRef.current.submitStem();
         console.log("submitstem2")
-        console.log("qobj:",qObj)
-        axios.post("http://localhost:4000/question//organic/question/create",{optionList:optionList, qInfo:qObj, cid:cid})
+        console.log("qobj:",newQobj)
+        axios.post("http://localhost:4000/question/organic/question/create",{optionList:optionList, qInfo:newQobj, cid:cid})
         .then((res) => {
             if(res.data.success) {
                 console.log("success!")

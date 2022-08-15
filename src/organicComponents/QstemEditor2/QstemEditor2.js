@@ -55,10 +55,11 @@ const QstemEditor2 = forwardRef(({cid, setQobj},ref) => {
                 author: ObjectID(uid), 
                 stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
                 raw_string: editorState.editorState.getCurrentContent().getPlainText('\u0001'),
-                class: ObjectID(cid)
+                class: ObjectID(cid),
+                options:[]
             }
             setQobj(qstemObj)
-            console.log("submitstem1")
+            return qstemObj
             // axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj, cid:cid}).then(
             //     (res)=>{
             //         setMsg("Successfuly made question stem!")

@@ -2,19 +2,15 @@ import React from "react";
 
 import "./Button.scss";
 
-class Button extends React.Component {
-	render() {
-		return (
-			<button
-				className="button"
-				// onClick={() => {
-				// 	this.props.onclick();
-				// }}
-			>
-				<div className="button-text">{this.props.children}</div>
-			</button>
-		);
-	}
+const Button = ({navigateBy, text}) => {
+	return (
+		<button
+			className="button"
+			onClick={navigateBy}
+		>
+			<div className="button-text">{text}</div>
+		</button>
+	);
 }
 
 export default Button;

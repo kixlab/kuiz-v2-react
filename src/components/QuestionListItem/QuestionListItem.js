@@ -8,7 +8,7 @@ const QuestionList = (props) => {
 			<div className="question-list-number">{props.number}</div>
 			<div className="question-list-title">{props.title}</div>
 			<div className="question-list-optioncount">
-				{props.options.length}
+				{props.options && props.options.length}
 			</div>
 			<div className="question-list-date">{props.date}</div>
 		</div>
