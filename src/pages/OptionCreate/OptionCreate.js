@@ -93,6 +93,11 @@ const OptionCreate = (props) => {
 						className="introduce-content"
 					/>
 				)}
+
+				<div className="objective-container">
+					learning objective : {qinfo && qinfo.learning_objective}
+				</div>
+
 				<DndProvider backend={HTML5Backend}>
 					<div className="option-box">
 						<div className="option-container">

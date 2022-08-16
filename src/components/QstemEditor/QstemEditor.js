@@ -163,7 +163,6 @@ function QstemEditor(props) {
 						},
 					})
 					.then((res2) => {
-						console.log("success:::", res2.data.success);
 						setMsg("Successfuly made question stem!");
 						navigate("/" + cid + "/question/" + res.data.data + "/create");
 					});

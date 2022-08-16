@@ -13,16 +13,17 @@ import "./QuestionList.scss";
 const QuestionList = (props) => {
 	const navigate = useNavigate();
 	props.funcNav(true);
+
 	const cid = useParams().cid;
 	const [questionList, setQuestionList] = useState([]);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	console.log("UID:", uid);
 	const getQuestionList = () => {
-		//TODO : add cid in request url
 		console.log("CID:", cid);
 		axios
 			.get("http://localhost:4000/question/list/load?cid=" + cid)
 			.then((res) => {
+				console.log("qlist:", res.data.qstems.problemList);
 				setQuestionList(res.data.qstems.problemList);
 			});
 	};
@@ -32,6 +33,7 @@ const QuestionList = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		if (isLoggedIn) {
+			console.log("AA");
 			getQuestionList();
 		} else {
 			navigate("/login");
@@ -54,6 +56,7 @@ const QuestionList = (props) => {
 				<div> # of Options</div>
 				<div>Last Updated</div>
 			</div>
+
 			{questionList
 				.map((question, i) => (
 					<Link
@@ -66,7 +69,9 @@ const QuestionList = (props) => {
 								number={i + 1}
 								title={question.raw_string}
 								options={question.options}
-								// date={question.options.createdAt}
+								date={
+									question.updatedAt ? question.updatedAt : question.createdAt
+								}
 							/>
 						</div>
 					</Link>
