@@ -35,7 +35,7 @@ function QstemEditor(props) {
 	const [uploadImages, setUploadImages] = useState([]);
 	const cid = props.cid;
 	const [template, setTemplate] = useState([]);
-	const [answer, setAnswer] = useState()
+	const [answer, setAnswer] = useState();
 	const templateList = [
 		"What might occur if … ?",
 		"What is the difference between … and … ?",
@@ -147,28 +147,30 @@ function QstemEditor(props) {
 			.post("http://localhost:4000/question/qstem/create", {
 				qstemObj: qstemObj,
 				cid: cid,
-				answer_text: answer
+				answer_text: answer,
 			})
 			.then((res) => {
-				axios.post("http://localhost:4000/question/option/create",{optionData:{
-					author:ObjectID(uid),
-					option_text:answer,
-					is_answer:true,
-					explanation:"",
-					class:ObjectID(cid),
-					qstem:ObjectID(res.data.data),
-					plausible:{similar:[], difference: []}
-				}}).then(
-					(res2) => {
-						console.log("success:::", res2.data.success)
+				axios
+					.post("http://localhost:4000/question/option/create", {
+						optionData: {
+							author: ObjectID(uid),
+							option_text: answer,
+							is_answer: true,
+							explanation: "",
+							class: ObjectID(cid),
+							qstem: ObjectID(res.data.data),
+							plausible: { similar: [], difference: [] },
+						},
+					})
+					.then((res2) => {
+						console.log("success:::", res2.data.success);
 						setMsg("Successfuly made question stem!");
-						navigate("/"+cid+"/question/"+res.data.data+"/create");
-					}
-				)
+						navigate("/" + cid + "/question/" + res.data.data + "/create");
+					});
 			});
 	};
 	return (
-		<div>
+		<div id="qstemeditor">
 			<h3>Learning Objective</h3>
 
 			<TextField
@@ -237,9 +239,7 @@ function QstemEditor(props) {
 				</Row>
 				<div>
 					<h3>One Answer</h3>
-					<div className="helper-text">
-						One answer option of your question.
-					</div>
+					<div className="helper-text">One answer option of your question.</div>
 					<TextField
 						fullWidth
 						value={answer}
@@ -247,11 +247,11 @@ function QstemEditor(props) {
 						placeholder="One answer option of your question."
 						className="objective-input"
 					/>
-
 				</div>
-					
+
 				<div style={{ textAlign: "center", width: "100%" }}>
 					<Button
+						className="submit"
 						style={{ margin: "16px auto", display: "block" }}
 						onClick={submitStem}
 						type="primary"

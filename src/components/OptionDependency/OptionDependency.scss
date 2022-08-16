@@ -1,5 +1,26 @@
 .same {
-  width: 300px;
-  height: 100px;
-  border: 2px solid black;
+	min-height: 100px;
+	border: 1.5px solid black;
+	padding: 12px;
+
+	.dependency-option {
+		padding: 12px;
+		border: 2px solid blue;
+		margin-bottom: 12px;
+		border-radius: 4px;
+		display: flex;
+		justify-content: space-between;
+		button {
+			background: none;
+			border: none;
+			width: 20px;
+			height: 20px;
+			border: 1px solid gray;
+			border-radius: 8px;
+			color: white;
+			background-color: gray;
+			cursor: pointer;
+			font-weight: 400;
+		}
+	}
 }
