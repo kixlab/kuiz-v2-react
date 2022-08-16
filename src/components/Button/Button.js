@@ -2,15 +2,12 @@ import React from "react";
 
 import "./Button.scss";
 
-const Button = ({navigateBy, text}) => {
+const Button = ({ navigateBy, text, style }) => {
 	return (
-		<button
-			className="button"
-			onClick={navigateBy}
-		>
+		<button className="button" onClick={navigateBy} style={style}>
 			<div className="button-text">{text}</div>
 		</button>
 	);
-}
+};
 
 export default Button;
