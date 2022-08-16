@@ -38,12 +38,16 @@ const Question = (props) => {
 				if(res.data.data.options.length>1) {
 					const ansList = res.data.data.options.filter((o) => o.is_answer===true)
 					const disList = res.data.data.options.filter((o) => o.is_answer === false)
+					console.log("anslist:", ansList)
+					console.log("dislist:",disList)
 					if(ansList.length>0 && disList.length>0){
 						const optionList = [ansList[0]].concat(disList)
 						if(disList.length>4){
 							setOptions(optionList.slice(0,4))
+							setIsOptionValid(true)
 						} else {
 							setOptions(optionList)
+							setIsOptionValid(true)
 						}
 					} else {
 						setIsOptionValid(false)

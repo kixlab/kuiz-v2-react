@@ -81,8 +81,8 @@ const OptionInput = ({setMyOption, setPageStat}) => {
     return(
         <div>
             <input placeholder="option" onChange={setOptionValue} value={option}/>
-            <input type="radio" value={0} checked={isAnswer===0} onChange={setAnswer}/> <label> Distractor</label>
-            <input type="radio" value={1} checked={isAnswer===1} onChange={setAnswer}/> <label> Answer </label>
+            <input type="radio" value={0} checked={isAnswer===0} onChange={(e) => setAnswer(0)}/> <label> Distractor</label>
+            <input type="radio" value={1} checked={isAnswer===1} onChange={(e) => setAnswer(1)}/> <label> Answer </label>
             <InputTags handleDelete={handleDeleteSimilar} handleOnSubmit={handleOnSubmitSimilar} tags={similar}/>
             <InputTags handleDelete={handleDeleteDifference} handleOnSubmit={handleOnSubmitDifference} tags={difference}/>
             <input placeholder="explanation" onChange={setExpValue} value={explanation}/>
