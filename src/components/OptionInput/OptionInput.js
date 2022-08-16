@@ -128,7 +128,7 @@ const OptionInput = ({setMyOption, setPageStat}) => {
                 </div>
             </div>
             <div className="submit-button">
-                <Button variant="contained" onClick={submit} >Submit</Button>
+                <Button variant="contained" onClick={submit} >Next</Button>
             </div>
         </div>
     );

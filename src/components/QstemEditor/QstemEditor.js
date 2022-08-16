@@ -35,6 +35,7 @@ function QstemEditor(props) {
 	const [uploadImages, setUploadImages] = useState([]);
 	const cid = props.cid;
 	const [template, setTemplate] = useState([]);
+	const [answer, setAnswer] = useState()
 	const templateList = [
 		"What might occur if … ?",
 		"What is the difference between … and … ?",
@@ -146,11 +147,24 @@ function QstemEditor(props) {
 			.post("http://localhost:4000/question/qstem/create", {
 				qstemObj: qstemObj,
 				cid: cid,
+				answer_text: answer
 			})
 			.then((res) => {
-				setMsg("Successfuly made question stem!");
-				navigate("/" + cid);
-				console.log("CID2:", cid);
+				axios.post("http://localhost:4000/question/option/create",{optionData:{
+					author:ObjectID(uid),
+					option_text:answer,
+					is_answer:true,
+					explanation:"",
+					class:ObjectID(cid),
+					qstem:ObjectID(res.data.data),
+					plausible:{similar:[], difference: []}
+				}}).then(
+					(res2) => {
+						console.log("success:::", res2.data.success)
+						setMsg("Successfuly made question stem!");
+						navigate("/"+cid+"/question/"+res.data.data+"/create");
+					}
+				)
 			});
 	};
 	return (
@@ -221,6 +235,21 @@ function QstemEditor(props) {
 						</Form>
 					</Col>
 				</Row>
+				<div>
+					<h3>One Answer</h3>
+					<div className="helper-text">
+						One answer option of your question.
+					</div>
+					<TextField
+						fullWidth
+						value={answer}
+						onChange={(e) => setAnswer(e.target.value)}
+						placeholder="One answer option of your question."
+						className="objective-input"
+					/>
+
+				</div>
+					
 				<div style={{ textAlign: "center", width: "100%" }}>
 					<Button
 						style={{ margin: "16px auto", display: "block" }}
