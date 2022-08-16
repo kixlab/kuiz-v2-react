@@ -1,3 +1,5 @@
+// @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100&display=swap");
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -12,6 +14,7 @@ code {
     monospace;
 }
 .app-wrapper {
+  // font-family: "Noto Sans", sans-serif;
   display: grid;
   grid-template-columns: 350px auto;
   height: 100vh;

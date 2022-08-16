@@ -3,10 +3,26 @@
   padding-left: 6px;
   padding-right: 6px;
   margin-right: 5px;
+  font-size: 10px;
 }
 .similarTag {
   background-color: #fff6eb;
 }
 .differenceTag {
   background-color: #f4ebff;
+}
+
+#answer-wrapper {
+  border: 1px solid #06c71f;
+  border-radius: 5px;
+}
+
+#distractor-wrapper {
+  border: 1px solid #3d73dd;
+  border-radius: 5px;
+}
+.option-components {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
 }

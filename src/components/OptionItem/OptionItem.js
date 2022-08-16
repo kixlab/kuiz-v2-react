@@ -29,14 +29,18 @@ const OptionItem = ({optionInfo, id}) => {
 
 
 	return (
-		<div>
+		<div id={isAnswer?"answer-wrapper":"distractor-wrapper"}>
             <div 
             ref={drag}
             style={{ border: isDragging ? "5px solid pink" : "0px" }}
+            className="option-components"
             >
-              {isAnswer?"<answer>":"<distractor>"}, {text}
-              <div>{similar.map(option => {return <a className="similarTag tag">{option}</a>})}</div>
-              <div>{difference.map(option => {return <a className="differenceTag tag">{option}</a>})}</div>
+              {text}
+              <div className="tags">
+                <div>{similar.map(option => {return <a className="similarTag tag">{option}</a>})}</div>
+                <div>{difference.map(option => {return <a className="differenceTag tag">{option}</a>})}</div>
+              </div>
+              
               {detail?<div>{explanation}<button onClick={changeDetailView}>hide</button></div>:<button onClick={changeDetailView}>See Detail</button>}
             </div>
 			

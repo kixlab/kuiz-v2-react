@@ -81,21 +81,26 @@ const OptionCreate = (props) => {
 				</Link>
 				{qinfo && <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}} className="introduce-content"/>}
 				<DndProvider backend={HTML5Backend}>
-				<OptionList qinfo={qinfo} ansList={ansList} disList={disList}/>
-                	
-                	{pageStat?<OptionInput setMyOption={setMyOption} setPageStat={setPageStat}/>:
-					<div>{<div>
-							{(ansList && disList) && 
-								<div>
-									<div>My Option</div>
-									{myOption && myOption.option_text}
-									<OptionDependency optionList={ansList.concat(disList)} label={"same"} setDependency={setSame}/>
-									<OptionDependency optionList={ansList.concat(disList)} label={"contradictory"} setDependency={setContradictory}/>
-									<button onClick={submitDependency}>submit</button>
-								</div>
-							}
+				<div className="option-box">
+					<div className="option-container">
+						<OptionList qinfo={qinfo} ansList={ansList} disList={disList}/>
+					</div>
+					<div className="option-container">
+						{pageStat?<OptionInput setMyOption={setMyOption} setPageStat={setPageStat}/>:
+						<div>{<div>
+								{(ansList && disList) && 
+									<div>
+										<div>My Option</div>
+										{myOption && myOption.option_text}
+										<OptionDependency optionList={ansList.concat(disList)} label={"same"} setDependency={setSame}/>
+										<OptionDependency optionList={ansList.concat(disList)} label={"contradictory"} setDependency={setContradictory}/>
+										<button onClick={submitDependency}>submit</button>
+									</div>
+								}
+							</div>}
 						</div>}
-					</div>}
+					</div>
+				</div>
 				</DndProvider>
 			</div>
 		</div>

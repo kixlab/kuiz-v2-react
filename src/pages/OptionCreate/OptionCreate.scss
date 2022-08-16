@@ -19,3 +19,15 @@
   grid-template-rows: 36px 1fr 1fr;
   row-gap: 24px;
 }
+
+.option-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.option-container {
+  border: 2px solid #3d73dd;
+  border-radius: 10px;
+  width: 48.5%;
+  padding: 2%;
+}
