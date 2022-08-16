@@ -80,6 +80,8 @@ const OptionCreate = (props) => {
 					</div>
 				</Link>
 				{qinfo && <div dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}} className="introduce-content"/>}
+				
+				<div className="objective-container">learning objective : {qinfo && qinfo.learning_objective}</div>
 				<DndProvider backend={HTML5Backend}>
 				<div className="option-box">
 					<div className="option-container">
