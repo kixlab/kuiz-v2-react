@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./QuestionListItem.scss";
 
 const QuestionList = (props) => {
+	useEffect(() => {
+		// console.log("PROPS:",props)
+	},[])
 	return (
 		<div className="question-list-item">
 			<div className="question-list-number">{props.number}</div>
