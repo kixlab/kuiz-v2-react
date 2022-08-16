@@ -18,6 +18,7 @@
   display: grid;
   grid-template-rows: 20px auto;
   row-gap: 24px;
+  height: 90%;
 }
 
 .option-box {
@@ -30,4 +31,5 @@
   border-radius: 10px;
   width: 45%;
   padding: 2%;
+  height: 95%;
 }

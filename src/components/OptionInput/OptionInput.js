@@ -3,9 +3,11 @@ import { useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import {changePageStat} from '../../features/optionSelection/pageStatSlice'
 import { Cancel, Tag } from "@mui/icons-material";
-import { FormControl, Stack, TextField, Typography } from "@mui/material";
+import { FormControl, Stack, TextField, Typography, Button } from "@mui/material";
 import { Box } from "@mui/system";
 import InputTags from "../InputTags/InputTags";
+
+
 
 
 import axios from "axios";
@@ -82,39 +84,52 @@ const OptionInput = ({setMyOption, setPageStat}) => {
         <div>
             <div className="option-list-title">Option Construction</div>
             <div className="option-construction-step">
-            <div className="option-input-area">
-                <div className="sub-title">Your Option</div>
-                <TextField
-                    fullWidth
-                    value={option}
-                    onChange={setOptionValue}
-                    placeholder="Your Option"
-                    className="objective-input"
-			    />
-                
+                <div className="option-input-area">
+                    <div className="sub-title">Your Option</div>
+                    <div className="option-field">
+                    <TextField
+                        fullWidth
+                        value={option}
+                        onChange={setOptionValue}
+                        className="objective-input"
+                        // label="Your Option"
+                    />
+                    </div>
+                    <div>
+                        <input type="radio" value={0} checked={isAnswer===0} onChange={(e) => setIsAnswer(0)}/> <label> Distractor</label>
+                        <input type="radio" value={1} checked={isAnswer===1} onChange={(e) => setIsAnswer(1)}/> <label> Answer </label>
+                    </div>
+                </div>
+            
+                <div className="option-input-tags">
+                    <div className="similar-tag-container">
+                        <div className="sub-title">Similarity</div>
+                        <div className="sub-exp">How is the distrctor plausible?</div>
+                        <InputTags handleDelete={handleDeleteSimilar} handleOnSubmit={handleOnSubmitSimilar} tags={similar} type={true}/>
+                    </div>
+                    <div className="different-tag-container">
+                        <div className="sub-title">Difference</div>
+                        <div className="sub-exp">How is it different with the answer?</div>
+                        <InputTags handleDelete={handleDeleteDifference} handleOnSubmit={handleOnSubmitDifference} tags={difference} type={false}/>
+                    </div>
+                </div>
                 <div>
-                    <input type="radio" value={0} checked={isAnswer===0} onChange={(e) => setIsAnswer(0)}/> <label> Distractor</label>
-                    <input type="radio" value={1} checked={isAnswer===1} onChange={(e) => setIsAnswer(1)}/> <label> Answer </label>
+                    <div className="sub-title">Explanation</div>
+                    <div className="explanation-field">
+                        <TextField
+                            id="outlined-textarea"
+                            // placeholder="Explanation"
+                            // label="Explanation"
+                            multiline
+                            fullWidth
+                        />
+                    </div>
+
                 </div>
             </div>
-            <div className="option-input-tags">
-                <div>
-                    <div className="sub-title">Similarity</div>
-                    <div>How is the distrctor plausible?</div>
-                    <InputTags handleDelete={handleDeleteSimilar} handleOnSubmit={handleOnSubmitSimilar} tags={similar}/>
-                </div>
-                <div>
-                    <div className="sub-title">Difference</div>
-                    <div>How is it different with the answer?</div>
-                    <InputTags handleDelete={handleDeleteDifference} handleOnSubmit={handleOnSubmitDifference} tags={difference}/>
-                </div>
+            <div className="submit-button">
+                <Button variant="contained" onClick={submit} >Submit</Button>
             </div>
-            <div>
-                <div className="sub-title">Explanation</div>
-                <textarea placeholder="explanation" onChange={setExpValue} value={explanation}/>
-            </div>
-            </div>
-            <div onClick={submit}><button >Submit</button></div>
         </div>
     );
 }

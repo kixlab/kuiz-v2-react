@@ -6,10 +6,41 @@
 .option-construction-step {
   display: flex;
   flex-direction: column;
+  align-content: flex-start;
   justify-content: space-between;
 }
 .option-input-tags {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-top: 13px;
+  padding-bottom: 10px;
+}
+.option-field {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.divider {
+  border: 0.5px solid #e8e8e8;
+}
+.submit-button {
+}
+// .sub-title{
+//     padding-bottom: 3px;
+// }
+.sub-exp {
+  font-style: italic;
+  color: #3d8add;
+  font-size: x-small;
+  padding-bottom: 8px;
+}
+.similar-tag-container {
+  flex-basis: 47%;
+}
+.different-tag-container {
+  flex-basis: 47%;
+}
+.explanation-field {
+  padding-top: 5px;
+  padding-bottom: 10px;
 }

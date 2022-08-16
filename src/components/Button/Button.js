@@ -4,7 +4,7 @@ import "./Button.scss";
 
 const Button = ({ navigateBy, text, style }) => {
 	return (
-		<button className="button" onClick={navigateBy} style={style}>
+		<button className="custom-button" onClick={navigateBy} style={style}>
 			<div className="button-text">{text}</div>
 		</button>
 	);
