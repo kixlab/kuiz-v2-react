@@ -1,5 +1,9 @@
 .option-list-title {
   margin-bottom: 7px;
+  color: #555555;
+  font-weight: 500;
+  font-size: 18px;
+  padding-bottom: 10px;
 }
 .answer-container {
   display: flex;
@@ -10,4 +14,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: scroll;
+}
+.option-item-wrapper {
+  padding-bottom: 5px;
 }

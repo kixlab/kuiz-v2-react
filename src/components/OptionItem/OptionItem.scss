@@ -13,16 +13,39 @@
 }
 
 #answer-wrapper {
-  border: 1px solid #06c71f;
+  border: 2px solid #06c71f;
   border-radius: 5px;
 }
 
 #distractor-wrapper {
-  border: 1px solid #3d73dd;
+  border: 2px solid #3d73dd;
   border-radius: 5px;
 }
 .option-components {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+.extra-wrapper {
+  align-self: flex-end;
+}
+.option-text {
+  vertical-align: middle;
+}
+.tags {
+  display: flex;
   flex-direction: row;
-  padding: 10px;
+}
+.answer-label {
+  font-size: xx-small;
+  color: #06c71f;
+}
+.distractor-label {
+  font-size: xx-small;
+  color: #3d73dd;
 }

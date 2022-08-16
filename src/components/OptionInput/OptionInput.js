@@ -7,6 +7,7 @@ import { FormControl, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import InputTags from "../InputTags/InputTags";
 
+
 import axios from "axios";
 import './OptionInput.scss'
 var ObjectID = require("bson-objectid");
@@ -34,9 +35,6 @@ const OptionInput = ({setMyOption, setPageStat}) => {
 
     const dispatch = useDispatch()
     const qid = useParams().id
-    const setAnswer = (e) => {
-        setIsAnswer(e.target.value)
-    }
     const setOptionValue = (e) => {
         setOption(e.target.value)
     }
@@ -59,6 +57,7 @@ const OptionInput = ({setMyOption, setPageStat}) => {
 
     const submit = () => {
         
+        
         const optionData = {
             author:ObjectID(uid),
             option_text:option,
@@ -68,6 +67,7 @@ const OptionInput = ({setMyOption, setPageStat}) => {
             qstem:ObjectID(qid),
             plausible:{similar:similar, difference: difference}
         }
+        console.log("Optiondata:",optionData)
         axios.post("http://localhost:4000/question/option/create",{optionData:optionData}).then(
             (res)=>{
                 console.log("SUCCESS?",res.data.success)
@@ -80,13 +80,41 @@ const OptionInput = ({setMyOption, setPageStat}) => {
 
     return(
         <div>
-            <input placeholder="option" onChange={setOptionValue} value={option}/>
-            <input type="radio" value={0} checked={isAnswer===0} onChange={(e) => setAnswer(0)}/> <label> Distractor</label>
-            <input type="radio" value={1} checked={isAnswer===1} onChange={(e) => setAnswer(1)}/> <label> Answer </label>
-            <InputTags handleDelete={handleDeleteSimilar} handleOnSubmit={handleOnSubmitSimilar} tags={similar}/>
-            <InputTags handleDelete={handleDeleteDifference} handleOnSubmit={handleOnSubmitDifference} tags={difference}/>
-            <input placeholder="explanation" onChange={setExpValue} value={explanation}/>
-            <button onClick={submit}>Submit</button>
+            <div className="option-list-title">Option Construction</div>
+            <div className="option-construction-step">
+            <div className="option-input-area">
+                <div className="sub-title">Your Option</div>
+                <TextField
+                    fullWidth
+                    value={option}
+                    onChange={setOptionValue}
+                    placeholder="Your Option"
+                    className="objective-input"
+			    />
+                
+                <div>
+                    <input type="radio" value={0} checked={isAnswer===0} onChange={(e) => setIsAnswer(0)}/> <label> Distractor</label>
+                    <input type="radio" value={1} checked={isAnswer===1} onChange={(e) => setIsAnswer(1)}/> <label> Answer </label>
+                </div>
+            </div>
+            <div className="option-input-tags">
+                <div>
+                    <div className="sub-title">Similarity</div>
+                    <div>How is the distrctor plausible?</div>
+                    <InputTags handleDelete={handleDeleteSimilar} handleOnSubmit={handleOnSubmitSimilar} tags={similar}/>
+                </div>
+                <div>
+                    <div className="sub-title">Difference</div>
+                    <div>How is it different with the answer?</div>
+                    <InputTags handleDelete={handleDeleteDifference} handleOnSubmit={handleOnSubmitDifference} tags={difference}/>
+                </div>
+            </div>
+            <div>
+                <div className="sub-title">Explanation</div>
+                <textarea placeholder="explanation" onChange={setExpValue} value={explanation}/>
+            </div>
+            </div>
+            <div onClick={submit}><button >Submit</button></div>
         </div>
     );
 }
