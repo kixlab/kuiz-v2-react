@@ -6,7 +6,7 @@ import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
 //actions
 //ant part
-import { Row, Col, Form, Input, notification } from "antd";
+import { Row, Col, Form, Input, Button, notification } from "antd";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -21,7 +21,7 @@ import axios from "axios";
 import "./QstemEditor.scss";
 import { useNavigate } from "react-router-dom";
 
-import Button from "../Button/Button.js";
+// import Button from "../Button/Button.js";
 import { display } from "@mui/system";
 
 var ObjectID = require("bson-objectid");
@@ -228,7 +228,9 @@ function QstemEditor(props) {
 						type="primary"
 						htmlType="submit"
 						text={"Add Question Stem"}
-					></Button>
+					>
+						Add Question Stem
+					</Button>
 				</div>
 			</div>
 		</div>

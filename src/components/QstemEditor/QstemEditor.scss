@@ -23,3 +23,18 @@ h3 {
 	width: 100%;
 	margin: 16px 0;
 }
+
+button {
+	background: none;
+	border: none;
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.167) 0px 4px 8px;
+	font-size: 18px;
+	min-width: 250px;
+	height: 64px;
+	border-radius: 18px;
+
+	display: grid;
+	place-items: center;
+	cursor: pointer;
+}
