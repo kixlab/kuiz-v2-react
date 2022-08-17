@@ -35,7 +35,7 @@ const OptionCreate = (props) => {
 
 	const getOptionList = (qid) => {
 		axios
-			.get("http://localhost:4000/question/option/load?qid=" + qid)
+			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/load?qid=` + qid)
 			.then((res) => {
 				const ans = res.data.options.filter((op) => op.is_answer === true);
 				const dis = res.data.options.filter((op) => op.is_answer === false);
@@ -47,7 +47,7 @@ const OptionCreate = (props) => {
 	};
 	const submitDependency = () => {
 		axios
-			.post("http://localhost:4000/question/option/dependency", {
+			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/dependency`, {
 				oid: myOption._id,
 				dependency: {
 					same: same.map((o) => ObjectID(o._id)),

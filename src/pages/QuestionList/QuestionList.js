@@ -21,7 +21,7 @@ const QuestionList = (props) => {
 	const getQuestionList = () => {
 		console.log("CID:", cid);
 		axios
-			.get("http://localhost:4000/question/list/load?cid=" + cid)
+			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` + cid)
 			.then((res) => {
 				console.log("qlist:", res.data.qstems.problemList);
 				setQuestionList(res.data.qstems.problemList);

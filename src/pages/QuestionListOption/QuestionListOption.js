@@ -20,7 +20,7 @@ const QuestionListOption = (props) => {
 	console.log("UID:",uid)
 	const getQuestionList = () => { //TODO : add cid in request url
 		console.log("CID:",cid)
-		axios.get(`http://localhost:${process.env.REACT_APP_PORT}/question/list/load?cid=`+cid).then(
+		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=`+cid).then(
 			(res)=> {
 				setQuestionList(res.data.qstems.problemList)
 			}

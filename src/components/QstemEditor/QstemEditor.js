@@ -144,14 +144,14 @@ function QstemEditor(props) {
 		};
 		console.log("obj:", qstemObj);
 		axios
-			.post("http://localhost:4000/question/qstem/create", {
+			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`, {
 				qstemObj: qstemObj,
 				cid: cid,
 				answer_text: answer,
 			})
 			.then((res) => {
 				axios
-					.post("http://localhost:4000/question/option/create", {
+					.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`, {
 						optionData: {
 							author: ObjectID(uid),
 							option_text: answer,

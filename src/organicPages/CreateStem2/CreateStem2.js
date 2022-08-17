@@ -41,7 +41,7 @@ const StemCreate2 = (props) => {
         const newQobj = await childRef.current.submitStem();
         console.log("submitstem2")
         console.log("qobj:",newQobj)
-        axios.post("http://localhost:4000/question/organic/question/create",{optionList:optionList, qInfo:newQobj, cid:cid, explanation:explanation})
+        axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/organic/question/create`,{optionList:optionList, qInfo:newQobj, cid:cid, explanation:explanation})
         .then((res) => {
             if(res.data.success) {
                 console.log("success!")

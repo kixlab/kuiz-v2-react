@@ -32,7 +32,7 @@ const Question = (props) => {
 	const [isOptionValid, setIsOptionValid] = useState()
 	const getQinfo = (qid) => {
 		console.log("QID:",qid)
-		axios.get("http://localhost:4000/question/detail/load?qid="+qid).then(
+		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=`+qid).then(
 			(res)=> {
 				console.log("Qinfo:",res.data.data)
 				if(res.data.data.options.length>1) {
@@ -67,7 +67,7 @@ const Question = (props) => {
 	const isLoggedIn = useSelector((state)=> state.userInfo.isLoggedIn)
 	const checkAnswer = () => {
 		if(!ansVisible){
-			axios.post("http://localhost:4000/question/solve",{qid:qid, uid:uid, initAns: options[selected]._id, isCorrect:(selected === answer),optionSet:options.map((o)=>ObjectID(o._id))}).then(
+			axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/solve`,{qid:qid, uid:uid, initAns: options[selected]._id, isCorrect:(selected === answer),optionSet:options.map((o)=>ObjectID(o._id))}).then(
 			(res)=>{
 				console.log("success:",res.data.success)
 			}

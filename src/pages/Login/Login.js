@@ -12,7 +12,7 @@ const Login = (props) => {
     const navigate = useNavigate()
     const [user, setUser] = useState({})
 
-    const REDIRECT_URI = "http://localhost:3000/kakaologin"
+    const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     return(
         <di>
@@ -28,7 +28,7 @@ const Login2 = (props) => {
     function handleCallbackResponse(response){
         console.log("Encoded JWT ID token: " + response.credential);
         var userObject = jwt_decode(response.credential)
-        axios.post('http://localhost:4000/auth/register',{email:userObject.email,name:userObject.name,image:userObject.picture}).then
+        axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/register`,{email:userObject.email,name:userObject.name,image:userObject.picture}).then
             ((res)=>{
                 if(res.data.success){
                     console.log("success!")

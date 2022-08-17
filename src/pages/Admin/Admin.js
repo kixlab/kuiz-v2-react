@@ -11,7 +11,7 @@ const Admin = () => {
     const navigate = useNavigate()
 
     const loadUser = () => {
-        axios.get("http://localhost:4000/admin/load/user?cid="+cid).then(
+        axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/admin/load/user?cid=`+cid).then(
             (res) => {
                 setUser(res.data.students)
                 console.log("Success?:",res.data.success)

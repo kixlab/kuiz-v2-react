@@ -18,7 +18,7 @@ const Enroll = (props) => {
         setCode(e.target.value)
     }
     const onSubmit = () => {
-        axios.post("http://localhost:4000/auth/class/join",{code:code,_id:uid, userEmail:email}).then(
+        axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/join`,{code:code,_id:uid, userEmail:email}).then(
             (res)=>{
                 console.log("res.data.cid", res.data.cid)
                 dispatch(enrollClass({cid: res.data.cid, cType:res.data.cType}))
