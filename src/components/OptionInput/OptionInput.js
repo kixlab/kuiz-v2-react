@@ -72,7 +72,7 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 		};
 		console.log("Optiondata:", optionData);
 		axios
-			.post("http://localhost:4000/question/option/create", {
+			.post(`http://localhost:${process.env.REACT_APP_PORT}/question/option/create`, {
 				optionData: optionData,
 			})
 			.then((res) => {

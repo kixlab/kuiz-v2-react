@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 
+
 const Login = (props) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [user, setUser] = useState({})
-    const REST_API_KEY = "8b42dafd5a5b6dbf941521141583631a"
+
     const REDIRECT_URI = "http://localhost:3000/kakaologin"
-    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
     return(
         <di>
             <a href={KAKAO_AUTH_URL}>카카오 로그인</a>

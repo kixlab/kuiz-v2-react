@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { Send } from "@mui/icons-material";
 
+
 const Kakao = (props) => {
     const dispatch = useDispatch();
 
@@ -12,7 +13,6 @@ const Kakao = (props) => {
     const navigate = useNavigate()
     let params = new URL(document.URL).searchParams;
     let KAKAO_CODE = params.get("code");
-    const REST_API_KEY = '8b42dafd5a5b6dbf941521141583631a'
 
 
     const REDIRECT_URI = "http://localhost:3000/kakaologin"
@@ -20,13 +20,13 @@ const Kakao = (props) => {
         fetch(`https://kauth.kakao.com/oauth/token`,{
             method:'POST',
             headers:{'Content-Type':'application/x-www-form-urlencoded'},
-            body:`grant_type=authorization_code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&code=${KAKAO_CODE}`,
+            body:`grant_type=authorization_code&client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&code=${KAKAO_CODE}`,
         })
             .then(res => res.json())
             .then(data => {
                 console.log("DATA:",data)
                 if(data.access_token) {
-                    window.Kakao.init(REST_API_KEY)
+                    window.Kakao.init(process.env.REACT_APP_REST_API_KEY)
                     window.Kakao.Auth.setAccessToken(data.access_token)
                     getUserInfo()
                 } else {

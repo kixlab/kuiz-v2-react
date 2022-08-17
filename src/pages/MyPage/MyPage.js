@@ -15,7 +15,7 @@ const MyPage = (props) => {
 
     const getMadeStem = () => {
         console.log("UID:",uid)
-        axios.post("http://localhost:4000/question/made/stem",{uid:uid}).then(
+        axios.post(`http://localhost:${process.env.REACT_APP_PORT}/question/made/stem`,{uid:uid}).then(
             (res) => {
                 setMadeStem(res.data.madeStem)
             }
@@ -23,16 +23,13 @@ const MyPage = (props) => {
     }
 
     const getMadeOption = () => {
-        axios.post("http://localhost:4000/question/made/option",{uid, uid}).then(
+        axios.post(`http://localhost:${process.env.REACT_APP_PORT}/question/made/option`,{uid, uid}).then(
             (res) => {
                 setMadeOption(res.data.madeOption)
             }
         )
     }
 
-    const getSolvedOption = () => {
-        
-    }
 
     useEffect(()=>{
         if(!isLoggedIn){
