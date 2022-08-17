@@ -10,9 +10,11 @@ import Admin from './pages/Admin/Admin';
 import MyPage from './pages/MyPage/MyPage';
 import Navbar from './components/Navbar/Navbar';
 import Enroll   from './pages/Enroll/Enroll';
+import Kakao from './pages/Kakao/Kakao';
 import './App.scss'
 import React, {useEffect, useState} from 'react';
 import { useSelector } from 'react-redux';
+
 
 function App() {
 
@@ -33,6 +35,7 @@ function App() {
       <Routes>
           {cType && <Route path="/:cid" element={<QuestionListOption funcNav={setShowNav}/>}/>}
           <Route path="/:cid/qlist" element={<QuestionList funcNav={setShowNav}/>}/>
+          <Route path="/kakaologin" element={<Kakao funcNav={setShowNav}/>}/>
           <Route path="/:cid/question/:id" element={<Question funcNav={setShowNav}/>}/>
           <Route path="/:cid/createstem" element={cType?<StemCreate funcNav={setShowNav}/>:<StemCreate2 funcNav={setShowNav}/>}/>
           {cType && <Route path="/:cid/question/:id/create" element={<OptionCreate funcNav={setShowNav}/>}/>}
