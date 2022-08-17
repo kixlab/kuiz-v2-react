@@ -13,10 +13,7 @@ const Kakao = (props) => {
     let params = new URL(document.URL).searchParams;
     let KAKAO_CODE = params.get("code");
     const REST_API_KEY = '8b42dafd5a5b6dbf941521141583631a'
-    const [user_id, setUserId] = useState();
-    const [email, setEmail] = useState()
-    const [prof_img, setProfileImage] = useState()
-    const [name, setName] = useState()
+
 
     const REDIRECT_URI = "http://localhost:3000/kakaologin"
     const getKakaoToken = () => {
@@ -40,16 +37,11 @@ const Kakao = (props) => {
 
     const getUserInfo = async () => {
         try {
-            console.log("KAKAO",Kakao)
-            console.log("Window.kakao", window.Kakao)
+
             let data = await window.Kakao.API.request({
                 url: "/v2/user/me"
             })
-            console.log("userINfo:", data)
-            setName(data.properties.nickname)
-            setUserId(data.id);
-            setEmail(data.kakao_account.email);
-            setProfileImage(data.properties.profile_image)
+
             axios.post("http://localhost:4000/auth/register",{email: data.kakao_account.email, name:data.properties.nickname, image: data.properties.profile_image}).then(
                 (res) => {
                     if(res.data.success){
