@@ -26,7 +26,7 @@ const StemCreate2 = (props) => {
         {option_text:"", is_answer:false},
         {option_text:"", is_answer:false}
     ])
-    const [explanation, setExplanation] = useState("")
+    const [explanation, setExplanation] = useState()
     const [qObj, setQobj] = useState({})
 
     const [msg, setMsg] = useState("")
@@ -34,13 +34,12 @@ const StemCreate2 = (props) => {
         if(!isLoggedIn) {
             navigate("/"+cid)
         }
+        console.log("createStem2")
     },[])
 
     async function onSubmit () {
-        console.log("CHildref",childRef)
         const newQobj = await childRef.current.submitStem();
-        console.log("submitstem2")
-        console.log("qobj:",newQobj)
+        checkForm(newQobj)
         axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/organic/question/create`,{optionList:optionList, qInfo:newQobj, cid:cid, explanation:explanation})
         .then((res) => {
             if(res.data.success) {
@@ -49,6 +48,23 @@ const StemCreate2 = (props) => {
             }
         })
     }
+    const checkForm = (qobj) => {
+        const rawString = qobj.raw_string
+        const wordcount = rawString.split(' ').filter(word => word!=='').length
+        if(rawString === null || wordcount < 3) {
+            alert("Please fill in the question stem valid")
+        }
+        if(optionList.filter(option => option.is_answer===true).length !== 1) {
+            alert("Please check one answer")
+        }
+        const blankAnswerOptionExists = optionList.find(option => option.option_text ==="")
+        if(blankAnswerOptionExists) alert("Please fill in any blank answer options")
+        if(explanation === null || explanation.match(/^\s*$/) !== null) {
+            alert("Please add an explanation about why the chosen option is the correct answer.");
+        }
+
+    }
+    
 
 	return (
 		<div id="question-screen-wrapper">

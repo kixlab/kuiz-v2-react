@@ -54,7 +54,12 @@ const Kakao = (props) => {
                         if(res.data.user.classes.length!=0){
                             console.log("cid:",res.data.user.classes[0])
                             dispatch(enrollClass({cid:res.data.user.classes[0], cType:res.data.cType}))
-                            navigate('/'+res.data.user.classes[0])
+                            if(res.data.cType) {
+                                navigate('/'+res.data.user.classes[0])
+                            } else {
+                                navigate('/'+res.data.user.classes[0] +'/qlist')
+                            }
+                            
                         } else {
                             navigate('/enroll')
                         }
@@ -68,11 +73,12 @@ const Kakao = (props) => {
     }
     useEffect(()=>{
         console.log("uinfo:",uInfo)
-        if(uInfo!=={}) {
-            navigate('/'+uInfo.classes[0])
-        } else {
-            getKakaoToken() 
-        }
+        // if(uInfo!=={}) {
+        //     navigate('/'+uInfo.classes[0])
+        // } else {
+        //     getKakaoToken() 
+        // }
+        getKakaoToken() 
           
              
     },[])

@@ -22,13 +22,13 @@ const Login = (props) => {
     }
 
     useEffect(() => {
-        if(uIfno!=={}) {
-            if(uIfno.classes.length === 0) {
-                navigate("/enroll")
-            } else {
-                navigate("/"+uIfno.classes[0])
-            }
-        } 
+        // if(uIfno!=={}) {
+        //     if(uIfno.classes.length === 0) {
+        //         navigate("/enroll")
+        //     } else {
+        //         navigate("/"+uIfno.classes[0])
+        //     }
+        // } 
     })
     return(
         <di>

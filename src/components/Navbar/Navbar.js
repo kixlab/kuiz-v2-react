@@ -43,7 +43,7 @@ function Navbar() {
 					className="profile"
 					onClick={(e) => navigate("/" + cid + "/mypage")}
 				>
-					<img src={profile} />
+					<img src={profile} width="100px"/>
 				</div>
 			</div>
 		</div>
