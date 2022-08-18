@@ -36,6 +36,7 @@ function QstemEditor(props) {
 	const cid = props.cid;
 	const [template, setTemplate] = useState([]);
 	const [answer, setAnswer] = useState();
+	
 	const templateList = [
 		"What might occur if … ?",
 		"What is the difference between … and … ?",
@@ -125,8 +126,23 @@ function QstemEditor(props) {
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 
 	const setMsg = props.setMsg;
+	const checkForm = (qobj) => {
+        const rawString = qobj.raw_string
+        const wordcount = rawString.split(' ').filter(word => word!=='').length
+        if(rawString === null || wordcount < 3) {
+            alert("Please fill in the question stem valid")
+			return;
+        }
+        if(qobj.explanation === null || qobj.explanation.match(/^\s*$/) !== null) {
+            alert("Please add an explanation about why the chosen option is the correct answer.");
+			return;
+        }
+		if(qobj.learning_objective === null) {
+			alert("Please fill in the learning objective")
+			return;
+		}
+    }
 	const submitStem = () => {
-		console.log("UID:", uid);
 		const qstemObj = {
 			author: ObjectID(uid),
 			stem_text: JSON.stringify(
@@ -142,7 +158,7 @@ function QstemEditor(props) {
 			optionSets: [],
 			learning_objective: objective,
 		};
-		console.log("obj:", qstemObj);
+		checkForm(qstemObj)
 		axios
 			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`, {
 				qstemObj: qstemObj,

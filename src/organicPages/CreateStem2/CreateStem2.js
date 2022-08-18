@@ -53,14 +53,20 @@ const StemCreate2 = (props) => {
         const wordcount = rawString.split(' ').filter(word => word!=='').length
         if(rawString === null || wordcount < 3) {
             alert("Please fill in the question stem valid")
+            return;
         }
         if(optionList.filter(option => option.is_answer===true).length !== 1) {
             alert("Please check one answer")
+            return;
         }
         const blankAnswerOptionExists = optionList.find(option => option.option_text ==="")
-        if(blankAnswerOptionExists) alert("Please fill in any blank answer options")
+        if(blankAnswerOptionExists) {
+            alert("Please fill in any blank answer options")
+            return;
+        }
         if(explanation === null || explanation.match(/^\s*$/) !== null) {
             alert("Please add an explanation about why the chosen option is the correct answer.");
+            return;
         }
 
     }
