@@ -42,8 +42,7 @@ const Kakao = (props) => {
             let data = await window.Kakao.API.request({
                 url: "/v2/user/me"
             })
-            console.log("userEmail:", email)
-            debugger;
+
             
 
             axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/register`,{email: email, name:data.properties.nickname, image: data.properties.profile_image}).then(
