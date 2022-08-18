@@ -9,6 +9,7 @@ import { Send } from "@mui/icons-material";
 const Kakao = (props) => {
     const dispatch = useDispatch();
     const email = useSelector((state) => state.userInfo.email)
+    const uInfo = useSelector((state) => state.userInfo.userInfo)
 
     const href = window.location.href;
     const navigate = useNavigate()
@@ -66,7 +67,14 @@ const Kakao = (props) => {
         }
     }
     useEffect(()=>{
-        getKakaoToken()        
+        console.log("uinfo:",uInfo)
+        if(uInfo!=={}) {
+            navigate('/'+uInfo.classes[0])
+        } else {
+            getKakaoToken() 
+        }
+          
+             
     },[])
 
     return (

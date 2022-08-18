@@ -11,6 +11,7 @@ const Login = (props) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [user, setUser] = useState({})
+    const uIfno = useSelector((state) => state.userInfo.userInfo)
     const [email, setEmail] = useState()
 
     const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`
@@ -19,6 +20,16 @@ const Login = (props) => {
     const saveUserEmail = () => {
         dispatch(setUserEmail(email))
     }
+
+    useEffect(() => {
+        if(uIfno!=={}) {
+            if(uIfno.classes.length === 0) {
+                navigate("/enroll")
+            } else {
+                navigate("/"+uIfno.classes[0])
+            }
+        } 
+    })
     return(
         <di>
             <input value={email} onChange={e => setEmail(e.target.value)}/>
