@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser, logoutUser, enrollClass } from "../../features/authentication/userSlice";
 import axios from "axios";
 import { useNavigate } from "react-router";
@@ -8,6 +8,7 @@ import { Send } from "@mui/icons-material";
 
 const Kakao = (props) => {
     const dispatch = useDispatch();
+    const email = useSelector((state) => state.userInfo.email)
 
     const href = window.location.href;
     const navigate = useNavigate()
@@ -41,8 +42,11 @@ const Kakao = (props) => {
             let data = await window.Kakao.API.request({
                 url: "/v2/user/me"
             })
+            console.log("userEmail:", email)
+            debugger;
+            
 
-            axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/register`,{email: data.kakao_account.email, name:data.properties.nickname, image: data.properties.profile_image}).then(
+            axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/register`,{email: email, name:data.properties.nickname, image: data.properties.profile_image}).then(
                 (res) => {
                     if(res.data.success){
                         console.log("success!")

@@ -6,9 +6,13 @@ export const userSlice = createSlice({
     userInfo:{},
     cid:"",
     cType:false,
-    isLoggedIn:false
+    isLoggedIn:false,
+    email:""
   },
   reducers: {
+    setUserEmail:(state, action) => {
+      state.email = action.payload
+    },
     loginUser: (state, action) => {
       state.userInfo = action.payload
       state.isLoggedIn = true
@@ -26,6 +30,6 @@ export const userSlice = createSlice({
   },
 })
 
-export const { loginUser, logoutUser, enrollClass } = userSlice.actions
+export const { loginUser, logoutUser, enrollClass, setUserEmail } = userSlice.actions
 
 export default userSlice.reducer

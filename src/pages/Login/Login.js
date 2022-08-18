@@ -3,20 +3,32 @@ import jwt_decode from 'jwt-decode'
 import {useSelector, useDispatch} from 'react-redux'
 import { loginUser, logoutUser, enrollClass } from "../../features/authentication/userSlice";
 import { useNavigate } from 'react-router-dom';
+import { setUserEmail } from "../../features/authentication/userSlice";
 import axios from "axios";
-
 
 
 const Login = (props) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [user, setUser] = useState({})
+    const [email, setEmail] = useState()
 
     const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+    const saveUserEmail = () => {
+        console.log("beforeDispatchL",email)
+        dispatch(setUserEmail(email))
+        console.log("setemail:",email)
+        debugger;
+    }
     return(
         <di>
-            <a href={KAKAO_AUTH_URL}>카카오 로그인</a>
+            <input value={email} onChange={e => setEmail(e.target.value)}/>
+            <div onClick={e => saveUserEmail()}>
+                <a href={KAKAO_AUTH_URL}>카카오 로그인</a>
+            </div>
+            
         </di>
     )
 }
