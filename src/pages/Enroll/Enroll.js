@@ -3,7 +3,7 @@ import './Enroll.scss'
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { enrollClass } from "../../features/authentication/userSlice";
+import { enrollClass, loginUser } from "../../features/authentication/userSlice";
 
 
 const Enroll = (props) => {
@@ -17,11 +17,14 @@ const Enroll = (props) => {
     const detectChange = (e) => {
         setCode(e.target.value)
     }
+    const userInfo = useSelector((state) => state.userInfo.userInfo)
     const onSubmit = () => {
         axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/join`,{code:code,_id:uid, userEmail:email}).then(
             (res)=>{
-                console.log("res.data.cid", res.data.cid)
                 dispatch(enrollClass({cid: res.data.cid, cType:res.data.cType}))
+                const newInfo = {...userInfo}
+                newInfo["classes"] = [res.data.cid]
+                dispatch(loginUser(newInfo))
                 navigate('/'+res.data.cid)
             }
         )
