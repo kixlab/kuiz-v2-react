@@ -17,6 +17,7 @@ const QuestionList = (props) => {
 	const cid = useParams().cid;
 	const [questionList, setQuestionList] = useState([]);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
+	const cType = useSelector((state) => state.userInfo.cType)
 	console.log("UID:", uid);
 	const getQuestionList = () => {
 		console.log("CID:", cid);
@@ -30,6 +31,30 @@ const QuestionList = (props) => {
 	const moveToCreateStem = () => {
 		navigate("/" + cid + "/createstem");
 	};
+	const isValidSet = (qid) => {
+		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=`+qid).then(
+			(res)=> {
+				console.log("Qinfo:",res.data.data)
+				if(cType) {
+					if(res.data.data.options.length>1) {
+						const ansList = res.data.data.options.filter((o) => o.is_answer===true)
+						const disList = res.data.data.options.filter((o) => o.is_answer === false)
+						if(ansList.length>0 && disList.length>0){
+							return true
+						} else {
+							return false
+						}
+					} else {
+						console.log("Not enough")
+						return true
+					}
+				} else {
+					return true
+				}
+
+			}
+		)
+	}
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -65,13 +90,12 @@ const QuestionList = (props) => {
 					>
 						<div id="question-list-wrapper">
 							<QuestionListItem
+
 								id={question._id}
 								number={i + 1}
 								title={question.raw_string}
 								options={question.options}
-								date={
-									question.updatedAt ? question.updatedAt : question.createdAt
-								}
+								date={question.updatedAt ? question.updatedAt : question.createdAt}
 							/>
 						</div>
 					</Link>

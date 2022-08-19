@@ -61,6 +61,7 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 	}, []);
 
 	const submit = () => {
+        setPageStat(false)
 		const optionData = {
 			author: ObjectID(uid),
 			option_text: option,
@@ -70,17 +71,17 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 			qstem: ObjectID(qid),
 			plausible: { similar: similar, difference: difference },
 		};
-		console.log("Optiondata:", optionData);
-		axios
-			.post(`http://localhost:${process.env.REACT_APP_PORT}/question/option/create`, {
-				optionData: optionData,
-			})
-			.then((res) => {
-				console.log("SUCCESS?", res.data.success);
-				setMyOption(res.data.option);
-				setPageStat(false);
-				reset();
-			});
+        setMyOption(optionData)
+		// axios
+		// 	.post(`http://${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`, {
+		// 		optionData: optionData,
+		// 	})
+		// 	.then((res) => {
+		// 		console.log("SUCCESS?", res.data.success);
+		// 		setMyOption(res.data.option);
+		// 		setPageStat(false);
+		// 		reset();
+		// 	});
 	};
 
 	return (

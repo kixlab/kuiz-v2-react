@@ -3,13 +3,18 @@ import { useDrop } from "react-dnd";
 import "./OptionDependency.scss";
 import axios from "axios";
 import { update } from "draft-js/lib/DefaultDraftBlockRenderMap";
+import { ConstructionOutlined } from "@mui/icons-material";
 
-const OptionDependency = ({ optionList, label, setDependency }) => {
+const OptionDependency = ({ optionList, label, setDependency, available }) => {
 	const [board, setBoard] = useState([]);
 	const [{ isOver }, drop] = useDrop(() => ({
 		accept: "option",
 		drop: (item) => {
-			addOptionToBoard(item.id);
+			if(item.type + available === 1){
+				alert("sure?")
+			} else {
+				addOptionToBoard(item.id);
+			}
 		},
 		collect: (monitor) => ({
 			isOver: !!monitor.isOver(),
@@ -18,9 +23,12 @@ const OptionDependency = ({ optionList, label, setDependency }) => {
 
 	const addOptionToBoard = (id) => {
 		const newOptionList = optionList.filter((option) => id === option._id);
-		setDependency((board) => [...board, newOptionList[0]]);
+		setDependency((board) => {
+			return [...board, newOptionList[0]]
+		});
 		setBoard((board) => [...board, newOptionList[0]]);
 	};
+
 
 	const removeOptionFromBoard = (id) => {
 		const newOptionList = board.filter((option) => id !== option._id);
@@ -33,18 +41,17 @@ const OptionDependency = ({ optionList, label, setDependency }) => {
 			<h3>{label}</h3>
 			<div className="same" ref={drop}>
 				{board &&
-					board.map((option) => {
+					board.map((cluster) => {
 						return (
 							<div className="dependency-option">
-								{option.option_text}
-								<button onClick={(e) => removeOptionFromBoard(option._id)}>
+								{available?cluster.ansRep.option_text:cluster.disRep.option_text}
+								<button onClick={(e) => removeOptionFromBoard(cluster._id)}>
 									X
 								</button>
 							</div>
 						);
 					})}
 			</div>
-			={" "}
 		</div>
 	);
 };

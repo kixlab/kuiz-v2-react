@@ -133,8 +133,8 @@ function QstemEditor(props) {
             alert("Please fill in the question stem valid")
 			return;
         }
-        if(qobj.explanation === null || qobj.explanation.match(/^\s*$/) !== null) {
-            alert("Please add an explanation about why the chosen option is the correct answer.");
+        if(answer === null || answer.match(/^\s*$/) !== null) {
+            alert("Please add one answer.");
 			return;
         }
 		if(qobj.learning_objective === null) {
@@ -158,6 +158,7 @@ function QstemEditor(props) {
 			optionSets: [],
 			learning_objective: objective,
 		};
+
 		checkForm(qstemObj)
 		axios
 			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`, {
@@ -176,6 +177,7 @@ function QstemEditor(props) {
 							class: ObjectID(cid),
 							qstem: ObjectID(res.data.data),
 							plausible: { similar: [], difference: [] },
+							cluster:[]
 						},
 					})
 					.then((res2) => {
