@@ -18,21 +18,16 @@ import "./OptionCreate.scss";
 var ObjectID = require("bson-objectid");
 
 const OptionCreate = (props) => {
-	const [mode, setMode] = useState(false)
 	const [pageStat, setPageStat] = useState(true);
 	const navigate = useNavigate();
 	props.funcNav(true);
-	const selected = useSelector((state) => state.option.value);
 	const qid = useParams().id;
 	const [ansList, setAnsList] = useState();
 	const [disList, setDistList] = useState();
 	const [qinfo, setQinfo] = useState();
-	const [oid, setOid] = useState();
 	const [options, setOptions] = useState();
 	const cid = useParams().cid;
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-	const [same, setSame] = useState([]);
-	const [contradictory, setContradictory] = useState([]);
 	const [myOption, setMyOption] = useState();
 	const [cluster, setCluster] = useState()
 	const [sameCluster, setSameCluster] = useState([])
@@ -59,7 +54,6 @@ const OptionCreate = (props) => {
 			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/cluster?qid=`+qid)
 			.then(async (res) => {
 				setCluster(res.data.cluster)
-				console.log("cluster:",res.data.cluster[0])
 				if(res.data.cluster.length!==0){
 					
 				} else {
@@ -81,10 +75,10 @@ const OptionCreate = (props) => {
 			})
 	}
 	const submitDependency = () => {
-		myOption["cluster"]= sameCluster.concat(contCluster)
 		axios
 			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`, {
 				optionData: myOption,
+				dependency: sameCluster.concat(contCluster)
 			})
 			.then((res) => {
 				console.log("SUCCESS?", res.data.success);
@@ -92,26 +86,13 @@ const OptionCreate = (props) => {
 				setPageStat(false);
 				reset();
 			});
-		// axios
-		// 	.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/dependency`, {
-		// 		oid: myOption._id,
-		// 		dependency: {
-		// 			same: same.map((o) => ObjectID(o._id)),
-		// 			contradictory: contradictory.map((o) => ObjectID(o._id)),
-		// 		},
-		// 	})
-		// 	.then((res) => {
-		// 		reset();
-		// 	});
+
 	};
 
 	const reset = () => {
-		setSame([]);
-		setContradictory([]);
 		setPageStat(true);
-		// setCluster();
-		setSameCluster();
-		setContCluster()
+		setSameCluster([]);
+		setContCluster([])
 	};
 
 	useEffect(() => {
@@ -156,7 +137,6 @@ const OptionCreate = (props) => {
 							{pageStat?
 								<OptionList qinfo={qinfo} ansList={ansList} disList={disList} />:
 								<ClusterList clusterList={cluster}/>}
-							{/* <OptionList qinfo={qinfo} ansList={ansList} disList={disList} /> */}
 							
 						</div>
 						<div className="option-container">
@@ -171,16 +151,7 @@ const OptionCreate = (props) => {
 										<div>
 											<div>My Option</div>
 											{myOption && myOption.option_text}
-											{/* <OptionDependency
-												optionList={ansList.concat(disList)}
-												label={"same"}
-												setDependency={setSame}
-											/>
-											<OptionDependency
-												optionList={ansList.concat(disList)}
-												label={"contradictory"}
-												setDependency={setContradictory}
-											/> */}
+
 											<OptionDependency
 												optionList={cluster}
 												label={"same"}

@@ -27,9 +27,6 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 		}),
 	}));
 
-	useEffect(() => {
-		console.log("CINFO:", clusterInfo.ansRep)
-	},[])
 
 	return (
 		<div id={type ? "answer-wrapper" : "distractor-wrapper"}>
