@@ -29,7 +29,7 @@ function Navbar() {
 		<div id="left-sidebar">
 			<div>
 				<div id="main-logo">KUIZ</div>
-				<div>{cid}</div>
+				{/* <div>{cid}</div> */}
 			</div>
 			<div id="side-nav">
 				<Button

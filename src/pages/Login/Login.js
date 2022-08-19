@@ -14,7 +14,8 @@ const Login = (props) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
-	const uIfno = useSelector((state) => state.userInfo.userInfo);
+	const uInfo = useSelector((state) => state.userInfo.userInfo);
+    const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
 	const [email, setEmail] = useState();
 
 	const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`;
@@ -25,6 +26,16 @@ const Login = (props) => {
 	};
 
 	useEffect(() => {
+        if(isLoggedIn) {
+            console.log("uinfo",uInfo)
+            if(uInfo !== {}){
+                if(uInfo.classes.length === 0){
+                    navigate("/enroll")
+                } else {
+                    navigate("/"+uInfo.classes[0])
+                }
+            }
+        }
 		// if(uIfno!=={}) {
 		//     if(uIfno.classes.length === 0) {
 		//         navigate("/enroll")

@@ -14,6 +14,7 @@ import Kakao from './pages/Kakao/Kakao';
 import './App.scss'
 import React, {useEffect, useState} from 'react';
 import { useSelector } from 'react-redux';
+import {useNavigate} from 'react-router'
 
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
   const isAdmin = useSelector((state) => state.userInfo.userInfo.isAdmin)
   const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
   useEffect(() => {
-    
+
     console.log("ISADMIN!!:",isAdmin)
   },[])
 

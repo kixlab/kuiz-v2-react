@@ -38,50 +38,60 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 		setDifference([...difference, difRef.current.value]);
 	};
 
-	const dispatch = useDispatch();
 	const qid = useParams().id;
 	const setOptionValue = (e) => {
 		setOption(e.target.value);
 	};
-	const setExpValue = (e) => {
-		setExplanation(e.target.value);
-	};
-	const reset = () => {
-		setOption("");
-		setIsAnswer();
-		setExplanation("");
-		setSimilar([]);
-		setDifference([]);
-	};
+
 	const cid = useParams().cid;
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	useEffect(() => {
-		console.log("UID:", uid);
-		console.log("CID:", cid);
-	}, []);
+
+    const checkForm = () => {
+        // const rawString = qobj.raw_string
+        // const wordcount = rawString.split(' ').filter(word => word!=='').length
+        if(option === null || option ==="") {
+            alert("보기 내용을 입력해주세요")
+			return;
+        }
+        if(isAnswer === null) {
+            alert("정답/오답(?)을 선택해주세요");
+			return;
+        }
+		if(explanation === null || explanation === "") {
+			alert("보기에 대한 설명을 남겨주세요")
+			return;
+		}
+    }
 
 	const submit = () => {
-        setPageStat(false)
-		const optionData = {
-			author: ObjectID(uid),
-			option_text: option,
-			is_answer: isAnswer,
-			explanation: explanation,
-			class: ObjectID(cid),
-			qstem: ObjectID(qid),
-			plausible: { similar: similar, difference: difference },
-		};
-        setMyOption(optionData)
-		// axios
-		// 	.post(`http://${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`, {
-		// 		optionData: optionData,
-		// 	})
-		// 	.then((res) => {
-		// 		console.log("SUCCESS?", res.data.success);
-		// 		setMyOption(res.data.option);
-		// 		setPageStat(false);
-		// 		reset();
-		// 	});
+        if(option === null || option ==="") {
+            alert("보기 내용을 입력해주세요")
+			return;
+        } else {
+            if(isAnswer === null) {
+                alert("정답/오답(?)을 선택해주세요");
+                return;
+            } else {
+                if(explanation === null || explanation === "") {
+                    alert("보기에 대한 설명을 남겨주세요")
+                    return;
+                } else {
+                    setPageStat(false)
+                    const optionData = {
+                        author: ObjectID(uid),
+                        option_text: option,
+                        is_answer: isAnswer,
+                        explanation: explanation,
+                        class: ObjectID(cid),
+                        qstem: ObjectID(qid),
+                        plausible: { similar: similar, difference: difference },
+                    };
+                    setMyOption(optionData)
+                }
+            } 
+        }
+        
+	
 	};
 
 	return (
