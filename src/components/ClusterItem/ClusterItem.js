@@ -38,8 +38,8 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				<div className={type ? "answer-label" : "distractor-label"}>
 					{type ? "Answer" : "Distractor"}
 				</div>
-				{/* <div className="option-text">{type?(clusterInfo.ansRep.option_text):(clusterInfo.disRep.option_text)}</div> */}
-				<div>{clusterInfo._id}</div>
+				<div className="option-text">{type?(clusterInfo.ansRep.option_text):(clusterInfo.disRep.option_text)}</div>
+				{/* <div>{clusterInfo._id}</div> */}
 			</div>
 		</div>
 	);
