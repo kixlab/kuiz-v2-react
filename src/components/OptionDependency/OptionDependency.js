@@ -29,7 +29,7 @@ const OptionDependency = ({ optionList, label, setDependency }) => {
 	};
 
 	return (
-		<div>
+		<div className="option-dependency">
 			<h3>{label}</h3>
 			<div className="same" ref={drop}>
 				{board &&
@@ -37,7 +37,10 @@ const OptionDependency = ({ optionList, label, setDependency }) => {
 						return (
 							<div className="dependency-option">
 								{option.option_text}
-								<button onClick={(e) => removeOptionFromBoard(option._id)}>
+								<button
+									className="dependency-button"
+									onClick={(e) => removeOptionFromBoard(option._id)}
+								>
 									X
 								</button>
 							</div>

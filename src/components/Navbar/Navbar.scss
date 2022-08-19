@@ -1,29 +1,53 @@
 .app-wrapper {
-  display: grid;
-  grid-template-columns: 350px auto;
-  height: 100vh;
-  #left-sidebar {
-    max-width: 350px;
-    background-color: white;
-    padding: 56px 36px;
-    display: grid;
-    grid-template-rows: 30% auto;
+	display: grid;
+	grid-template-columns: 350px auto;
+	height: 100vh;
+	#left-sidebar {
+		max-width: 350px;
+		background-color: white;
+		padding: 56px 36px;
+		display: grid;
+		grid-template-rows: 30% auto auto;
 
-    #main-logo {
-      text-align: center;
-    }
+		#main-logo {
+			text-align: left;
+			font-size: 48px;
+			font-weight: 900;
+		}
 
-    #side-nav {
-      place-self: start;
-      display: grid;
-      row-gap: 36px;
-    }
-  }
+		#side-nav {
+			place-self: start;
+			display: grid;
+			row-gap: 36px;
+		}
+	}
 
-  main {
-    background-color: #f2f5f8;
-    padding: 36px;
-    display: grid;
-    place-items: stretch;
-  }
+	main {
+		background-color: #f2f5f8;
+		padding: 36px;
+		display: grid;
+		place-items: stretch;
+	}
+
+	.profile {
+		place-self: center left;
+		display: grid;
+		row-gap: 16px;
+		.profile-photo {
+			border-radius: 50%;
+			width: 100px;
+			height: 100px;
+			overflow: hidden;
+		}
+
+		.profile-name {
+			font-weight: 600s;
+		}
+
+		.profile-nav {
+			color: #3d73dd;
+			font-weight: 500;
+			cursor: pointer;
+		}
+	}
 }

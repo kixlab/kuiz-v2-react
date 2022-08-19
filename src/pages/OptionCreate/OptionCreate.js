@@ -80,7 +80,7 @@ const OptionCreate = (props) => {
 	}, []);
 
 	return (
-		<div id="question-screen-wrapper">
+		<div id="option-create-wrapper">
 			<div id="question-nav">Question List &gt; #123</div>
 			<div id="question-screen">
 				<Link
@@ -133,7 +133,9 @@ const OptionCreate = (props) => {
 												label={"contradictory"}
 												setDependency={setContradictory}
 											/>
-											<button onClick={submitDependency}>Submit</button>
+											<button id="submit-button" onClick={submitDependency}>
+												Submit
+											</button>
 										</div>
 									)}
 								</div>
