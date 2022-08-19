@@ -1,0 +1,55 @@
+#mypage {
+	.question-list-item {
+		background-color: white;
+		margin-bottom: 16px;
+		border-radius: 16px;
+		position: relative;
+		top: 0;
+
+		&:hover {
+			top: -4px;
+		}
+	}
+
+	.option-item {
+		padding: 24px 36px;
+		background-color: white;
+		margin-bottom: 16px;
+		border-radius: 16px;
+
+		.option-text-wrapper {
+			display: flex;
+			align-items: center;
+
+			.indicator-answer,
+			.indicator-distractor {
+				font-size: 10px;
+				color: white;
+				padding: 4px;
+				border-radius: 4px;
+			}
+			.indicator-answer {
+				background-color: #06c71f;
+			}
+
+			.indicator-distractor {
+				background-color: #3d73dd;
+			}
+
+			.option-text {
+				margin-left: 8px;
+			}
+		}
+		.option-nav {
+			text-align: right;
+			font-size: 14px;
+			cursor: pointer;
+			position: relative;
+			top: 0;
+
+			&:hover {
+				top: -2px;
+			}
+		}
+	}
+}

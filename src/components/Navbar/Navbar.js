@@ -10,6 +10,7 @@ function Navbar() {
 	// const {pathname} = useLocation();
 	// if (withouSidebarRoutes.some((item) => pathname.includes(item))) return null;
 	const profile = useSelector((state) => state.userInfo.userInfo.imageUrl);
+	const user_name = useSelector((state) => state.userInfo.userInfo.name);
 	const cid = useSelector((state) => state.userInfo.cid);
 	const isAdmin = useSelector((state) => state.userInfo.userInfo);
 	const navigate = useNavigate();
@@ -39,12 +40,18 @@ function Navbar() {
 					<Button navigateBy={moveToCreateOption} text="Create Option" />
 				) : null}
 				<Button navigateBy={moveToQlist} text="Question List" />
+			</div>
+			<div className="profile">
+				<div className="profile-photo">
+					<img src={profile} width="100px" />
+				</div>
+				<div className="profile-name">{user_name}</div>
 				<div
-					className="profile"
+					className="profile-nav"
 					onClick={(e) => navigate("/" + cid + "/mypage")}
 				>
-					{/* <img src={profile} width="100px"/> */}
-					<button>My Page</button>
+					MY PAGE &nbsp;
+					<i className="fa-solid fa-arrow-right"></i>
 				</div>
 			</div>
 		</div>

@@ -37,7 +37,7 @@ const OptionDependency = ({ optionList, label, setDependency, available }) => {
 	};
 
 	return (
-		<div>
+		<div className="option-dependency">
 			<h3>{label}</h3>
 			<div className="same" ref={drop}>
 				{board &&
@@ -45,7 +45,9 @@ const OptionDependency = ({ optionList, label, setDependency, available }) => {
 						return (
 							<div className="dependency-option">
 								{available?cluster.ansRep.option_text:cluster.disRep.option_text}
-								<button onClick={(e) => removeOptionFromBoard(cluster._id)}>
+								<button 
+									className="dependency-button"
+									onClick={(e) => removeOptionFromBoard(cluster._id)}>  
 									X
 								</button>
 							</div>

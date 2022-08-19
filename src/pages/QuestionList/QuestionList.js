@@ -22,14 +22,17 @@ const QuestionList = (props) => {
 	const getQuestionList = () => {
 		console.log("CID:", cid);
 		axios
-			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` + cid)
+			.get(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` +
+					cid
+			)
 			.then((res) => {
 				console.log("qlist:", res.data.qstems.problemList);
 				setQuestionList(res.data.qstems.problemList);
 			});
 	};
-	const moveToCreateStem = () => {
-		navigate("/" + cid + "/createstem");
+	const moveToCreateOption = () => {
+		navigate("/");
 	};
 	const isValidSet = (qid) => {
 		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=`+qid).then(
@@ -68,11 +71,8 @@ const QuestionList = (props) => {
 	return (
 		<div id="question-list">
 			<div id="question-list-functions">
-				<div id="searchbar">
-					<input></input>
-				</div>
 				<div style={{ textDecoration: "none", color: "#000000" }}>
-					<Button navigateBy={moveToCreateStem} text="Create Stem" />
+					<Button navigateBy={moveToCreateOption} text="Create Questions" />
 				</div>
 			</div>
 			<div id="question-list-header">

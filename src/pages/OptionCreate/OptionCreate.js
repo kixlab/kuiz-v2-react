@@ -40,7 +40,10 @@ const OptionCreate = (props) => {
 
 	const getOptionList = (qid) => {
 		axios
-			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/load?qid=` + qid)
+			.get(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/load?qid=` +
+					qid
+			)
 			.then((res) => {
 				const ans = res.data.options.filter((op) => op.is_answer === true);
 				const dis = res.data.options.filter((op) => op.is_answer === false);
@@ -121,7 +124,7 @@ const OptionCreate = (props) => {
 	}, []);
 
 	return (
-		<div id="question-screen-wrapper">
+		<div id="option-create-wrapper">
 			<div id="question-nav">Question List &gt; #123</div>
 			<div id="question-screen">
 				<Link
@@ -132,17 +135,19 @@ const OptionCreate = (props) => {
 						<i className="fa-solid fa-arrow-left"></i> Back to Question List
 					</div>
 				</Link>
-				{qinfo && (
-					<div
-						dangerouslySetInnerHTML={{
-							__html: draftToHtml(JSON.parse(qinfo.stem_text)),
-						}}
-						className="introduce-content"
-					/>
-				)}
+				<div id="question-content-wrapper">
+					{qinfo && (
+						<div
+							dangerouslySetInnerHTML={{
+								__html: draftToHtml(JSON.parse(qinfo.stem_text)),
+							}}
+							className="introduce-content"
+						/>
+					)}
 
-				<div className="objective-container">
-					learning objective : {qinfo && qinfo.learning_objective}
+					<div className="objective-container">
+						learning objective : {qinfo && qinfo.learning_objective}
+					</div>
 				</div>
 
 				<DndProvider backend={HTML5Backend}>
@@ -188,7 +193,9 @@ const OptionCreate = (props) => {
 												setDependency={setContCluster}
 												available={!myOption.is_answer}
 											/>
-											<button onClick={submitDependency}>Submit</button>
+											<button id="submit-button" onClick={submitDependency}>
+												Submit
+											</button>
 										</div>
 									)}
 								</div>
