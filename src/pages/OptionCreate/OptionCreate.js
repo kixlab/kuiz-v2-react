@@ -35,7 +35,10 @@ const OptionCreate = (props) => {
 
 	const getOptionList = (qid) => {
 		axios
-			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/load?qid=` + qid)
+			.get(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/load?qid=` +
+					qid
+			)
 			.then((res) => {
 				const ans = res.data.options.filter((op) => op.is_answer === true);
 				const dis = res.data.options.filter((op) => op.is_answer === false);
@@ -47,13 +50,16 @@ const OptionCreate = (props) => {
 	};
 	const submitDependency = () => {
 		axios
-			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/dependency`, {
-				oid: myOption._id,
-				dependency: {
-					same: same.map((o) => ObjectID(o._id)),
-					contradictory: contradictory.map((o) => ObjectID(o._id)),
-				},
-			})
+			.post(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/dependency`,
+				{
+					oid: myOption._id,
+					dependency: {
+						same: same.map((o) => ObjectID(o._id)),
+						contradictory: contradictory.map((o) => ObjectID(o._id)),
+					},
+				}
+			)
 			.then((res) => {
 				reset();
 			});
@@ -85,17 +91,19 @@ const OptionCreate = (props) => {
 						<i className="fa-solid fa-arrow-left"></i> Back to Question List
 					</div>
 				</Link>
-				{qinfo && (
-					<div
-						dangerouslySetInnerHTML={{
-							__html: draftToHtml(JSON.parse(qinfo.stem_text)),
-						}}
-						className="introduce-content"
-					/>
-				)}
+				<div id="question-content-wrapper">
+					{qinfo && (
+						<div
+							dangerouslySetInnerHTML={{
+								__html: draftToHtml(JSON.parse(qinfo.stem_text)),
+							}}
+							className="introduce-content"
+						/>
+					)}
 
-				<div className="objective-container">
-					learning objective : {qinfo && qinfo.learning_objective}
+					<div className="objective-container">
+						learning objective : {qinfo && qinfo.learning_objective}
+					</div>
 				</div>
 
 				<DndProvider backend={HTML5Backend}>

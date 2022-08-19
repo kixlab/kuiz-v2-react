@@ -5,7 +5,7 @@
 	row-gap: 16px;
 }
 .introduce-content {
-	height: 100px;
+	min-height: 100px;
 }
 
 #question-nav {
@@ -19,7 +19,7 @@
 	border-radius: 8px;
 
 	display: grid;
-	grid-template-rows: 20px 100px auto;
+	grid-template-rows: 20px auto 1fr;
 	row-gap: 24px;
 	height: 90%;
 }
@@ -27,6 +27,7 @@
 .option-box {
 	display: flex;
 	justify-content: space-between;
+	min-height: 50%;
 }
 .option-container {
 	border: 1px solid #3d73dd;
@@ -47,8 +48,12 @@ button {
 	border-radius: 8px;
 }
 .objective-container {
-  background-color: #f2f5f8;
-  padding: 15px;
-  border-radius: 10px;
-  font-weight: 300;
+	background-color: #f2f5f8;
+	padding: 15px;
+	border-radius: 10px;
+	font-weight: 300;
+}
+
+#question-content-wrapper {
+	height: fit-content;
 }
