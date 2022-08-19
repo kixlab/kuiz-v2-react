@@ -30,35 +30,77 @@ const Question = (props) => {
 	const [answer, setAnswer] = useState()
 	const uid = useSelector((state) => state.userInfo.userInfo._id)
 	const [isOptionValid, setIsOptionValid] = useState()
+	function getMultipleRandom(arr, num) {
+		const shuffled = [...arr].sort(() => 0.5 - Math.random());
+	  
+		return shuffled.slice(0, num);
+	}
+	function shuffle(array) {
+		array.sort(() => Math.random() - 0.5);
+		return array
+	}
+
+
 	const getQinfo = (qid) => {
-		console.log("QID:",qid)
 		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=`+qid).then(
 			(res)=> {
-				console.log("Qinfo:",res.data.data)
-				if(res.data.data.options.length>1) {
-					const ansList = res.data.data.options.filter((o) => o.is_answer===true)
-					const disList = res.data.data.options.filter((o) => o.is_answer === false)
-					console.log("anslist:", ansList)
-					console.log("dislist:",disList)
-					if(ansList.length>0 && disList.length>0){
-						const optionList = [ansList[0]].concat(disList)
-						if(disList.length>4){
-							setOptions(optionList.slice(0,4))
-							setIsOptionValid(true)
-						} else {
-							setOptions(optionList)
-							setIsOptionValid(true)
-						}
-					} else {
+				if(cType) {
+					// console.log("DATA:", res.data.data)
+					if(res.data.data.qinfo.cluster.length < 3){
 						setIsOptionValid(false)
+					} else {
+						axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/clusters`,{
+							clusters:res.data.data.qinfo.cluster
+						}).then(
+							(res2) => {
+								const clusters = res2.data.clusters
+								if(clusters.filter(c => c.ansExist === true).length >=1 && clusters.filter(c => c.disExist === true).length >=2){
+									setIsOptionValid(true)
+
+									const ansList1 = clusters.filter(c => c.ansExist === true).map(c2 => c2.ansList)
+									const disList1 = clusters.filter(c => c.disExist === true).map(c2 => c2.disList)
+									const ansList2 = [].concat.apply([], ansList1)
+									const disList2 = [].concat.apply([], disList1)
+
+									axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/options`,{
+										optionList:ansList2
+									}).then(
+										(res3) => {
+											const ansList = res3.data.options
+											axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/options`,{
+												optionList:disList2
+											}).then(
+												(res4) => {
+													const disList = res4.data.options
+													console.log("ANSLIST:", ansList)
+													console.log("DISLIST:", disList)
+							
+													/* selection algorithm of ansList should be here. random selection for now */
+													const answer = getMultipleRandom(ansList, 1)
+													const distractor = getMultipleRandom(disList, disList.length<3?disList.length:3)
+
+													//shuffle array
+													setOptions(shuffle(answer.concat(distractor)))
+												}
+											)
+										}
+									)
+								} else {
+									setIsOptionValid(false)
+								}
+							}
+						).catch(err => console.log(err)) 
 					}
 				} else {
-					console.log("Not enough")
-					setIsOptionValid(false)
+					setIsOptionValid(true)
 				}
+				
 				setQinfo(res.data.data.qinfo)
 				res.data.data.options.map((o, i) => {
-					if(o.is_answer) setAnswer(i)
+					if(o.is_answer) {
+						console.log("ans:", o.option_text)
+						setAnswer(i)
+					}
 				})
 			}
 		)
@@ -110,6 +152,7 @@ const Question = (props) => {
 					</div>
 					{ansVisible && (cType?
 						<div id="answer-wrapper">
+								<div>answer: {options[answer].option_text}</div>
 								{options && options.map((option)=>
 									<div className="answer-option">
 										<div className="option-text">{option.option_text}</div>
