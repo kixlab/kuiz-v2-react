@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { changeOptionSelection } from "../../features/optionSelection/optionSlice";
-import { changePageStat } from "../../features/optionSelection/pageStatSlice";
 import "./OptionItem.scss";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useDrag } from "react-dnd";
 import axios from "axios";
-import { SatelliteAlt } from "@mui/icons-material";
 import { pink } from "@mui/material/colors";
 
 const OptionItem = ({ optionInfo, id }) => {
@@ -44,8 +41,6 @@ const OptionItem = ({ optionInfo, id }) => {
 	};
 
 	const doLike = () => {
-		console.log("oInfo:", optionInfo.cluster[-1]);
-		debugger;
 		axios
 			.post(
 				`${process.env.REACT_APP_REQ_END}:${
@@ -79,22 +74,20 @@ const OptionItem = ({ optionInfo, id }) => {
 				style={{ border: isDragging ? "5px solid pink" : "0px" }}
 				className="option-components"
 			>
-				{/* <div className={isAnswer ? "answer-label" : "distractor-label"}>
+				<div className={isAnswer ? "answer-label" : "distractor-label"}>
 					{isAnswer ? "Answer" : "Distractor"}
-				</div> */}
-				<div className="option-wrapper">
-					<div className="option-text">{text}</div>
-					<div className="tags">
-						<div className="tags-container">
-							{similar.map((option) => {
-								return <div className="similarTag tag">{option}</div>;
-							})}
-						</div>
-						<div className="tags-container">
-							{difference.map((option) => {
-								return <div className="differenceTag tag">{option}</div>;
-							})}
-						</div>
+				</div>
+				<div className="option-text">{text}</div>
+				<div className="tags">
+					<div className="tags-container">
+						{similar.map((option) => {
+							return <div className="similarTag tag">{option}</div>;
+						})}
+					</div>
+					<div className="tags-container">
+						{difference.map((option) => {
+							return <div className="differenceTag tag">{option}</div>;
+						})}
 					</div>
 				</div>
 				<div className="likes-container" onClick={(e) => doLike()}>

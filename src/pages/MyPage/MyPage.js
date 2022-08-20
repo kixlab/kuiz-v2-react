@@ -7,6 +7,7 @@ import ContentStateInlineStyle from "draft-js/lib/ContentStateInlineStyle";
 import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
 
 import "./MyPage.scss";
+import { reactDraftWysiwyg } from "react-draft-wysiwyg";
 
 const MyPage = (props) => {
 	const cid = useParams().cid;
@@ -17,6 +18,7 @@ const MyPage = (props) => {
 	const cType = useSelector((state) => state.userInfo.cType);
 	const [madeStem, setMadeStem] = useState();
 	const [madeOption, setMadeOption] = useState();
+    const [qlist, setQlist] = useState()
 
 	const getMadeStem = () => {
 		console.log("UID:", uid);
@@ -37,7 +39,21 @@ const MyPage = (props) => {
 				{ uid, uid }
 			)
 			.then((res) => {
-				setMadeOption(res.data.madeOption);
+                axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstembyoption`,{
+                    qstems:res.data.madeOption.map(o => o.qstem)
+                }).then(
+                    (res2) => {
+                        // setMadeOption(res.data.madeOption)
+                        // setQlist(res2.data.qstems)
+                        const optionList = res.data.madeOption
+                        const qlist = res2.data.qstems.map(qstem => {return {qinfo:qstem}})
+                        const newOptionList = optionList.map((option, index) => ({
+                            ...option,
+                            ...qlist[index]
+                        }))
+                        setMadeOption(newOptionList)
+                    }
+                )
 			});
 	};
 
@@ -80,7 +96,7 @@ const MyPage = (props) => {
 			<h3>내가 만든 선택지</h3>
 			<div className="options-wrapper">
 				{madeOption &&
-					madeOption.map((option) => {
+					madeOption.map((option, i) => {
 						return (
 							<div key={option._id} className="option-item">
 								<div className="option-text-wrapper">
@@ -90,6 +106,7 @@ const MyPage = (props) => {
 										<div className="indicator-distractor">Distractor</div>
 									)}
 									<div className="option-text">{option.option_text}</div>
+                                    {/* <div>{option.toString()}</div> */}
 								</div>
 								<div
 									className="option-nav"
