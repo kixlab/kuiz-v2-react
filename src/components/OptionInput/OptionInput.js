@@ -42,6 +42,9 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 	const setOptionValue = (e) => {
 		setOption(e.target.value);
 	};
+    const setExpValue = (e) => {
+        setExplanation(e.target.value)
+    }
 
 	const cid = useParams().cid;
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
@@ -72,10 +75,10 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
                 alert("정답/오답(?)을 선택해주세요");
                 return;
             } else {
-                if(explanation === null || explanation === "") {
-                    alert("보기에 대한 설명을 남겨주세요")
+                if(explanation === null || explanation==""){
+                    alert('보기에 대한 설명을 입력해주세요')
                     return;
-                } else {
+                }else {
                     setPageStat(false)
                     const optionData = {
                         author: ObjectID(uid),
@@ -88,6 +91,7 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
                     };
                     setMyOption(optionData)
                 }
+                
             } 
         }
         
@@ -158,6 +162,8 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 							// label="Explanation"
 							multiline
 							fullWidth
+                            value={explanation}
+                            onChange={setExpValue}
 						/>
 					</div>
 				</div>
