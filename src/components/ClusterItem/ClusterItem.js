@@ -8,11 +8,12 @@ import axios from "axios";
 
 const ClusterItem = ({ clusterInfo, id, type }) => {
 
-
 	const [detail, setDetail] = useState(false);
+	const [optionList, setOptionList] = useState([])
 	const changeDetailView = () => {
 		setDetail(!detail);
 	};
+
 
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: "option",
@@ -22,10 +23,25 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 		}),
 	}));
 
+	const getOptions = () => {
+		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/optionbycluster?ocid=`+clusterInfo._id)
+		.then(res => {
+			if(type){
+				setOptionList(res.data.ansList)
+			} else {
+				setOptionList(res.data.disList)
+			}
+			setDetail(!detail)
+		})
+	}
+
 
 
 	return (
-		<div id={type ? "answer-wrapper" : "distractor-wrapper"}>
+		<div
+			id={type ? "answer-wrapper" : "distractor-wrapper"}
+			className="cluster-item"
+		>
 			<div
 				ref={drag}
 				style={{ border: isDragging ? "5px solid pink" : "0px" }}
@@ -34,7 +50,16 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				<div className={type ? "answer-label" : "distractor-label"}>
 					{type ? "Answer" : "Distractor"}
 				</div>
-				<div className="option-text">{type?(clusterInfo.ansRep.option_text):(clusterInfo.disRep.option_text)}</div>
+				<div className="option-text">
+					{type
+						? clusterInfo.ansRep.option_text
+						: clusterInfo.disRep.option_text}
+				</div>
+				<button onClick={e => getOptions()}>See more</button>
+				{detail?
+				<div>
+					{optionList.map(option => <div>{option.option_text}</div>)}
+				</div>:<></>}
 				{/* <div>{clusterInfo._id}</div> */}
 			</div>
 		</div>
