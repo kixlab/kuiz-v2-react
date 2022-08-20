@@ -156,8 +156,7 @@ function QstemEditor(props) {
 			class: ObjectID(cid),
 			options: [],
 			optionSets: [],
-			learning_objective: objective,
-		};
+			learning_objective: objective		};
 
 		checkForm(qstemObj)
 		axios
@@ -179,6 +178,7 @@ function QstemEditor(props) {
 							plausible: { similar: [], difference: [] },
 							cluster:[]
 						},
+						dependency:[]
 					})
 					.then((res2) => {
 						setMsg("Successfuly made question stem!");
