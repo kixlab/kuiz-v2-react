@@ -5,11 +5,12 @@ import ClusterItem from "../ClusterItem/ClusterItem";
 import { useDispatch, useSelector } from "react-redux";
 import "./ClusterList.scss";
 const ClusterList = (props) => {
+
 	return (
 		<div className="cluster-list">
 			<div className="option-list-title">선택지 목록</div>
 
-			{props.clusterList.map((c) => {
+			{props.clusterList && props.clusterList.map((c) => {
 				if (c.ansRep !== null) {
 					return (
 						<div id={c._id} className="option-item-wrapper">
@@ -19,7 +20,7 @@ const ClusterList = (props) => {
 				}
 			})}
 			<hr />
-			{props.clusterList.map((c) => {
+			{props.clusterList && props.clusterList.map((c) => {
 				if (c.disRep !== null) {
 					return (
 						<div id={c._id} className="option-item-wrapper">

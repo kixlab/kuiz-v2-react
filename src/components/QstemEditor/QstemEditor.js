@@ -238,6 +238,7 @@ function QstemEditor(props) {
 								plausible: { similar: [], difference: [] },
 								cluster: [],
 							},
+							dependency:[]
 						}
 					)
 					.then((res2) => {

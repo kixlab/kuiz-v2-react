@@ -46,7 +46,6 @@ const OptionCreate = (props) => {
 				setAnsList(ans);
 				setDistList(dis);
 				setQinfo(res.data.qinfo);
-				console.log("qinfo:", res.data.qinfo);
 			});
 	};
 	const getOptionCluster = (qid) => {
@@ -57,9 +56,6 @@ const OptionCreate = (props) => {
 			)
 			.then(async (res) => {
 				setCluster(res.data.cluster);
-				if (res.data.cluster.length !== 0) {
-				} else {
-				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -103,8 +99,9 @@ const OptionCreate = (props) => {
 
 	useEffect(() => {
 		if (isLoggedIn) {
-			getOptionList(qid);
+			
 			getOptionCluster(qid);
+			getOptionList(qid);
 		} else {
 			navigate("/login");
 		}
@@ -142,7 +139,7 @@ const OptionCreate = (props) => {
 						<div className="option-container">
 							{/* {pageStat ? (
 								<OptionList
-									// clusterList={cluster}
+									clusterList={cluster}
 									qinfo={qinfo}
 									ansList={ansList}
 									disList={disList}
