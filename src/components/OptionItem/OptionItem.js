@@ -97,14 +97,14 @@ const OptionItem = ({ optionInfo, id }) => {
 						</div>
 					</div>
 				</div>
-				<div onClick={(e) => doLike()}>
+				<div className="likes-container" onClick={(e) => doLike()}>
 					{like ? (
 						<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
 					) : (
 						<FavoriteBorderIcon color="action" fontSize="small" />
 					)}
+					{optionInfo.liked.length}
 				</div>
-				<div>likes:{optionInfo.liked.length}</div>
 				{/* {detail?<div>{explanation}<div onClick={changeDetailView}>hide</div></div>:<div onClick={changeDetailView}>0</div>} */}
 			</div>
 		</div>

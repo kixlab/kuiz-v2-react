@@ -140,11 +140,17 @@ const OptionCreate = (props) => {
 				<DndProvider backend={HTML5Backend}>
 					<div className="option-box">
 						<div className="option-container">
-							{pageStat ? (
-								<OptionList qinfo={qinfo} ansList={ansList} disList={disList} />
+							{/* {pageStat ? (
+								<OptionList
+									// clusterList={cluster}
+									qinfo={qinfo}
+									ansList={ansList}
+									disList={disList}
+								/>
 							) : (
 								<ClusterList clusterList={cluster} />
-							)}
+							)} */}
+							<ClusterList clusterList={cluster} />
 						</div>
 						<div className="option-container">
 							{pageStat ? (

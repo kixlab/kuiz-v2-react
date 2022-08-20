@@ -36,7 +36,7 @@ function QstemEditor(props) {
 	const cid = props.cid;
 	const [template, setTemplate] = useState([]);
 	const [answer, setAnswer] = useState();
-	
+
 	const templateList = [
 		"What might occur if … ?",
 		"What is the difference between … and … ?",
@@ -127,21 +127,21 @@ function QstemEditor(props) {
 
 	const setMsg = props.setMsg;
 	const checkForm = (qobj) => {
-        const rawString = qobj.raw_string
-        const wordcount = rawString.split(' ').filter(word => word!=='').length
-        if(rawString === null || wordcount < 3) {
-            alert("Please fill in the question stem valid")
-			return;
-        }
-        if(answer === null || answer.match(/^\s*$/) !== null) {
-            alert("Please add one answer.");
-			return;
-        }
-		if(qobj.learning_objective === null) {
-			alert("Please fill in the learning objective")
+		const rawString = qobj.raw_string;
+		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
+		if (rawString === null || wordcount < 3) {
+			alert("문제 내용을 입력해 주세요.");
 			return;
 		}
-    }
+		if (answer === null || answer.match(/^\s*$/) !== null) {
+			alert("정답을 입력해 주세요.");
+			return;
+		}
+		if (qobj.learning_objective === null) {
+			alert("학습 목표를 입력해 주세요.");
+			return;
+		}
+	};
 	const submitStem = () => {
 		const qstemObj = {
 			author: ObjectID(uid),
@@ -156,64 +156,124 @@ function QstemEditor(props) {
 			class: ObjectID(cid),
 			options: [],
 			optionSets: [],
-			learning_objective: objective		};
+			learning_objective: objective,
+		};
 
-		checkForm(qstemObj)
+		checkForm(qstemObj);
 		axios
-			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`, {
-				qstemObj: qstemObj,
-				cid: cid,
-				answer_text: answer,
-			})
+			.post(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`,
+				{
+					qstemObj: qstemObj,
+					cid: cid,
+					answer_text: answer,
+				}
+			)
 			.then((res) => {
 				axios
-					.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`, {
-						optionData: {
-							author: ObjectID(uid),
-							option_text: answer,
-							is_answer: true,
-							explanation: "",
-							class: ObjectID(cid),
-							qstem: ObjectID(res.data.data),
-							plausible: { similar: [], difference: [] },
-							cluster:[]
-						},
-						dependency:[]
-					})
+
+					.post(
+						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`,
+						{
+							optionData: {
+								author: ObjectID(uid),
+								option_text: answer,
+								is_answer: true,
+								explanation: "",
+								class: ObjectID(cid),
+								qstem: ObjectID(res.data.data),
+								plausible: { similar: [], difference: [] },
+								cluster: [],
+							},
+							dependency: [],
+						}
+					)
+
 					.then((res2) => {
 						setMsg("Successfuly made question stem!");
 						navigate("/" + cid + "/question/" + res.data.data + "/create");
 					});
 			});
 	};
+
+	const submitAndEnd = () => {
+		const qstemObj = {
+			author: ObjectID(uid),
+			stem_text: JSON.stringify(
+				convertToRaw(editorState.editorState.getCurrentContent())
+			),
+			raw_string: editorState.editorState
+				.getCurrentContent()
+				.getPlainText("\u0001"),
+			action_verb: props.verbs,
+			keyword: props.keywords,
+			class: ObjectID(cid),
+			options: [],
+			optionSets: [],
+			learning_objective: objective,
+		};
+
+		checkForm(qstemObj);
+		axios
+			.post(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`,
+				{
+					qstemObj: qstemObj,
+					cid: cid,
+					answer_text: answer,
+				}
+			)
+			.then((res) => {
+				axios
+					.post(
+						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`,
+						{
+							optionData: {
+								author: ObjectID(uid),
+								option_text: answer,
+								is_answer: true,
+								explanation: "",
+								class: ObjectID(cid),
+								qstem: ObjectID(res.data.data),
+								plausible: { similar: [], difference: [] },
+								cluster: [],
+							},
+						}
+					)
+					.then((res2) => {
+						setMsg("Successfuly made question stem!");
+						navigate("/" + cid + "/question/" + res.data.data);
+					});
+			});
+	};
 	return (
 		<div id="qstemeditor">
-			<h3>Learning Objective</h3>
+			<h3>학습 목표</h3>
 
 			<TextField
 				fullWidth
 				value={objective}
 				onChange={updateObjective}
-				placeholder="What would people learn from this question?"
+				placeholder="이 문제를 풂으로서 배우게 되는 내용은 무엇인가요?"
 				className="objective-input"
 			/>
 			{/* <textarea value ={objective} onChange={updateObjective} placeholder="Learning Objective"/> */}
 			<div>
-				<h3>Your Question</h3>
-				<div className="helper-text">
-					Feeling Stuck? Here are some question starters to help you out.
-				</div>
+				<h3>문제 내용</h3>
+				<div className="helper-text"></div>
 				<FormControl id="template">
-					<InputLabel id="demo-multiple-checkbox-label">Tags</InputLabel>
+					<InputLabel id="demo-multiple-checkbox-label">
+						문제 형식 예시
+					</InputLabel>
 					<Select
 						labelId="demo-multiple-checkbox-label"
 						id="demo-multiple-checkbox"
 						value={template}
 						onChange={selectTemplate}
-						input={<OutlinedInput label="Tags" />}
+						input={<OutlinedInput label="문제 형식 예시" />}
 						MenuProps={MenuProps}
 					>
-						{templateList.map((t) => (
+						{templatelist_kor.map((t) => (
 							<MenuItem key={t} value={t}>
 								{/* <Checkbox checked={template.indexOf(t) > -1} /> */}
 								<ListItemText primary={t} />
@@ -255,13 +315,15 @@ function QstemEditor(props) {
 					</Col>
 				</Row>
 				<div>
-					<h3>One Answer</h3>
-					<div className="helper-text">One answer option of your question.</div>
+					<h3>정답</h3>
+					<div className="helper-text">
+						입력해 주신 내용은 이 문제의 정답 선택지가 됩니다.
+					</div>
 					<TextField
 						fullWidth
 						value={answer}
 						onChange={(e) => setAnswer(e.target.value)}
-						placeholder="One answer option of your question."
+						placeholder="문제의 정답을 입력해 주세요."
 						className="objective-input"
 					/>
 				</div>
@@ -270,12 +332,20 @@ function QstemEditor(props) {
 					<Button
 						className="submit"
 						style={{ margin: "16px auto", display: "block" }}
+						onClick={submitAndEnd}
+						type="primary"
+						htmlType="submit"
+					>
+						완료
+					</Button>
+					<Button
+						className="submit"
+						style={{ margin: "16px auto", display: "block" }}
 						onClick={submitStem}
 						type="primary"
 						htmlType="submit"
-						text={"Add Question Stem"}
 					>
-						Add Question Stem
+						선택지 추가로 만들기
 					</Button>
 				</div>
 			</div>

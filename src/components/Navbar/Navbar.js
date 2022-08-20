@@ -28,18 +28,17 @@ function Navbar() {
 	return (
 		<div id="left-sidebar">
 			<div>
-				<div id="main-logo">KUIZ</div>
+				<div id="main-logo" onClick={(e) => navigate("/" + cid)}>
+					KUIZ
+				</div>
 				{/* <div>{cid}</div> */}
 			</div>
 			<div id="side-nav">
-				<Button
-					navigateBy={moveToCreateStem}
-					text={cType ? "Create Stem" : "Make Question"}
-				/>
+				<Button navigateBy={moveToCreateStem} text="새로운 문제 만들기" />
 				{cType ? (
-					<Button navigateBy={moveToCreateOption} text="Create Option" />
+					<Button navigateBy={moveToCreateOption} text="새로운 선택지 만들기" />
 				) : null}
-				<Button navigateBy={moveToQlist} text="Question List" />
+				<Button navigateBy={moveToQlist} text="문제 목록" />
 			</div>
 			<div className="profile">
 				<div className="profile-photo">

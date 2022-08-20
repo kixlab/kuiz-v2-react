@@ -42,6 +42,18 @@
 			font-size: 10px;
 		}
 	}
+
+	.cluster-show-button {
+		background: none;
+		border: none;
+		i {
+			margin-left: 8px;
+		}
+	}
+
+	.cluster-subitems {
+		margin: 4px 0;
+	}
 }
 
 #answer-wrapper {
