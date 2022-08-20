@@ -55,13 +55,12 @@ const OptionItem = ({ optionInfo, id }) => {
 			)
 			.then((res) => {
 				setLike(!like);
-				console.log("success:", res.data.success);
 			});
 	};
 
 	useEffect(() => {
+		console.log("optioninfo:", optionInfo)
 		userLike(optionInfo.liked, uid);
-		console.log("checkloop");
 	}, []);
 
 	return (

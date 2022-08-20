@@ -10,6 +10,20 @@ import "./OptionInCluster.scss";
 const OptionInCluster = ({ option }) => {
 	const [like, setLike] = useState();
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
+	const [likeNum, setLikeNum] = useState()
+
+	const userLike = (arr, user) => {
+		if (arr.includes(user)) {
+			setLike(true);
+		} else {
+			setLike(false);
+		}
+		setLikeNum(option.liked.length);
+	};
+
+	useEffect(() => {
+		userLike(option.liked, uid)
+	},[])
 
 	const doLike = () => {
 		console.log("oInfo:", option.cluster[-1]);
@@ -26,7 +40,13 @@ const OptionInCluster = ({ option }) => {
 				}
 			)
 			.then((res) => {
+				if(like){
+					setLikeNum(likeNum-1)
+				} else {
+					setLikeNum(likeNum+1)
+				}
 				setLike(!like);
+				
 				console.log("success:", res.data.success);
 			});
 	};
@@ -47,7 +67,7 @@ const OptionInCluster = ({ option }) => {
 				) : (
 					<FavoriteBorderIcon color="action" fontSize="small" />
 				)}
-				{option.liked.length}
+				{likeNum}
 			</div>
 		</div>
 	);
