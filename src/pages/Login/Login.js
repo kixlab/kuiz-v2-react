@@ -10,12 +10,15 @@ import { useNavigate } from "react-router-dom";
 import { setUserEmail } from "../../features/authentication/userSlice";
 import axios from "axios";
 
+import kakao from "../../assets/kakao_login_medium_wide.png";
+import "./Login.scss";
+
 const Login = (props) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	const uInfo = useSelector((state) => state.userInfo.userInfo);
-    const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
+	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [email, setEmail] = useState();
 
 	const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`;
@@ -26,22 +29,28 @@ const Login = (props) => {
 	};
 
 	useEffect(() => {
-        if(isLoggedIn) {
-            console.log("uinfo",uInfo)
-            if(uInfo !== {}){
-                if(uInfo.classes.length === 0){
-                    navigate("/enroll")
-                } else {
-                    navigate("/"+uInfo.classes[0])
-                }
-            }
-        }
+		if (isLoggedIn) {
+			console.log("uinfo", uInfo);
+			if (uInfo !== {}) {
+				if (uInfo.classes.length === 0) {
+					navigate("/enroll");
+				} else {
+					navigate("/" + uInfo.classes[0]);
+				}
+			}
+		}
 	});
 	return (
-		<div>
-			<input value={email} onChange={(e) => setEmail(e.target.value)} />
-			<div onClick={(e) => saveUserEmail()}>
-				<a href={KAKAO_AUTH_URL}>카카오 로그인</a>
+		<div id="login">
+			<h2>Welcome to KUIZ!</h2>
+			<div id="email-section">
+				<div>이메일 주소를 입력하세요:</div>
+				<input value={email} onChange={(e) => setEmail(e.target.value)} />
+			</div>
+			<div onClick={(e) => saveUserEmail()} className="login" id="kakao-login">
+				<a href={KAKAO_AUTH_URL}>
+					<img src={kakao}></img>
+				</a>
 			</div>
 		</div>
 	);

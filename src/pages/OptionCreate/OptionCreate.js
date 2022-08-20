@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import draftToHtml from "draftjs-to-html";
 import OptionDependency from "../../components/OptionDependency/OptionDependency";
 import Button from "../../components/Button/Button";
-import ClusterList from '../../components/ClusterList/ClusterList'
+import ClusterList from "../../components/ClusterList/ClusterList";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "./OptionCreate.scss";
@@ -29,9 +29,9 @@ const OptionCreate = (props) => {
 	const cid = useParams().cid;
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [myOption, setMyOption] = useState();
-	const [cluster, setCluster] = useState()
-	const [sameCluster, setSameCluster] = useState([])
-	const [contCluster, setContCluster] = useState([])
+	const [cluster, setCluster] = useState();
+	const [sameCluster, setSameCluster] = useState([]);
+	const [contCluster, setContCluster] = useState([]);
 
 	const getOptionList = (qid) => {
 		axios
@@ -46,53 +46,59 @@ const OptionCreate = (props) => {
 				setAnsList(ans);
 				setDistList(dis);
 				setQinfo(res.data.qinfo);
-				console.log("qinfo:",res.data.qinfo)
+				console.log("qinfo:", res.data.qinfo);
 			});
 	};
 	const getOptionCluster = (qid) => {
 		axios
-			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/cluster?qid=`+qid)
+			.get(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/cluster?qid=` +
+					qid
+			)
 			.then(async (res) => {
-				setCluster(res.data.cluster)
-				if(res.data.cluster.length!==0){
-					
+				setCluster(res.data.cluster);
+				if (res.data.cluster.length !== 0) {
 				} else {
-
 				}
 			})
 			.catch((err) => {
-				console.log(err)
-			})
-	}
+				console.log(err);
+			});
+	};
 	const getOptionByCluster = (cluserId) => {
 		axios
-			.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/optionbycluster?qid=`+qid)
+			.get(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/optionbycluster?qid=` +
+					qid
+			)
 			.then((res) => {
-				cluster.set(res.data.cluster)
+				cluster.set(res.data.cluster);
 			})
 			.catch((err) => {
-				console.log(err)
-			})
-	}
+				console.log(err);
+			});
+	};
 	const submitDependency = () => {
 		axios
-			.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`, {
-				optionData: myOption,
-				dependency: sameCluster.concat(contCluster)
-			})
+			.post(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`,
+				{
+					optionData: myOption,
+					dependency: sameCluster.concat(contCluster),
+				}
+			)
 			.then((res) => {
 				console.log("SUCCESS?", res.data.success);
 				setMyOption(res.data.option);
 				setPageStat(false);
 				reset();
 			});
-
 	};
 
 	const reset = () => {
 		setPageStat(true);
 		setSameCluster([]);
-		setContCluster([])
+		setContCluster([]);
 	};
 
 	useEffect(() => {
@@ -106,14 +112,14 @@ const OptionCreate = (props) => {
 
 	return (
 		<div id="option-create-wrapper">
-			<div id="question-nav">Question List &gt; #123</div>
+			<div id="question-nav">새로운 선택지 추가하기</div>
 			<div id="question-screen">
 				<Link
 					to={"/" + cid}
 					style={{ textDecoration: "none", color: "#000000" }}
 				>
 					<div id="return-button">
-						<i className="fa-solid fa-arrow-left"></i> Back to Question List
+						<i className="fa-solid fa-arrow-left"></i> 목록으로 돌아가기
 					</div>
 				</Link>
 				<div id="question-content-wrapper">
@@ -127,17 +133,18 @@ const OptionCreate = (props) => {
 					)}
 
 					<div className="objective-container">
-						learning objective : {qinfo && qinfo.learning_objective}
+						질문의 학습 목표 : {qinfo && qinfo.learning_objective}
 					</div>
 				</div>
 
 				<DndProvider backend={HTML5Backend}>
 					<div className="option-box">
 						<div className="option-container">
-							{pageStat?
-								<OptionList qinfo={qinfo} ansList={ansList} disList={disList} />:
-								<ClusterList clusterList={cluster}/>}
-							
+							{pageStat ? (
+								<OptionList qinfo={qinfo} ansList={ansList} disList={disList} />
+							) : (
+								<ClusterList clusterList={cluster} />
+							)}
 						</div>
 						<div className="option-container">
 							{pageStat ? (
@@ -149,7 +156,7 @@ const OptionCreate = (props) => {
 								<div>
 									{ansList && disList && (
 										<div>
-											<div>My Option</div>
+											<div>내가 만든 선택지</div>
 											{myOption && myOption.option_text}
 
 											<OptionDependency
@@ -165,7 +172,7 @@ const OptionCreate = (props) => {
 												available={!myOption.is_answer}
 											/>
 											<button id="submit-button" onClick={submitDependency}>
-												Submit
+												제출하기
 											</button>
 										</div>
 									)}
