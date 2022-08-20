@@ -7,11 +7,6 @@ import { useDrag } from "react-dnd";
 import axios from "axios";
 
 const ClusterItem = ({ clusterInfo, id, type }) => {
-	const stat = useSelector((state) => state.pageStat.value);
-	const ansRep = clusterInfo.ansRep
-	const disRep = clusterInfo.disRep
-	const ansList = clusterInfo.ansList
-	const disList = clusterInfo.disList
 
 
 	const [detail, setDetail] = useState(false);
@@ -26,6 +21,7 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 			isDragging: !!monitor.isDragging(),
 		}),
 	}));
+
 
 
 	return (
