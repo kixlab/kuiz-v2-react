@@ -1,20 +1,21 @@
 import "./Navbar.scss";
 import { useLocation } from "react-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import axios from 'axios'
 
 import Button from "../Button/Button";
 
-function Navbar() {
-	// const {pathname} = useLocation();
-	// if (withouSidebarRoutes.some((item) => pathname.includes(item))) return null;
+function Navbar(props) {
+
+	const cid = useSelector((state) => state.userInfo.cid)
+	const cType = useSelector((state) => state.userInfo.cType)
 	const profile = useSelector((state) => state.userInfo.userInfo.imageUrl);
 	const user_name = useSelector((state) => state.userInfo.userInfo.name);
-	const cid = useSelector((state) => state.userInfo.cid);
-	const isAdmin = useSelector((state) => state.userInfo.userInfo);
+	const isAdmin = useSelector((state) => state.userInfo.userInfo.isAdmin);
 	const navigate = useNavigate();
-	const cType = useSelector((state) => state.userInfo.cType);
+
 	const moveToCreateStem = () => {
 		navigate("/" + cid + "/createstem");
 	};
@@ -53,6 +54,7 @@ function Navbar() {
 					<i className="fa-solid fa-arrow-right"></i>
 				</div>
 			</div>
+			{isAdmin?<div>Admin Page</div>:<></>}
 		</div>
 	);
 }

@@ -4,21 +4,35 @@ import { useSelector, useDispatch } from "react-redux";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg";
 import QstemEditor from "../../components/QstemEditor/QstemEditor";
 import { useParams } from "react-router";
+import { enrollClass } from "../../features/authentication/userSlice";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const StemCreate = (props) => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	props.funcNav(true);
 	const keywords = useSelector((state) => state.objective.keywords);
 	const verbs = useSelector((state) => state.objective.verbs);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 
 	const cid = useParams().cid;
+	const classType = props.classType
+
+	const setCtype  = () => {
+		if(cid!=null || cid!="")
+		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
+		.then((res) => {
+			dispatch(enrollClass({ cid: cid, cType: res.data.cType}));
+		})
+	}
 
 	const [msg, setMsg] = useState("");
 	useEffect(() => {
 		if (!isLoggedIn) {
 			navigate("/login");
+		} else {
+			setCtype()
 		}
 	}, []);
 
@@ -44,6 +58,7 @@ const StemCreate = (props) => {
 							keywords={keywords}
 							setMsg={setMsg}
 							cid={cid}
+							classType = {classType}
 						/>
 					</div>
 					{msg}

@@ -24,7 +24,6 @@ const OptionDependency = ({ optionList, label, setDependency, available }) => {
 	const addOptionToBoard = (id) => {
 		const newOptionList = optionList.filter((option) => id === option._id);
 		setDependency((board) => {
-			console.log("BOARD:", board)
 			return [...board, newOptionList[0]]
 		});
 		setBoard((board) => [...board, newOptionList[0]]);

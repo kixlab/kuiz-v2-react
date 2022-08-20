@@ -14,7 +14,6 @@ const Admin = () => {
         axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/admin/load/user?cid=`+cid).then(
             (res) => {
                 setUser(res.data.students)
-                console.log("Success?:",res.data.success)
             }
         )
     }

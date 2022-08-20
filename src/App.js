@@ -19,73 +19,70 @@ import Enroll from "./pages/Enroll/Enroll";
 import Kakao from "./pages/Kakao/Kakao";
 import "./App.scss";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { enrollClass } from "./features/authentication/userSlice";
+import axios from "axios";
 
 function App() {
 	const [showNav, setShowNav] = useState(true);
-	const cType = useSelector((state) => state.userInfo.cType);
 	const isAdmin = useSelector((state) => state.userInfo.userInfo.isAdmin);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-	// const navigate = useNavigate();
-	useEffect(() => {
-		console.log("ISADMIN!!:", isAdmin);
-		// if (!isLoggedIn) {
-		// 	navigate("/login");
-		// }
-	}, []);
+	const cid = useParams().cid
+	const dispatch = useDispatch()
+	const cType = useSelector((state) => state.userInfo.cType)
 
 	return (
 		<BrowserRouter>
 			{isLoggedIn ? (
 				<div className="app-wrapper">
-					{showNav && <Navbar />}
+					{showNav && <Navbar/>}
 					<main>
 						<Routes>
 							{cType && (
 								<Route
 									path="/:cid"
-									element={<QuestionListOption funcNav={setShowNav} />}
+									element={<QuestionListOption funcNav={setShowNav} classType={cType} />}
 								/>
 							)}
 							<Route
 								path="/:cid/qlist"
-								element={<QuestionList funcNav={setShowNav} />}
+								element={<QuestionList funcNav={setShowNav} classType={cType}/>}
 							/>
 							<Route
 								path="/kakaologin"
-								element={<Kakao funcNav={setShowNav} />}
+								element={<Kakao funcNav={setShowNav} classType={cType}/>}
 							/>
 							<Route
 								path="/:cid/question/:id"
-								element={<Question funcNav={setShowNav} />}
+								element={<Question funcNav={setShowNav} classType={cType}/>}
 							/>
 							<Route
 								path="/:cid/createstem"
 								element={
 									cType ? (
-										<StemCreate funcNav={setShowNav} />
+										<StemCreate funcNav={setShowNav} classType={cType}/>
 									) : (
-										<StemCreate2 funcNav={setShowNav} />
+										<StemCreate2 funcNav={setShowNav} classType={cType}/>
 									)
 								}
 							/>
 							{cType && (
 								<Route
 									path="/:cid/question/:id/create"
-									element={<OptionCreate funcNav={setShowNav} />}
+									element={<OptionCreate funcNav={setShowNav} classType={cType}/>}
 								/>
 							)}
-							<Route path="/login" element={<Login funcNav={setShowNav} />} />
-							<Route path="/enroll" element={<Enroll funcNav={setShowNav} />} />
+							<Route path="/login" element={<Login funcNav={setShowNav} classType={cType}/>} />
+							<Route path="/enroll" element={<Enroll funcNav={setShowNav} classType={cType}/>} />
 							<Route
 								path="/:cid/mypage"
-								element={<MyPage funcNav={setShowNav} />}
+								element={<MyPage funcNav={setShowNav} classType={cType}/>}
 							/>
 							{isAdmin && (
 								<Route
 									path="/:cid/admin"
-									element={<Admin funcNav={setShowNav} />}
+									element={<Admin funcNav={setShowNav} classType={cType}/>}
 								/>
 							)}
 						</Routes>

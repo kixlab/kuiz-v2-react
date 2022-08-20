@@ -26,7 +26,6 @@ const OptionInCluster = ({ option }) => {
 	},[])
 
 	const doLike = () => {
-		console.log("oInfo:", option.cluster[-1]);
 		axios
 			.post(
 				`${process.env.REACT_APP_REQ_END}:${
@@ -47,7 +46,6 @@ const OptionInCluster = ({ option }) => {
 				}
 				setLike(!like);
 				
-				console.log("success:", res.data.success);
 			});
 	};
 

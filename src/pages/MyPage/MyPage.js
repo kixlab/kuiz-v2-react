@@ -106,7 +106,7 @@ const MyPage = (props) => {
 										<div className="indicator-distractor">Distractor</div>
 									)}
 									<div className="option-text">{option.option_text}</div>
-                                    {/* <div>{option.toString()}</div> */}
+                                    <div>{option.qinfo.raw_string}</div>
 								</div>
 								<div
 									className="option-nav"

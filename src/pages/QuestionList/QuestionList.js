@@ -4,35 +4,41 @@ import Button from "../../components/Button/Button";
 import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
 import axios from "axios";
 import { NavLink, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { enrollClass } from "../../features/authentication/userSlice";
 import { useNavigate } from "react-router";
 
 import "./QuestionList.scss";
 
 const QuestionList = (props) => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch()
 	props.funcNav(true);
-
 	const cid = useParams().cid;
+
+	const setCtype  = () => {
+		if(cid!=null || cid!="")
+		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
+		.then((res) => {
+			dispatch(enrollClass({ cid: cid, cType: res.data.cType}));
+		})
+	}
 	const [questionList, setQuestionList] = useState([]);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const cType = useSelector((state) => state.userInfo.cType);
-	console.log("UID:", uid);
 	const getQuestionList = () => {
-		console.log("CID:", cid);
 		axios
 			.get(
 				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` +
 					cid
 			)
 			.then((res) => {
-				console.log("qlist:", res.data.qstems.problemList);
 				setQuestionList(res.data.qstems.problemList);
 			});
 	};
 	const moveToCreateOption = () => {
-		navigate("/");
+		navigate("/"+cid+"/createstem");
 	};
 	const isValidSet = (qid) => {
 		axios
@@ -41,7 +47,6 @@ const QuestionList = (props) => {
 					qid
 			)
 			.then((res) => {
-				console.log("Qinfo:", res.data.data);
 				if (cType) {
 					if (res.data.data.options.length > 1) {
 						const ansList = res.data.data.options.filter(
@@ -56,7 +61,6 @@ const QuestionList = (props) => {
 							return false;
 						}
 					} else {
-						console.log("Not enough");
 						return true;
 					}
 				} else {
@@ -67,7 +71,7 @@ const QuestionList = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		if (isLoggedIn) {
-			console.log("AA");
+			setCtype()
 			getQuestionList();
 		} else {
 			navigate("/login");

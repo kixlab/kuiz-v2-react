@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
-import axios from "axios";
+import React from "react";
 import ClusterItem from "../ClusterItem/ClusterItem";
-import { useDispatch, useSelector } from "react-redux";
 import "./ClusterList.scss";
 const ClusterList = (props) => {
 

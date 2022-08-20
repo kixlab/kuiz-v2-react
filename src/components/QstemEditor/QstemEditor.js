@@ -191,7 +191,12 @@ function QstemEditor(props) {
 
 					.then((res2) => {
 						setMsg("Successfuly made question stem!");
-						navigate("/" + cid + "/question/" + res.data.data + "/create");
+						if(props.classType){
+							navigate("/" + cid + "/question/" + res.data.data + "/create");
+						} else {
+							navigate("/" + cid + "/question/" + res.data.data);
+						}
+						
 					});
 			});
 	};

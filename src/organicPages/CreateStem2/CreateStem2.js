@@ -34,7 +34,6 @@ const StemCreate2 = (props) => {
         if(!isLoggedIn) {
             navigate("/"+cid)
         }
-        console.log("createStem2")
     },[])
 
     async function onSubmit () {

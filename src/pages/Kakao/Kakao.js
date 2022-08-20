@@ -26,7 +26,6 @@ const Kakao = (props) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log("DATA:",data)
                 if(data.access_token) {
                     window.Kakao.init(process.env.REACT_APP_REST_API_KEY)
                     window.Kakao.Auth.setAccessToken(data.access_token)
@@ -44,15 +43,11 @@ const Kakao = (props) => {
                 url: "/v2/user/me"
             })
 
-            
-
             axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/register`,{email: email, name:data.properties.nickname, image: data.properties.profile_image}).then(
                 (res) => {
                     if(res.data.success){
-                        console.log("success!")
                         dispatch(loginUser(res.data.user))
                         if(res.data.user.classes.length!=0){
-                            console.log("cid:",res.data.user.classes[0])
                             dispatch(enrollClass({cid:res.data.user.classes[0], cType:res.data.cType}))
                             if(res.data.cType) {
                                 navigate('/'+res.data.user.classes[0])
@@ -72,7 +67,6 @@ const Kakao = (props) => {
         }
     }
     useEffect(()=>{
-        console.log("uinfo:",uInfo)
         // if(uInfo!=={}) {
         //     navigate('/'+uInfo.classes[0])
         // } else {

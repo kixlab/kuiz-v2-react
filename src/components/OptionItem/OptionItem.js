@@ -59,7 +59,6 @@ const OptionItem = ({ optionInfo, id }) => {
 	};
 
 	useEffect(() => {
-		console.log("optioninfo:", optionInfo)
 		userLike(optionInfo.liked, uid);
 	}, []);
 

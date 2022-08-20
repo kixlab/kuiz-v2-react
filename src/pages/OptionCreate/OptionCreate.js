@@ -84,7 +84,6 @@ const OptionCreate = (props) => {
 				}
 			)
 			.then((res) => {
-				console.log("SUCCESS?", res.data.success);
 				setMyOption(res.data.option);
 				setPageStat(false);
 				reset();
@@ -99,7 +98,7 @@ const OptionCreate = (props) => {
 
 	useEffect(() => {
 		if (isLoggedIn) {
-			
+		
 			getOptionCluster(qid);
 			getOptionList(qid);
 		} else {

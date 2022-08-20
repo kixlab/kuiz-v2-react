@@ -92,8 +92,6 @@ const Question = (props) => {
 												)
 												.then((res4) => {
 													const disList = res4.data.options;
-													console.log("ANSLIST:", ansList);
-													console.log("DISLIST:", disList);
 
 													/* selection algorithm of ansList should be here. random selection for now */
 													const answer = getMultipleRandom(ansList, 1);
@@ -119,7 +117,6 @@ const Question = (props) => {
 				setQinfo(res.data.data.qinfo);
 				res.data.data.options.map((o, i) => {
 					if (o.is_answer) {
-						console.log("ans:", o.option_text);
 						setAnswer(i);
 					}
 				});
@@ -149,15 +146,11 @@ const Question = (props) => {
 	useEffect(() => {
 		if (isLoggedIn) {
 			getQinfo(qid);
-			console.log("cType:", cType);
 		} else {
 			navigate("/login");
 		}
 	}, []);
 
-	useEffect(() => {
-		console.log("OPTIONS:", options);
-	}, [options]);
 
 	return (
 		<div id="question-screen-wrapper">

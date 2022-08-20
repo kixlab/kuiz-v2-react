@@ -4,22 +4,30 @@ import Button from "../../components/Button/Button";
 import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
 import axios from "axios";
 import { NavLink, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { enrollClass } from "../../features/authentication/userSlice";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 
 import "./QuestionListOption.scss";
 
 const QuestionListOption = (props) => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	props.funcNav(true);
 	const cid = useParams().cid;
+	const setCtype  = () => {
+		if(cid!=null || cid!="")
+		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
+		.then((res) => {
+			console.log("CID in QuestionList:", cid)
+			dispatch(enrollClass({ cid: cid, cType: res.data.cType}));
+		})
+	}
+	props.funcNav(true);
 	const [questionList, setQuestionList] = useState([]);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	console.log("UID:", uid);
 	const getQuestionList = () => {
 		//TODO : add cid in request url
-		console.log("CID:", cid);
 		axios
 			.get(
 				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` +
@@ -35,6 +43,7 @@ const QuestionListOption = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		if (isLoggedIn) {
+			setCtype();
 			getQuestionList();
 		} else {
 			navigate("/login");

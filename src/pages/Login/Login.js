@@ -14,6 +14,7 @@ import kakao from "../../assets/kakao_login_medium_wide.png";
 import "./Login.scss";
 
 const Login = (props) => {
+	props.funcNav(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
@@ -30,7 +31,6 @@ const Login = (props) => {
 
 	useEffect(() => {
 		if (isLoggedIn) {
-			console.log("uinfo", uInfo);
 			if (uInfo !== {}) {
 				if (uInfo.classes.length === 0) {
 					navigate("/enroll");
@@ -60,7 +60,6 @@ const Login2 = (props) => {
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
 	function handleCallbackResponse(response) {
-		console.log("Encoded JWT ID token: " + response.credential);
 		var userObject = jwt_decode(response.credential);
 		axios
 			.post(
@@ -73,10 +72,8 @@ const Login2 = (props) => {
 			)
 			.then((res) => {
 				if (res.data.success) {
-					console.log("success!");
 					dispatch(loginUser(res.data.user));
 					if (res.data.user.classes.length != 0) {
-						console.log("cid:", res.data.user.classes[0]);
 						dispatch(
 							enrollClass({
 								cid: res.data.user.classes[0],
@@ -92,7 +89,6 @@ const Login2 = (props) => {
 	}
 	props.funcNav(false);
 	useEffect(() => {
-		console.log("google:", process.env.REACT_APP_CLIENT_ID);
 		/*global google*/
 		google.accounts.id.initialize({
 			client_id: process.env.REACT_APP_CLIENT_ID,

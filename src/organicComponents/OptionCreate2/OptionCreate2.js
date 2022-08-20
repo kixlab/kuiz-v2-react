@@ -44,7 +44,6 @@ const OptionCreate2 = ({optionList, updateOptionList, updateExplanation}) => {
         const newList = optionList.map((o, i) => {
             return i===index?{option_text:e.target.value, is_answer:o.is_answer}:o
         })
-        console.log("New:",newList)
         updateOptionList(newList)
     }
 
@@ -52,7 +51,6 @@ const OptionCreate2 = ({optionList, updateOptionList, updateExplanation}) => {
     useEffect(()=> {
         if(!isLoggedIn) {
             navigate("/login")
-            console.log("OLIST:")
         }
     },[])
 

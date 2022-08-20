@@ -50,7 +50,6 @@ const QstemEditor2 = forwardRef(({cid, setQobj},ref) => {
     
     useImperativeHandle(ref, () => ({
         submitStem() {
-            console.log("UID:",uid)
             const qstemObj = {
                 author: ObjectID(uid), 
                 stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
