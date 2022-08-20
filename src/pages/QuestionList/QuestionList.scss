@@ -27,4 +27,8 @@
 .question-list-item {
 	padding: 24px 0;
 	border-bottom: 0.5px solid #e1e9ff;
+
+	&:hover {
+		font-weight: 600;
+	}
 }

@@ -72,7 +72,7 @@ const QuestionList = (props) => {
 		<div id="question-list">
 			<div id="question-list-functions">
 				<div style={{ textDecoration: "none", color: "#000000" }}>
-					<Button navigateBy={moveToCreateOption} text="Create Questions" />
+					<Button navigateBy={moveToCreateOption} text="문제 만들러 가기" />
 				</div>
 			</div>
 			<div id="question-list-header">
