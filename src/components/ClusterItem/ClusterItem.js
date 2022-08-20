@@ -5,6 +5,7 @@ import { changePageStat } from "../../features/optionSelection/pageStatSlice";
 import "./ClusterItem.scss";
 import { useDrag } from "react-dnd";
 import axios from "axios";
+import OptionInCluster from "../OptionInCluster/OptionInCluster";
 
 const ClusterItem = ({ clusterInfo, id, type }) => {
 
@@ -55,10 +56,11 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 						? clusterInfo.ansRep.option_text
 						: clusterInfo.disRep.option_text}
 				</div>
-				<button onClick={e => getOptions()}>See more</button>
+				<button onClick={e => getOptions()}>{detail?"Hide":"See more"}</button>
 				{detail?
 				<div>
-					{optionList.map(option => <div>{option.option_text}</div>)}
+					{optionList.map(option => 
+					<OptionInCluster option={option}/>)}
 				</div>:<></>}
 				{/* <div>{clusterInfo._id}</div> */}
 			</div>
