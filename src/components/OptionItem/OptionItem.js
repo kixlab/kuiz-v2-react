@@ -45,8 +45,6 @@ const OptionItem = ({ optionInfo, id }) => {
 	}
 
 	const doLike = () => {
-		console.log("oInfo:", optionInfo.cluster[-1])
-		debugger;
 		axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/${like?"dislike":"like"}`,{
 			oid:optionInfo._id,
 			isAns:optionInfo.is_answer,
@@ -89,6 +87,7 @@ const OptionItem = ({ optionInfo, id }) => {
 					</div>
 				</div>
 				<div onClick={e => doLike()}>{like?<FavoriteIcon sx={{color: pink[500]}} fontSize="small"/>:<FavoriteBorderIcon color="action" fontSize="small"/>}</div>
+				<div>likes:{optionInfo.liked.length}</div>
 				{/* {detail?<div>{explanation}<div onClick={changeDetailView}>hide</div></div>:<div onClick={changeDetailView}>0</div>} */}
 			</div>
 		</div>
