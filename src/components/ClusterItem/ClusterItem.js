@@ -8,11 +8,10 @@ import axios from "axios";
 
 const ClusterItem = ({ clusterInfo, id, type }) => {
 	const stat = useSelector((state) => state.pageStat.value);
-	const ansRep = clusterInfo.ansRep
-	const disRep = clusterInfo.disRep
-	const ansList = clusterInfo.ansList
-	const disList = clusterInfo.disList
-
+	const ansRep = clusterInfo.ansRep;
+	const disRep = clusterInfo.disRep;
+	const ansList = clusterInfo.ansList;
+	const disList = clusterInfo.disList;
 
 	const [detail, setDetail] = useState(false);
 	const changeDetailView = () => {
@@ -27,9 +26,11 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 		}),
 	}));
 
-
 	return (
-		<div id={type ? "answer-wrapper" : "distractor-wrapper"}>
+		<div
+			id={type ? "answer-wrapper" : "distractor-wrapper"}
+			className="cluster-item"
+		>
 			<div
 				ref={drag}
 				style={{ border: isDragging ? "5px solid pink" : "0px" }}
@@ -38,7 +39,11 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				<div className={type ? "answer-label" : "distractor-label"}>
 					{type ? "Answer" : "Distractor"}
 				</div>
-				<div className="option-text">{type?(clusterInfo.ansRep.option_text):(clusterInfo.disRep.option_text)}</div>
+				<div className="option-text">
+					{type
+						? clusterInfo.ansRep.option_text
+						: clusterInfo.disRep.option_text}
+				</div>
 				{/* <div>{clusterInfo._id}</div> */}
 			</div>
 		</div>
