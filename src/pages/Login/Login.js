@@ -27,14 +27,14 @@ const Login = (props) => {
 
 	useEffect(() => {
         if(isLoggedIn) {
-            // console.log("uinfo",uInfo)
-            // if(uInfo !== {}){
-            //     if(uInfo.classes.length === 0){
-            //         navigate("/enroll")
-            //     } else {
-            //         navigate("/"+uInfo.classes[0])
-            //     }
-            // }
+            console.log("uinfo",uInfo)
+            if(uInfo !== {}){
+                if(uInfo.classes.length === 0){
+                    navigate("/enroll")
+                } else {
+                    navigate("/"+uInfo.classes[0])
+                }
+            }
         }
 	});
 	return (

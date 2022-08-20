@@ -12,11 +12,11 @@ const OptionList = (props) => {
         <div>
             <div className="option-list-title">Option List</div>
             <div className="answer-container">
-            {ansList&& ansList.map((option)=><div id={option._id} className="option-item-wrapper" onClick={(e)=>(props.changeOid)(option._id)}><OptionItem optionInfo={option} id={option._id}/></div>)}
+            {ansList&& ansList.map((option)=><div id={option._id} className="option-item-wrapper" ><OptionItem optionInfo={option} id={option._id}/></div>)}
             </div>
             <hr/>
             <div className="distractor-container">
-            {disList&& disList.map((option)=><div id={option._id} className="option-item-wrapper" onClick={(e)=>(props.changeOid)(option._id)}><OptionItem optionInfo={option} id={option._id} /></div>)}
+            {disList&& disList.map((option)=><div id={option._id} className="option-item-wrapper" ><OptionItem optionInfo={option} id={option._id} /></div>)}
             </div>
         </div>
     );
