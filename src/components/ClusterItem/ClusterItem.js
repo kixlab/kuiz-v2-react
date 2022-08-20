@@ -42,6 +42,7 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 			id={type ? "answer-wrapper" : "distractor-wrapper"}
 			className="cluster-item"
 		>
+			{console.log(clusterInfo)}
 			<div
 				ref={drag}
 				style={{ border: isDragging ? "5px solid pink" : "0px" }}

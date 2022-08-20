@@ -79,20 +79,22 @@ const OptionItem = ({ optionInfo, id }) => {
 				style={{ border: isDragging ? "5px solid pink" : "0px" }}
 				className="option-components"
 			>
-				<div className={isAnswer ? "answer-label" : "distractor-label"}>
+				{/* <div className={isAnswer ? "answer-label" : "distractor-label"}>
 					{isAnswer ? "Answer" : "Distractor"}
-				</div>
-				<div className="option-text">{text}</div>
-				<div className="tags">
-					<div className="tags-container">
-						{similar.map((option) => {
-							return <div className="similarTag tag">{option}</div>;
-						})}
-					</div>
-					<div className="tags-container">
-						{difference.map((option) => {
-							return <div className="differenceTag tag">{option}</div>;
-						})}
+				</div> */}
+				<div className="option-wrapper">
+					<div className="option-text">{text}</div>
+					<div className="tags">
+						<div className="tags-container">
+							{similar.map((option) => {
+								return <div className="similarTag tag">{option}</div>;
+							})}
+						</div>
+						<div className="tags-container">
+							{difference.map((option) => {
+								return <div className="differenceTag tag">{option}</div>;
+							})}
+						</div>
 					</div>
 				</div>
 				<div onClick={(e) => doLike()}>
