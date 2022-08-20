@@ -41,6 +41,7 @@ const Question = (props) => {
 	}
 
 
+
 	const getQinfo = (qid) => {
 		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=`+qid).then(
 			(res)=> {
@@ -126,6 +127,10 @@ const Question = (props) => {
 		}
 	},[])
 
+	useEffect(() => {
+		console.log("OPTIONS:", options)
+	},[options])
+
 	return (
 		<div id="question-screen-wrapper">
 			<div id="question-nav">Question List &gt; #123</div>
@@ -152,12 +157,18 @@ const Question = (props) => {
 					</div>
 					{ansVisible && (cType?
 						<div id="answer-wrapper">
-								<div>answer: {options[answer].option_text}</div>
-								{options && options.map((option)=>
+								{/* <div>answer: {options[answer].option_text}</div> */}
+								{/* <div>answer: {options.filter((o,i) => i === answer)}</div> */}
+								{options.map((option)=>
+
+								{
+									return(
 									<div className="answer-option">
 										<div className="option-text">{option.option_text}</div>
 										<div className="option-exp">{option.explanation}</div>
-									</div>)
+									</div>
+								)}
+									)
 								}
 							</div>:
 						<div className="explanation">
