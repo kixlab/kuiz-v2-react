@@ -36,6 +36,7 @@ function QstemEditor(props) {
 	const cid = props.cid;
 	const [template, setTemplate] = useState([]);
 	const [answer, setAnswer] = useState();
+	const [explanation, setExplanation] = useState()
 
 	const templateList = [
 		"What might occur if … ?",
@@ -159,7 +160,20 @@ function QstemEditor(props) {
 			learning_objective: objective,
 		};
 
-		checkForm(qstemObj);
+		const rawString = qstemObj.raw_string;
+		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
+		if (rawString === null || wordcount < 3) {
+			alert("문제 내용을 입력해 주세요.");
+			return;
+		}
+		if (answer === null || answer.match(/^\s*$/) !== null) {
+			alert("정답을 입력해 주세요.");
+			return;
+		}
+		if (qstemObj.learning_objective === null) {
+			alert("학습 목표를 입력해 주세요.");
+			return;
+		}
 		axios
 			.post(
 				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`,
@@ -179,7 +193,7 @@ function QstemEditor(props) {
 								author: ObjectID(uid),
 								option_text: answer,
 								is_answer: true,
-								explanation: "",
+								explanation: explanation,
 								class: ObjectID(cid),
 								qstem: ObjectID(res.data.data),
 								plausible: { similar: [], difference: [] },
@@ -218,7 +232,20 @@ function QstemEditor(props) {
 			learning_objective: objective,
 		};
 
-		checkForm(qstemObj);
+		const rawString = qstemObj.raw_string;
+		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
+		if (rawString === null || wordcount < 3) {
+			alert("문제 내용을 입력해 주세요.");
+			return;
+		}
+		if (answer === null || answer.match(/^\s*$/) !== null) {
+			alert("정답을 입력해 주세요.");
+			return;
+		}
+		if (qstemObj.learning_objective === null) {
+			alert("학습 목표를 입력해 주세요.");
+			return;
+		}
 		axios
 			.post(
 				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`,
@@ -237,7 +264,7 @@ function QstemEditor(props) {
 								author: ObjectID(uid),
 								option_text: answer,
 								is_answer: true,
-								explanation: "",
+								explanation: explanation,
 								class: ObjectID(cid),
 								qstem: ObjectID(res.data.data),
 								plausible: { similar: [], difference: [] },
@@ -330,6 +357,16 @@ function QstemEditor(props) {
 						value={answer}
 						onChange={(e) => setAnswer(e.target.value)}
 						placeholder="문제의 정답을 입력해 주세요."
+						className="objective-input"
+					/>
+					<div className="helper-text">
+						정답에 대한 설명이 필요하다면 적어주세요ㅁ.
+					</div>
+					<TextField
+						fullWidth
+						value={explanation}
+						onChange={(e) => setExplanation(e.target.value)}
+						placeholder="정답에 대해 설명이 필요하다면 입력해 주세요."
 						className="objective-input"
 					/>
 				</div>
