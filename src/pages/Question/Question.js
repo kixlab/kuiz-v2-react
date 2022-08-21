@@ -115,6 +115,7 @@ const Question = (props) => {
 				}
 
 				setQinfo(res.data.data.qinfo);
+				setOptions(res.data.data.options)
 				res.data.data.options.map((o, i) => {
 					if (o.is_answer) {
 						setAnswer(i);
