@@ -17,22 +17,26 @@ const StemCreate = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 
 	const cid = useParams().cid;
-	const classType = props.classType
+	const classType = props.classType;
 
-	const setCtype  = () => {
-		if(cid!=null || cid!="")
-		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
-		.then((res) => {
-			dispatch(enrollClass({ cid: cid, cType: res.data.cType}));
-		})
-	}
+	const setCtype = () => {
+		if (cid != null || cid != "")
+			axios
+				.get(
+					`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=` +
+						cid
+				)
+				.then((res) => {
+					dispatch(enrollClass({ cid: cid, cType: res.data.cType }));
+				});
+	};
 
 	const [msg, setMsg] = useState("");
 	useEffect(() => {
 		if (!isLoggedIn) {
 			navigate("/login");
 		} else {
-			setCtype()
+			setCtype();
 		}
 	}, []);
 
@@ -58,7 +62,7 @@ const StemCreate = (props) => {
 							keywords={keywords}
 							setMsg={setMsg}
 							cid={cid}
-							classType = {classType}
+							classType={classType}
 						/>
 					</div>
 					{msg}

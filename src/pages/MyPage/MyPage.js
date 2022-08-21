@@ -18,7 +18,7 @@ const MyPage = (props) => {
 	const cType = useSelector((state) => state.userInfo.cType);
 	const [madeStem, setMadeStem] = useState();
 	const [madeOption, setMadeOption] = useState();
-    const [qlist, setQlist] = useState()
+	const [qlist, setQlist] = useState();
 
 	const getMadeStem = () => {
 		console.log("UID:", uid);
@@ -39,21 +39,26 @@ const MyPage = (props) => {
 				{ uid, uid }
 			)
 			.then((res) => {
-                axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstembyoption`,{
-                    qstems:res.data.madeOption.map(o => o.qstem)
-                }).then(
-                    (res2) => {
-                        // setMadeOption(res.data.madeOption)
-                        // setQlist(res2.data.qstems)
-                        const optionList = res.data.madeOption
-                        const qlist = res2.data.qstems.map(qstem => {return {qinfo:qstem}})
-                        const newOptionList = optionList.map((option, index) => ({
-                            ...option,
-                            ...qlist[index]
-                        }))
-                        setMadeOption(newOptionList)
-                    }
-                )
+				axios
+					.post(
+						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstembyoption`,
+						{
+							qstems: res.data.madeOption.map((o) => o.qstem),
+						}
+					)
+					.then((res2) => {
+						// setMadeOption(res.data.madeOption)
+						// setQlist(res2.data.qstems)
+						const optionList = res.data.madeOption;
+						const qlist = res2.data.qstems.map((qstem) => {
+							return { qinfo: qstem };
+						});
+						const newOptionList = optionList.map((option, index) => ({
+							...option,
+							...qlist[index],
+						}));
+						setMadeOption(newOptionList);
+					});
 			});
 	};
 
@@ -101,12 +106,15 @@ const MyPage = (props) => {
 							<div key={option._id} className="option-item">
 								<div className="option-text-wrapper">
 									{option.is_answer ? (
-										<div className="indicator-answer">Answer</div>
+										<div className="indicator-answer">정답</div>
 									) : (
-										<div className="indicator-distractor">Distractor</div>
+										<div className="indicator-distractor">오답</div>
 									)}
 									<div className="option-text">{option.option_text}</div>
-                                    <div>{option.qinfo.raw_string}</div>
+								</div>
+								<div>
+									<span style={{ color: "gray", margin: "8px" }}>ㄴ</span>
+									{option.qinfo.raw_string}
 								</div>
 								<div
 									className="option-nav"

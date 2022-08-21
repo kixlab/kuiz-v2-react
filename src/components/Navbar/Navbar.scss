@@ -1,13 +1,14 @@
 .app-wrapper {
 	display: grid;
 	grid-template-columns: 350px auto;
-	height: 100vh;
+
 	#left-sidebar {
 		max-width: 350px;
 		background-color: white;
 		padding: 56px 36px;
 		display: grid;
 		grid-template-rows: 30% auto auto;
+		height: calc(100vh - 112px);
 
 		#main-logo {
 			text-align: left;
@@ -27,6 +28,8 @@
 		padding: 36px;
 		display: grid;
 		place-items: stretch;
+		overflow: auto;
+		height: calc(100vh - 72px);
 	}
 
 	.profile {
