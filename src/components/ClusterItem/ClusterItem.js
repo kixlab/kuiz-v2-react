@@ -6,13 +6,18 @@ import "./ClusterItem.scss";
 import { useDrag } from "react-dnd";
 import axios from "axios";
 import OptionInCluster from "../OptionInCluster/OptionInCluster";
+import { pink } from "@mui/material/colors";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const ClusterItem = ({ clusterInfo, id, type }) => {
+	const uid = useSelector((state) => state.userInfo.userInfo._id)
+	const [like, setLike] = useState()
+	const [likeNum, setLikeNum] = useState()
 	const [detail, setDetail] = useState(false);
 	const [optionList, setOptionList] = useState([]);
-	const changeDetailView = () => {
-		setDetail(!detail);
-	};
+	const [repOption, setRepOption] = useState()
+	const repOid = type?clusterInfo.ansRep._id : clusterInfo.disRep._id
 
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: "option",
@@ -21,6 +26,29 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 			isDragging: !!monitor.isDragging(),
 		}),
 	}));
+	const doLike = () => {
+		axios
+			.post(
+				`${process.env.REACT_APP_REQ_END}:${
+					process.env.REACT_APP_PORT
+				}/question/option/${like ? "dislike" : "like"}`,
+				{
+					oid: repOption._id,
+					isAns: repOption.is_answer,
+					uid: uid,
+					ocid: repOption.cluster[-1],
+				}
+			)
+			.then((res) => {
+				if(like){
+					setLikeNum(likeNum-1)
+				} else {
+					setLikeNum(likeNum+1)
+				}
+				setLike(!like);
+				
+			});
+	};
 
 	const getOptions = () => {
 		axios
@@ -30,9 +58,36 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 			)
 			.then((res) => {
 				if (type) {
-					setOptionList(res.data.ansList);
+					const newOptionList = res.data.ansList
+					setOptionList(newOptionList);
+
+					const newRepOption = newOptionList.filter(o => {
+						if(o._id === repOid) {
+							console.log("TRUE")
+							return o
+						}
+					})
+					console.log("LIKED:", newRepOption)
+					// console.log("newRepOption:", newRepOption)
+					// debugger;
+					setRepOption(newRepOption[0])
+					if(newRepOption[0].liked.includes(uid)){
+						setLike(true)
+					} else {
+						setLike(false)
+					}
+					setLikeNum(newRepOption[0].liked.length)
 				} else {
-					setOptionList(res.data.disList);
+					const newOptionList = res.data.disList
+					setOptionList(newOptionList);
+					const newRepOption = newOptionList.filter(o => o._id === repOid)
+					setRepOption(newRepOption[0])
+					if(newRepOption[0].liked.includes(uid)){
+						setLike(true)
+					} else {
+						setLike(false)
+					}
+					setLikeNum(newRepOption[0].liked.length)
 				}
 				setDetail(!detail);
 			});
@@ -56,6 +111,15 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 						? clusterInfo.ansRep.option_text
 						: clusterInfo.disRep.option_text}
 				</div>
+				{detail?<div onClick={(e) => doLike()} className="likes-container">
+					{like ? (
+						<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
+					) : (
+						<FavoriteBorderIcon color="action" fontSize="small" />
+					)}
+					{likeNum}
+				</div>:<></>}
+				
 				<button onClick={(e) => getOptions()} className="cluster-show-button">
 					내용이 같은 다른 선택지 보기
 					{detail ? (
@@ -66,9 +130,11 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				</button>
 				{detail ? (
 					<div className="cluster-subitems">
-						{optionList.map((option) => (
-							<OptionInCluster option={option} />
-						))}
+						{optionList.map((option) => {
+							if(option._id != repOid){
+								return <OptionInCluster option={option} />
+							}
+						})}
 					</div>
 				) : (
 					<></>
