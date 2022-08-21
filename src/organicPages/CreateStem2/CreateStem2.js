@@ -38,7 +38,29 @@ const StemCreate2 = (props) => {
 
 	async function onSubmit() {
 		const newQobj = await childRef.current.submitStem();
-		checkForm(newQobj);
+		const rawString = newQobj.raw_string;
+		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
+		if (rawString === null || wordcount < 3) {
+			alert("Please fill in the question stem valid");
+			return;
+		}
+		if (optionList.filter((option) => option.is_answer === true).length !== 1) {
+			alert("Please check one answer");
+			return;
+		}
+		const blankAnswerOptionExists = optionList.find(
+			(option) => option.option_text === ""
+		);
+		if (blankAnswerOptionExists) {
+			alert("Please fill in any blank answer options");
+			return;
+		}
+		if (explanation === null || explanation.match(/^\s*$/) !== null) {
+			alert(
+				"Please add an explanation about why the chosen option is the correct answer."
+			);
+			return;
+		}
 		axios
 			.post(
 				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/organic/question/create`,
@@ -52,6 +74,7 @@ const StemCreate2 = (props) => {
 			.then((res) => {
 				if (res.data.success) {
 					console.log("success!");
+                    navigate("/"+cid+"/qlist")
 				}
 			});
 	}
