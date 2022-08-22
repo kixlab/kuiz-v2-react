@@ -16,6 +16,7 @@ import Admin from "./pages/Admin/Admin";
 import MyPage from "./pages/MyPage/MyPage";
 import Navbar from "./components/Navbar/Navbar";
 import Enroll from "./pages/Enroll/Enroll";
+import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Kakao from "./pages/Kakao/Kakao";
 import "./App.scss";
 import React, { useEffect, useState } from "react";
@@ -85,6 +86,7 @@ function App() {
 									element={<Admin funcNav={setShowNav} classType={cType}/>}
 								/>
 							)}
+							<Route path="*" element={<PageNotFound/>}/>
 						</Routes>
 					</main>
 				</div>
