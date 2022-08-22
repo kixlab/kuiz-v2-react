@@ -106,19 +106,23 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				{/* <div className={type ? "answer-label" : "distractor-label"}>
 					{type ? "Answer" : "Distractor"}
 				</div> */}
-				<div className="option-text">
-					{type
-						? clusterInfo.ansRep.option_text
-						: clusterInfo.disRep.option_text}
+				<div className="cluster-container">
+					<div className="option-text">
+						{type
+							? clusterInfo.ansRep.option_text
+							: clusterInfo.disRep.option_text}
+					</div>
+					{detail?<div onClick={(e) => doLike()} className="likes-container">
+						{like ? (
+							<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
+						) : (
+							<FavoriteBorderIcon color="action" fontSize="small" />
+						)}
+						{likeNum}
+					</div>:<></>}
 				</div>
-				{detail?<div onClick={(e) => doLike()} className="likes-container">
-					{like ? (
-						<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
-					) : (
-						<FavoriteBorderIcon color="action" fontSize="small" />
-					)}
-					{likeNum}
-				</div>:<></>}
+				
+				
 				
 				<button onClick={(e) => getOptions()} className="cluster-show-button">
 					내용이 같은 다른 선택지 보기

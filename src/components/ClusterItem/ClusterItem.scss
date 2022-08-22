@@ -54,6 +54,11 @@
 	.cluster-subitems {
 		margin: 4px 0;
 	}
+	.cluster-container{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
 }
 
 #answer-wrapper {

@@ -54,7 +54,6 @@ function Navbar(props) {
 					<i className="fa-solid fa-arrow-right"></i>
 				</div>
 			</div>
-			{isAdmin?<div>Admin Page</div>:<></>}
 		</div>
 	);
 }
