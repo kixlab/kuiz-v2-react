@@ -192,8 +192,12 @@ const QuestionList = (props) => {
 				<div> 문제풀이가능여부</div>
 				<div> 수정 시각</div>
 			</div>
+		
 
-			{questionList
+			{questionList.filter((q,j) => validList[j]).length === 0?
+			<div className="no-question-msg">풀 수 있는 문제가 아직 없습니다.</div>:
+			<div>
+				{questionList
 				.filter((q,j) => validList[j]).map((question, i) => (
 					<Link
 						to={"/" + cid + "/question/" + question._id}
@@ -214,6 +218,10 @@ const QuestionList = (props) => {
 					</Link>
 				))
 				.reverse()}
+			</div>
+
+			}
+			
 		</div>
 	);
 };
