@@ -189,7 +189,6 @@ const QuestionList = (props) => {
 			<div id="question-list-header">
 				<div> No.</div>
 				<div> 문제 내용</div>
-				<div> 문제풀이가능여부</div>
 				<div> 수정 시각</div>
 			</div>
 		

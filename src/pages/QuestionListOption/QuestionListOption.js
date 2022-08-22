@@ -8,22 +8,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { enrollClass } from "../../features/authentication/userSlice";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import "./QuestionListOption.scss";
 import { ResetTvSharp } from "@mui/icons-material";
 
 const QuestionListOption = (props) => {
+	const [validList, setValidList] = useState([])
+	const [filter, setFilter] = useState(0)
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const cid = useParams().cid;
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const setCtype  = () => {
-		if(cid!=null || cid!="")
-		axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+cid)
-		.then((res) => {
-			dispatch(enrollClass({ cid: cid, cType: res.data.cType}));
-		})
-	}
+	const cType = useSelector((state) => state.userInfo.cType);
+
 	const checkValidUser = () => {
 		axios.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`,{
 			cid: cid,
@@ -67,14 +69,61 @@ const QuestionListOption = (props) => {
 	
 	const [questionList, setQuestionList] = useState([]);
 	
-	const getQuestionList = (newCid) => {
-		//TODO : add cid in request url
+	const getQuestionList = (cid) => {
 		axios
 			.get(
 				`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` +
-				newCid
+					cid
 			)
-			.then((res) => {
+			.then(async (res) => {
+				const valid = []
+				const problemList = res.data.qstems.problemList
+				const middleware = await Promise.all(res.data.qstems.problemList.map(async (q, i) => {
+					await axios
+					.get(
+						`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` +
+							q._id
+					)
+					.then(async (res) => {
+						console.log("await1")
+						if (cType) {
+							if (res.data.data.qinfo.cluster.length < 3) {
+								console.log("await2a")
+								valid[i] = false
+								return await false
+							} else {
+								await axios
+									.post(
+										`${process.env.REACT_APP_BACK_END}/question/load/clusters`,
+										{
+											clusters: res.data.data.qinfo.cluster,
+										}
+									)
+									.then(async (res2) => {
+										console.log("await2b")
+										console.log("res2:", res2.data)
+										const clusters = await res2.data.clusters;
+										if (
+											clusters.filter((c) => c.ansExist === true).length >= 1 &&
+											clusters.filter((c) => c.disExist === true).length >= 2
+										) {
+											valid[i] = true
+											return await true
+										} else {
+											valid[i] = false
+											return await false
+										}
+									})
+									.catch(async (err) => await console.log(err));
+							}
+						} else {
+							valid[i] = true
+							return true
+						}
+					});
+				}))
+
+				setValidList(valid)
 				setQuestionList(res.data.qstems.problemList);
 			});
 	};
@@ -97,6 +146,24 @@ const QuestionListOption = (props) => {
 					{/* <Button navigateBy={moveToCreateStem} text="Create New Stem" /> */}
 					<Button navigateBy={moveToCreateStem} text="새로운 문제 만들기" />
 				</div>
+				<div>
+					<Box sx={{ minWidth: 120 }}>
+						<FormControl fullWidth>
+							<InputLabel id="demo-simple-select-label">필터</InputLabel>
+							<Select
+							labelId="demo-simple-select-label"
+							id="demo-simple-select"
+							value={filter}
+							label="Age"
+							onChange={e => setFilter(e.target.value)}
+							>
+							<MenuItem value={0}>전체 보기</MenuItem>
+							<MenuItem value={1}>선택지 부족</MenuItem>
+							<MenuItem value={2}>선택지 충분</MenuItem>
+							</Select>
+						</FormControl>
+					</Box>
+				</div>
 			</div>
 			<div id="question-list-header">
 				<div> No.</div>
@@ -104,7 +171,9 @@ const QuestionListOption = (props) => {
 				<div> # of Options</div>
 				<div>Last Updated</div>
 			</div>
-			{questionList
+			{filter===0?
+			<div>
+				{questionList
 				.map((question, i) => (
 					<Link
 						to={"/" + cid + "/question/" + question._id + "/create"}
@@ -124,6 +193,61 @@ const QuestionListOption = (props) => {
 					</Link>
 				))
 				.reverse()}
+			</div>:
+			(filter==1?
+			<div>
+				<div>
+				{questionList
+				.filter((q,j) => validList[j]).map((question, i) => (
+					<Link
+						to={"/" + cid + "/question/" + question._id}
+						style={{ textDecoration: "none", color: "#000000" }}
+					>
+						<div id="question-list-wrapper">
+							<QuestionListItem
+								id={question._id}
+								number={i + 1}
+								title={question.raw_string}
+								options={question.options}
+								date={
+									question.updatedAt ? question.updatedAt : question.createdAt
+								}
+								valid={validList.filter((q,j) => validList[j])[i]}
+							/>
+						</div>
+					</Link>
+				))
+				.reverse()}
+			</div>
+			</div>:
+			<div>
+				<div>
+				{questionList
+				.filter((q,j) => !validList[j]).map((question, i) => (
+					<Link
+						to={"/" + cid + "/question/" + question._id}
+						style={{ textDecoration: "none", color: "#000000" }}
+					>
+						<div id="question-list-wrapper">
+							<QuestionListItem
+								id={question._id}
+								number={i + 1}
+								title={question.raw_string}
+								options={question.options}
+								date={
+									question.updatedAt ? question.updatedAt : question.createdAt
+								}
+								valid={validList.filter((q,j) => validList[j])[i]}
+							/>
+						</div>
+					</Link>
+				))
+				.reverse()}
+			</div>
+			</div>
+
+			)}
+			
 		</div>
 	);
 };

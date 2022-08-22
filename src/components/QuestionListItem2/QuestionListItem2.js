@@ -45,9 +45,9 @@ const QuestionListItem2 = (props) => {
 		<div className="question-list-item">
 			<div className="question-list-number">{props.number}</div>
 			<div className="question-list-title">{props.title}</div>
-			<div className="question-list-optioncount">
+			{/* <div className="question-list-optioncount">
 				{props.valid?"VALID":"INVALID"}
-			</div>
+			</div> */}
 			<div className="question-list-date">{formatDate(props.date)}</div>
 			{/* <div className="question-list-date">{props.valid?"valid option set":"no valid option set"}</div> */}
 		</div>
