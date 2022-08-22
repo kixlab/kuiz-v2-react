@@ -33,16 +33,15 @@ const Login = (props) => {
 
 	useEffect(() => {
 		// props.funcNav(false)
-		console.log("isloggedin?", isLoggedIn?"true":"false")
-		// if (isLoggedIn) {
-		// 	if (uInfo !== {}) {
-		// 		if (uInfo.classes.length === 0) {
-		// 			navigate("/enroll");
-		// 		} else {
-		// 			navigate("/" + uInfo.classes[0]);
-		// 		}
-		// 	}
-		// } 
+		if (isLoggedIn) {
+			if (uInfo !== {}) {
+				if (uInfo.classes.length === 0) {
+					navigate("/enroll");
+				} else {
+					navigate("/" + uInfo.classes[0]);
+				}
+			}
+		} 
 	});
 	return (
 		<div id="login">
