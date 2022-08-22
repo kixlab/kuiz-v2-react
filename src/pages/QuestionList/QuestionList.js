@@ -189,12 +189,12 @@ const QuestionList = (props) => {
 			<div id="question-list-header">
 				<div> No.</div>
 				<div> 문제 내용</div>
-				<div> 선택지 갯수</div>
+				<div> 문제풀이가능여부</div>
 				<div> 수정 시각</div>
 			</div>
 
 			{questionList
-				.map((question, i) => (
+				.filter((q,j) => validList[j]).map((question, i) => (
 					<Link
 						to={"/" + cid + "/question/" + question._id}
 						style={{ textDecoration: "none", color: "#000000" }}
@@ -208,7 +208,7 @@ const QuestionList = (props) => {
 								date={
 									question.updatedAt ? question.updatedAt : question.createdAt
 								}
-								valid={validList[i]}
+								valid={validList.filter((q,j) => validList[j])[i]}
 							/>
 						</div>
 					</Link>
