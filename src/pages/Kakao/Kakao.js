@@ -71,7 +71,6 @@ const Kakao = (props) => {
         console.log("empty?:", Object.keys(uInfo).length === 0)
         if(Object.keys(uInfo).length !== 0 && uInfo.constructor !== Object) {
             console.log("UIFNO", uInfo)
-            debugger;
             navigate('/'+uInfo.classes[0])
         } else {
             getKakaoToken() 
