@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Button from "../../components/Button/Button";
-import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
+import QuestionListItem2 from "../../components/QuestionListItem2/QuestionListItem2";
 import axios from "axios";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -31,15 +31,16 @@ const QuestionList = (props) => {
 		.then((res) => {
 			console.log("RES:", res.data)
 			if(res.data.inclass){
-				console.log("case1")
+				console.log("case11")
 				axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
 				.then((res2) => {
+					console.log("RES2:", res2.data)
 					dispatch(enrollClass({ cid: cid, cType: res2.data.cType}));
 					if(!res2.data.cType){
 						console.log("case2")
 						navigate('/'+res.data.cid+'/qlist')
 					}
-					getQuestionList(cid)
+					getQuestionList(res.data.cid)
 				})
 			} else {
 				if(!res.data.enrolled){
@@ -64,49 +65,111 @@ const QuestionList = (props) => {
 		})
 	}
 	const [questionList, setQuestionList] = useState([]);
+	const [validList, setValidList] = useState([])
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const cType = useSelector((state) => state.userInfo.cType);
-	const getQuestionList = () => {
+	const getQuestionList = (cid) => {
 		axios
 			.get(
 				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` +
 					cid
 			)
-			.then((res) => {
+			.then(async (res) => {
+				const valid = []
+				const problemList = res.data.qstems.problemList
+				const middleware = await Promise.all(res.data.qstems.problemList.map(async (q, i) => {
+					await axios
+					.get(
+						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=` +
+							q._id
+					)
+					.then(async (res) => {
+						console.log("await1")
+						if (cType) {
+							if (res.data.data.qinfo.cluster.length < 3) {
+								console.log("await2a")
+								valid[i] = false
+								return await false
+							} else {
+								await axios
+									.post(
+										`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/clusters`,
+										{
+											clusters: res.data.data.qinfo.cluster,
+										}
+									)
+									.then(async (res2) => {
+										console.log("await2b")
+										console.log("res2:", res2.data)
+										const clusters = await res2.data.clusters;
+										if (
+											clusters.filter((c) => c.ansExist === true).length >= 1 &&
+											clusters.filter((c) => c.disExist === true).length >= 2
+										) {
+											valid[i] = true
+											return await true
+										} else {
+											valid[i] = false
+											return await false
+										}
+									})
+									.catch(async (err) => await console.log(err));
+							}
+						} else {
+							valid[i] = true
+							return true
+						}
+					});
+				}))
+
+				setValidList(valid)
 				setQuestionList(res.data.qstems.problemList);
+			});
+	};
+
+	const getQinfo = async (qid) => {
+		await axios
+			.get(
+				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=` +
+					qid
+			)
+			.then(async (res) => {
+				console.log("await1")
+				if (cType) {
+					if (res.data.data.qinfo.cluster.length < 3) {
+						console.log("await2a")
+						return false
+					} else {
+						await axios
+							.post(
+								`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/clusters`,
+								{
+									clusters: res.data.data.qinfo.cluster,
+								}
+							)
+							.then(async (res2) => {
+								console.log("await2b")
+								const clusters = res2.data.clusters;
+								if (
+									clusters.filter((c) => c.ansExist === true).length >= 1 &&
+									clusters.filter((c) => c.disExist === true).length >= 2
+								) {
+									return true
+								} else {
+									return false
+								}
+							})
+							.catch(async (err) => await console.log(err));
+					}
+				} else {
+					return true
+				}
 			});
 	};
 	const moveToCreateOption = () => {
 		navigate("/"+cid+"/createstem");
 	};
-	const isValidSet = (qid) => {
-		axios
-			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=` +
-					qid
-			)
-			.then((res) => {
-				if (cType) {
-					if (res.data.data.options.length > 1) {
-						const ansList = res.data.data.options.filter(
-							(o) => o.is_answer === true
-						);
-						const disList = res.data.data.options.filter(
-							(o) => o.is_answer === false
-						);
-						if (ansList.length > 0 && disList.length > 0) {
-							return true;
-						} else {
-							return false;
-						}
-					} else {
-						return true;
-					}
-				} else {
-					return true;
-				}
-			});
-	};
+
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -137,7 +200,7 @@ const QuestionList = (props) => {
 						style={{ textDecoration: "none", color: "#000000" }}
 					>
 						<div id="question-list-wrapper">
-							<QuestionListItem
+							<QuestionListItem2
 								id={question._id}
 								number={i + 1}
 								title={question.raw_string}
@@ -145,6 +208,7 @@ const QuestionList = (props) => {
 								date={
 									question.updatedAt ? question.updatedAt : question.createdAt
 								}
+								valid={validList[i]}
 							/>
 						</div>
 					</Link>

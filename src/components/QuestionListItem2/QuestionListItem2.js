@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-import "./QuestionListItem.scss";
+import "./QuestionListItem2.scss";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
-const QuestionListItem = (props) => {
+const QuestionListItem2 = (props) => {
 	const cType = useSelector((state) => state.userInfo.cType);
 
 	const formatDate = (date) => {
@@ -41,7 +41,7 @@ const QuestionListItem = (props) => {
 			<div className="question-list-number">{props.number}</div>
 			<div className="question-list-title">{props.title}</div>
 			<div className="question-list-optioncount">
-				{props.options && props.options.length}
+				{props.valid?"VALID":"INVALID"}
 			</div>
 			<div className="question-list-date">{formatDate(props.date)}</div>
 			{/* <div className="question-list-date">{props.valid?"valid option set":"no valid option set"}</div> */}
@@ -49,4 +49,4 @@ const QuestionListItem = (props) => {
 	);
 };
 
-export default QuestionListItem;
+export default QuestionListItem2;
