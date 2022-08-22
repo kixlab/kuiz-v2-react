@@ -6,10 +6,7 @@ import draftToHtml from "draftjs-to-html";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
-import Button from "../../components/Button/Button";
-
 import "./Question.scss";
-import { is } from "immutable";
 
 var ObjectID = require("bson-objectid");
 
@@ -18,7 +15,6 @@ const Question = (props) => {
 	const qid = useParams().id;
 	const [options, setOptions] = useState([]);
 	const [qinfo, setQinfo] = useState();
-	const [stem, setStem] = useState();
 	const [ansVisible, setAnsVisible] = useState(false);
 	const cid = useParams().cid;
 	const [selected, setSelected] = useState();
@@ -45,7 +41,6 @@ const Question = (props) => {
 			)
 			.then((res) => {
 				if (cType) {
-					// console.log("DATA:", res.data.data)
 					if (res.data.data.qinfo.cluster.length < 3) {
 						setIsOptionValid(false);
 					} else {

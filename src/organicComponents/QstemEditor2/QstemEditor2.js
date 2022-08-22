@@ -145,7 +145,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 	}));
 
 	return (
-		<div id="qstem-editor">
+		<div id="qstemeditor">
             <div>
             <FormControl id="template">
 					<InputLabel id="demo-multiple-checkbox-label">
