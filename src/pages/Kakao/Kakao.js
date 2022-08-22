@@ -16,7 +16,7 @@ const Kakao = (props) => {
     let KAKAO_CODE = params.get("code");
 
 
-    const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`
+    const REDIRECT_URI = `${process.env.REACT_APP_REDIRECT}:3000/kakaologin`
     const getKakaoToken = () => {
         console.log("getKakaoToken")
         fetch(`https://kauth.kakao.com/oauth/token`,{

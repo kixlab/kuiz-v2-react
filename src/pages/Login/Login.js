@@ -22,7 +22,7 @@ const Login = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [email, setEmail] = useState();
 
-	const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`;
+	const REDIRECT_URI = `${process.env.REACT_APP_REDIRECT}:3000/kakaologin`;
 
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
