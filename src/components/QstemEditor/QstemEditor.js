@@ -176,7 +176,7 @@ function QstemEditor(props) {
 		}
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`,
+				`${process.env.REACT_APP_BACK_END}/question/qstem/create`,
 				{
 					qstemObj: qstemObj,
 					cid: cid,
@@ -187,7 +187,7 @@ function QstemEditor(props) {
 				axios
 
 					.post(
-						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`,
+						`${process.env.REACT_APP_BACK_END}/question/option/create`,
 						{
 							optionData: {
 								author: ObjectID(uid),
@@ -248,7 +248,7 @@ function QstemEditor(props) {
 		}
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstem/create`,
+				`${process.env.REACT_APP_BACK_END}/question/qstem/create`,
 				{
 					qstemObj: qstemObj,
 					cid: cid,
@@ -258,7 +258,7 @@ function QstemEditor(props) {
 			.then((res) => {
 				axios
 					.post(
-						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`,
+						`${process.env.REACT_APP_BACK_END}/question/option/create`,
 						{
 							optionData: {
 								author: ObjectID(uid),

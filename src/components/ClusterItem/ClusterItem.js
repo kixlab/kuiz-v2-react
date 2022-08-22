@@ -53,7 +53,7 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 	const getOptions = () => {
 		axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/optionbycluster?ocid=` +
+				`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?ocid=` +
 					clusterInfo._id
 			)
 			.then((res) => {

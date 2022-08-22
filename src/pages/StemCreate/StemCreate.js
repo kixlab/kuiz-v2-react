@@ -22,7 +22,7 @@ const StemCreate = (props) => {
 		if (cid != null || cid != "")
 			axios
 				.get(
-					`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=` +
+					`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` +
 						cid
 				)
 				.then((res) => {

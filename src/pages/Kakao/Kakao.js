@@ -16,7 +16,7 @@ const Kakao = (props) => {
     let KAKAO_CODE = params.get("code");
 
 
-    const REDIRECT_URI = `${process.env.REACT_APP_REDIRECT}:3000/kakaologin`
+    const REDIRECT_URI = `${process.env.REACT_APP_FRONT_END}/kakaologin`
     const getKakaoToken = () => {
         console.log("getKakaoToken")
         fetch(`https://kauth.kakao.com/oauth/token`,{
@@ -43,7 +43,7 @@ const Kakao = (props) => {
                 url: "/v2/user/me"
             })
 
-            axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/register`,{email: email, name:data.properties.nickname, image: data.properties.profile_image}).then(
+            axios.post(`${process.env.REACT_APP_BACK_END}/auth/register`,{email: email, name:data.properties.nickname, image: data.properties.profile_image}).then(
                 (res) => {
                     if(res.data.success){
                         dispatch(loginUser(res.data.user))

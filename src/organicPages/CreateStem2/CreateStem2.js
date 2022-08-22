@@ -62,7 +62,7 @@ const StemCreate2 = (props) => {
 		}
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/organic/question/create`,
+				`${process.env.REACT_APP_BACK_END}/question/organic/question/create`,
 				{
 					optionList: optionList,
 					qInfo: newQobj,

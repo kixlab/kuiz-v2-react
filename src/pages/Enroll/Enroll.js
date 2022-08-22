@@ -22,7 +22,7 @@ const Enroll = (props) => {
 	const onSubmit = () => {
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/join`,
+				`${process.env.REACT_APP_BACK_END}/auth/class/join`,
 				{ code: code, _id: uid, userEmail: email }
 			)
 			.then((res) => {

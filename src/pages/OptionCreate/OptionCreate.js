@@ -35,7 +35,7 @@ const OptionCreate = (props) => {
 	const getOptionList = (qid) => {
 		axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/load?qid=` +
+				`${process.env.REACT_APP_BACK_END}/question/option/load?qid=` +
 					qid
 			)
 			.then((res) => {
@@ -50,7 +50,7 @@ const OptionCreate = (props) => {
 	const getOptionCluster = (qid) => {
 		axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/cluster?qid=` +
+				`${process.env.REACT_APP_BACK_END}/question/load/cluster?qid=` +
 					qid
 			)
 			.then(async (res) => {
@@ -63,7 +63,7 @@ const OptionCreate = (props) => {
 	const getOptionByCluster = (cluserId) => {
 		axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/optionbycluster?qid=` +
+				`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?qid=` +
 					qid
 			)
 			.then((res) => {
@@ -76,7 +76,7 @@ const OptionCreate = (props) => {
 	const submitDependency = () => {
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/option/create`,
+				`${process.env.REACT_APP_BACK_END}/question/option/create`,
 				{
 					optionData: myOption,
 					dependency: sameCluster.concat(contCluster),

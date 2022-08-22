@@ -23,7 +23,7 @@ const MyPage = (props) => {
 		console.log("UID:", uid);
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/made/stem`,
+				`${process.env.REACT_APP_BACK_END}/question/made/stem`,
 				{ uid: uid }
 			)
 			.then((res) => {
@@ -34,13 +34,13 @@ const MyPage = (props) => {
 	const getMadeOption = () => {
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/made/option`,
+				`${process.env.REACT_APP_BACK_END}/question/made/option`,
 				{ uid, uid }
 			)
 			.then((res) => {
 				axios
 					.post(
-						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/qstembyoption`,
+						`${process.env.REACT_APP_BACK_END}/question/qstembyoption`,
 						{
 							qstems: res.data.madeOption.map((o) => o.qstem),
 						}

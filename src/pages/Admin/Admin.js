@@ -11,7 +11,7 @@ const Admin = () => {
     const navigate = useNavigate()
 
     const loadUser = () => {
-        axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/admin/load/user?cid=`+cid).then(
+        axios.get(`${process.env.REACT_APP_BACK_END}/admin/load/user?cid=`+cid).then(
             (res) => {
                 setUser(res.data.students)
             }

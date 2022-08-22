@@ -18,13 +18,13 @@ const QuestionList = (props) => {
 
 	const setCtype  = () => {
 		if(cid!=null || cid!="")
-		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
+		axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+cid)
 		.then((res) => {
 			dispatch(enrollClass({ cid: cid, cType: res.data.cType}));
 		})
 	}
 	const checkValidUser = () => {
-		axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/check/inclass`,{
+		axios.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`,{
 			cid: cid,
 			uid: uid
 		})
@@ -32,7 +32,7 @@ const QuestionList = (props) => {
 			console.log("RES:", res.data)
 			if(res.data.inclass){
 				console.log("case11")
-				axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
+				axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+cid)
 				.then((res2) => {
 					console.log("RES2:", res2.data)
 					dispatch(enrollClass({ cid: cid, cType: res2.data.cType}));
@@ -47,7 +47,7 @@ const QuestionList = (props) => {
 					console.log("case3")
 					navigate('/enroll')
 				} else {
-					axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+res.data.cid)
+					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+res.data.cid)
 						.then((res2) => {
 							dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType}));
 							if(res2.data.cType){
@@ -71,7 +71,7 @@ const QuestionList = (props) => {
 	const getQuestionList = (cid) => {
 		axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` +
+				`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` +
 					cid
 			)
 			.then(async (res) => {
@@ -80,7 +80,7 @@ const QuestionList = (props) => {
 				const middleware = await Promise.all(res.data.qstems.problemList.map(async (q, i) => {
 					await axios
 					.get(
-						`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=` +
+						`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` +
 							q._id
 					)
 					.then(async (res) => {
@@ -93,7 +93,7 @@ const QuestionList = (props) => {
 							} else {
 								await axios
 									.post(
-										`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/clusters`,
+										`${process.env.REACT_APP_BACK_END}/question/load/clusters`,
 										{
 											clusters: res.data.data.qinfo.cluster,
 										}
@@ -130,7 +130,7 @@ const QuestionList = (props) => {
 	const getQinfo = async (qid) => {
 		await axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=` +
+				`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` +
 					qid
 			)
 			.then(async (res) => {
@@ -142,7 +142,7 @@ const QuestionList = (props) => {
 					} else {
 						await axios
 							.post(
-								`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/clusters`,
+								`${process.env.REACT_APP_BACK_END}/question/load/clusters`,
 								{
 									clusters: res.data.data.qinfo.cluster,
 								}

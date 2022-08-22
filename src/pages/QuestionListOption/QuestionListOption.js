@@ -19,13 +19,13 @@ const QuestionListOption = (props) => {
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const setCtype  = () => {
 		if(cid!=null || cid!="")
-		axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
+		axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+cid)
 		.then((res) => {
 			dispatch(enrollClass({ cid: cid, cType: res.data.cType}));
 		})
 	}
 	const checkValidUser = () => {
-		axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/check/inclass`,{
+		axios.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`,{
 			cid: cid,
 			uid: uid
 		})
@@ -33,7 +33,7 @@ const QuestionListOption = (props) => {
 			console.log("RES:", res.data)
 			if(res.data.inclass){
 				console.log("case1")
-				axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+cid)
+				axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+cid)
 				.then((res2) => {
 					dispatch(enrollClass({ cid: cid, cType: res2.data.cType}));
 					if(!res2.data.cType){
@@ -47,7 +47,7 @@ const QuestionListOption = (props) => {
 					console.log("case3")
 					navigate('/enroll')
 				} else {
-					axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+res.data.cid)
+					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+res.data.cid)
 						.then((res2) => {
 							dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType}));
 							if(res2.data.cType){
@@ -71,7 +71,7 @@ const QuestionListOption = (props) => {
 		//TODO : add cid in request url
 		axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/list/load?cid=` +
+				`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` +
 				newCid
 			)
 			.then((res) => {

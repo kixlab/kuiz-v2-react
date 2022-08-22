@@ -36,7 +36,7 @@ const Question = (props) => {
 	const getQinfo = (qid) => {
 		axios
 			.get(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/detail/load?qid=` +
+				`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` +
 					qid
 			)
 			.then((res) => {
@@ -46,7 +46,7 @@ const Question = (props) => {
 					} else {
 						axios
 							.post(
-								`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/clusters`,
+								`${process.env.REACT_APP_BACK_END}/question/load/clusters`,
 								{
 									clusters: res.data.data.qinfo.cluster,
 								}
@@ -70,7 +70,7 @@ const Question = (props) => {
 
 									axios
 										.post(
-											`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/options`,
+											`${process.env.REACT_APP_BACK_END}/question/load/options`,
 											{
 												optionList: ansList2,
 											}
@@ -79,7 +79,7 @@ const Question = (props) => {
 											const ansList = res3.data.options;
 											axios
 												.post(
-													`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/load/options`,
+													`${process.env.REACT_APP_BACK_END}/question/load/options`,
 													{
 														optionList: disList2,
 													}
@@ -123,7 +123,7 @@ const Question = (props) => {
 		if (!ansVisible) {
 			axios
 				.post(
-					`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/question/solve`,
+					`${process.env.REACT_APP_BACK_END}/question/solve`,
 					{
 						qid: qid,
 						uid: uid,

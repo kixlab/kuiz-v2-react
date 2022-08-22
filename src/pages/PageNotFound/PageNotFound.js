@@ -12,7 +12,7 @@ const PageNotFound = () => {
     const uid = useSelector((state) => state.userInfo.userInfo._id)
 
     const checkValidUser = () => {
-		axios.post(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/check/inclass`,{
+		axios.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`,{
 			cid: "invalid",
 			uid: uid
 		})
@@ -22,7 +22,7 @@ const PageNotFound = () => {
                 console.log("case3")
                 navigate('/enroll')
             } else {
-                axios.get(`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/class/type?cid=`+res.data.cid)
+                axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+res.data.cid)
                     .then((res2) => {
                         dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType}));
                         if(res2.data.cType){

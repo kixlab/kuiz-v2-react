@@ -22,7 +22,7 @@ const Login = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [email, setEmail] = useState();
 
-	const REDIRECT_URI = `${process.env.REACT_APP_REDIRECT}:3000/kakaologin`;
+	const REDIRECT_URI = `${process.env.REACT_APP_FRONT_END}/kakaologin`;
 
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
@@ -66,7 +66,7 @@ const Login2 = (props) => {
 		var userObject = jwt_decode(response.credential);
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${process.env.REACT_APP_PORT}/auth/register`,
+				`${process.env.REACT_APP_BACK_END}/auth/register`,
 				{
 					email: userObject.email,
 					name: userObject.name,
