@@ -195,7 +195,7 @@ const QuestionList = (props) => {
 
 			{questionList.filter((q,j) => validList[j]).length === 0?
 			<div className="no-question-msg">
-				풀 수 있는 문제가 아직 없습니다.
+				문제를 로딩 중입니다 :)
 			</div>:
 			<div>
 				{questionList
