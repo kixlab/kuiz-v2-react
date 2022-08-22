@@ -20,7 +20,6 @@ var ObjectID = require("bson-objectid");
 const OptionCreate = (props) => {
 	const [pageStat, setPageStat] = useState(true);
 	const navigate = useNavigate();
-	props.funcNav(true);
 	const qid = useParams().id;
 	const [ansList, setAnsList] = useState();
 	const [disList, setDistList] = useState();

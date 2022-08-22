@@ -14,7 +14,7 @@ import kakao from "../../assets/kakao_login_medium_wide.png";
 import "./Login.scss";
 
 const Login = (props) => {
-	props.funcNav(false);
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
@@ -23,22 +23,26 @@ const Login = (props) => {
 	const [email, setEmail] = useState();
 
 	const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`;
+
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 	const saveUserEmail = () => {
+		console.log("EMAIL:", email)
 		dispatch(setUserEmail(email));
 	};
 
 	useEffect(() => {
-		if (isLoggedIn) {
-			if (uInfo !== {}) {
-				if (uInfo.classes.length === 0) {
-					navigate("/enroll");
-				} else {
-					navigate("/" + uInfo.classes[0]);
-				}
-			}
-		}
+		// props.funcNav(false)
+		console.log("isloggedin?", isLoggedIn?"true":"false")
+		// if (isLoggedIn) {
+		// 	if (uInfo !== {}) {
+		// 		if (uInfo.classes.length === 0) {
+		// 			navigate("/enroll");
+		// 		} else {
+		// 			navigate("/" + uInfo.classes[0]);
+		// 		}
+		// 	}
+		// } 
 	});
 	return (
 		<div id="login">
@@ -87,7 +91,6 @@ const Login2 = (props) => {
 				}
 			});
 	}
-	props.funcNav(false);
 	useEffect(() => {
 		/*global google*/
 		google.accounts.id.initialize({

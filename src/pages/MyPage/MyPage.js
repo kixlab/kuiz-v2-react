@@ -11,7 +11,6 @@ import { reactDraftWysiwyg } from "react-draft-wysiwyg";
 
 const MyPage = (props) => {
 	const cid = useParams().cid;
-	props.funcNav(true);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const navigate = useNavigate();
 	const uid = useSelector((state) => state.userInfo.userInfo._id);

@@ -9,7 +9,6 @@ import {
 } from "../../features/authentication/userSlice";
 
 const Enroll = (props) => {
-	props.funcNav(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);

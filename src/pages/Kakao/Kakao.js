@@ -11,7 +11,6 @@ const Kakao = (props) => {
     const email = useSelector((state) => state.userInfo.email)
     const uInfo = useSelector((state) => state.userInfo.userInfo)
 
-    const href = window.location.href;
     const navigate = useNavigate()
     let params = new URL(document.URL).searchParams;
     let KAKAO_CODE = params.get("code");
@@ -19,6 +18,7 @@ const Kakao = (props) => {
 
     const REDIRECT_URI = `${process.env.REACT_APP_REQ_END}:3000/kakaologin`
     const getKakaoToken = () => {
+        console.log("getKakaoToken")
         fetch(`https://kauth.kakao.com/oauth/token`,{
             method:'POST',
             headers:{'Content-Type':'application/x-www-form-urlencoded'},
@@ -67,13 +67,11 @@ const Kakao = (props) => {
         }
     }
     useEffect(()=>{
-        // if(uInfo!=={}) {
-        //     navigate('/'+uInfo.classes[0])
-        // } else {
-        //     getKakaoToken() 
-        // }
-        getKakaoToken() 
-          
+        if(uInfo!=={}) {
+            navigate('/'+uInfo.classes[0])
+        } else {
+            getKakaoToken() 
+        }          
              
     },[])
 

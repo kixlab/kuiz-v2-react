@@ -32,7 +32,6 @@ const PageNotFound = () => {
                             console.log("case5")
                             navigate('/'+res.data.cid+'/qlist')
                         }
-                        console.log("CIDtogetQ:", res.data.cid)
                     })
             }
 		})

@@ -15,7 +15,6 @@ var ObjectID = require("bson-objectid");
 
 const Question = (props) => {
 	const navigate = useNavigate();
-	props.funcNav(true);
 	const qid = useParams().id;
 	const [options, setOptions] = useState([]);
 	const [qinfo, setQinfo] = useState();

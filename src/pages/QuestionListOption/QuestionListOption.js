@@ -64,7 +64,7 @@ const QuestionListOption = (props) => {
 			}
 		})
 	}
-	props.funcNav(true);
+	
 	const [questionList, setQuestionList] = useState([]);
 	
 	const getQuestionList = (newCid) => {

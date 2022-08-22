@@ -14,7 +14,6 @@ import "./QuestionList.scss";
 const QuestionList = (props) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch()
-	props.funcNav(true);
 	const cid = useParams().cid;
 
 	const setCtype  = () => {

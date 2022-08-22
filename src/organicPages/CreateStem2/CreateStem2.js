@@ -14,7 +14,6 @@ var ObjectID = require("bson-objectid");
 const StemCreate2 = (props) => {
 	const childRef = useRef(null);
 	const navigate = useNavigate();
-	props.funcNav(true);
 
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 

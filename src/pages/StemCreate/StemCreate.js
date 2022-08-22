@@ -11,7 +11,6 @@ import axios from "axios";
 const StemCreate = (props) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	props.funcNav(true);
 	const keywords = useSelector((state) => state.objective.keywords);
 	const verbs = useSelector((state) => state.objective.verbs);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
