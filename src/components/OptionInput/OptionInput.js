@@ -19,7 +19,7 @@ var ObjectID = require("bson-objectid");
 
 const OptionInput = ({ setMyOption, setPageStat }) => {
 	const [option, setOption] = useState("");
-	const [isAnswer, setIsAnswer] = useState();
+	const [isAnswer, setIsAnswer] = useState(true);
 	const [explanation, setExplanation] = useState("");
 	const [similar, setSimilar] = useState([]);
 	const [difference, setDifference] = useState([]);
@@ -114,20 +114,20 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 						<input
 							type="radio"
 							value={0}
-							checked={isAnswer === 0}
-							onChange={(e) => setIsAnswer(0)}
+							checked={isAnswer === false}
+							onChange={(e) => setIsAnswer(false)}
 						/>{" "}
 						<label> 오답</label>
 						<input
 							type="radio"
 							value={1}
-							checked={isAnswer === 1}
-							onChange={(e) => setIsAnswer(1)}
+							checked={isAnswer === true}
+							onChange={(e) => setIsAnswer(true)}
 						/>{" "}
 						<label> 정답 </label>
 					</div>
 				</div>
-
+				{isAnswer?<></>:
 				<div className="option-input-tags">
 					<div className="similar-tag-container">
 						<div className="sub-title">정답과의 유사점</div>
@@ -150,6 +150,8 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 						/>
 					</div>
 				</div>
+				}
+				
 				<div>
 					<div className="sub-title">선택지에 대한 해설</div>
 					<div className="explanation-field">
