@@ -130,7 +130,7 @@ function QstemEditor(props) {
 	const checkForm = (qobj) => {
 		const rawString = qobj.raw_string;
 		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
-		if (rawString === null || wordcount < 3) {
+		if (rawString === null || wordcount<1) {
 			alert("문제 내용을 입력해 주세요.");
 			return;
 		}
