@@ -32,6 +32,14 @@ const Question = (props) => {
 		array.sort(() => Math.random() - 0.5);
 		return array;
 	}
+	function removeById(array, id) {
+		var index = array.map(x => {
+			return x._id;
+		}).indexOf(id);
+		console.log("index:", index)
+		const array2 = array.filter((a, i) => i !== index)
+		return array2;
+	}
 
 	const getQinfo = (qid) => {
 		axios
@@ -53,54 +61,102 @@ const Question = (props) => {
 							)
 							.then((res2) => {
 								const clusters = res2.data.clusters;
-								if (
-									clusters.filter((c) => c.ansExist === true).length >= 1 &&
-									clusters.filter((c) => c.disExist === true).length >= 2
-								) {
-									setIsOptionValid(true);
-
-									const ansList1 = clusters
-										.filter((c) => c.ansExist === true)
-										.map((c2) => c2.ansList);
-									const disList1 = clusters
-										.filter((c) => c.disExist === true)
-										.map((c2) => c2.disList);
-									const ansList2 = [].concat.apply([], ansList1);
-									const disList2 = [].concat.apply([], disList1);
-
-									axios
-										.post(
-											`${process.env.REACT_APP_BACK_END}/question/load/options`,
-											{
-												optionList: ansList2,
-											}
-										)
-										.then((res3) => {
-											const ansList = res3.data.options;
-											axios
-												.post(
-													`${process.env.REACT_APP_BACK_END}/question/load/options`,
-													{
-														optionList: disList2,
-													}
-												)
-												.then((res4) => {
-													const disList = res4.data.options;
-
-													/* selection algorithm of ansList should be here. random selection for now */
-													const answer = getMultipleRandom(ansList, 1);
-													const distractor = getMultipleRandom(
-														disList,
-														disList.length < 3 ? disList.length : 3
-													);
-
-													//shuffle array
-													setOptions(shuffle(answer.concat(distractor)));
-												});
-										});
+								var ans = clusters.filter((c) => c.ansExist)
+								var dis = clusters.filter((c) => c.disExist)
+								var ov = clusters.filter((c) => c.ansExist && c.disExist)
+								
+								if(ans.length + dis.length - ov.length >=3 && dis.length>=2){
+									if(ans.length - ov.length > 0 && dis.length < 3) {
+										console.log("case1")
+										var ansList = getMultipleRandom(ans.filter(a => !a.disExist), 1)
+										var disList = getMultipleRandom(dis, 2)
+										setOptions(shuffle(ansList.map(a => a.ansRep).concat(disList.map(d => d.disRep))))
+										setIsOptionValid(true)
+									} else {
+										console.log("case2")
+										var ansList = getMultipleRandom(ans,1)
+										dis = removeById(dis, ansList[0]._id)
+										var disList = getMultipleRandom(dis, dis.length < 3 ? 2 : 3);
+										setOptions(shuffle(ansList.map(a => a.ansRep).concat(disList.map(d => d.disRep))))
+										setIsOptionValid(true)
+									}
 								} else {
-									setIsOptionValid(false);
+									console.log("case3")
+									setIsOptionValid(false)
 								}
+								// if (clusters.filter((c) => c.ansExist && !c.disExist).length >= 1) {
+								// 	if(clusters.filter((c) => c.disExist === true).length >= 3){
+
+								// 	} else {
+								// 		if(clusters.filter((c) => c.disExist === true).length == 3) {
+
+								// 		} else {
+								// 			setIsOptionValid(false)
+								// 		}
+								// 	}
+								// 	setIsOptionValid(true);
+
+								// 	// const ansList1 = clusters
+								// 	// 	.filter((c) => c.ansExist === true)
+								// 	// 	.map((c2) => c2.ansList);
+								// 	// const disList1 = clusters
+								// 	// 	.filter((c) => c.disExist === true)
+								// 	// 	.map((c2) => c2.disList);
+								// 	// const ansList2 = [].concat.apply([], ansList1);
+								// 	// const disList2 = [].concat.apply([], disList1);
+								// 	const ansList2 = clusters.filter(c => c.ansExist).map(c2 => c2.ansRep)
+								// 	console.log("ansList2:", ansList2)
+								// 	const disList2 = clusters.filter(c => c.disExist).map(c2 => c2.disRep)
+								// 	console.log("disList2:", disList2)
+								// 	const answer = getMultipleRandom(ansList2, 1);
+								// 	const distractor = getMultipleRandom(
+								// 		disList2,
+								// 		disList2.length < 3 ? disList2.length : 3
+								// 	);
+								// 	setOptions(shuffle(answer.concat(distractor)));
+
+								// 	// axios
+								// 	// 	.post(
+								// 	// 		`${process.env.REACT_APP_BACK_END}/question/load/options`,
+								// 	// 		{
+								// 	// 			optionList: ansList2,
+								// 	// 		}
+								// 	// 	)
+								// 	// 	.then((res3) => {
+								// 	// 		const ansList = res3.data.options;
+								// 	// 		axios
+								// 	// 			.post(
+								// 	// 				`${process.env.REACT_APP_BACK_END}/question/load/options`,
+								// 	// 				{
+								// 	// 					optionList: disList2,
+								// 	// 				}
+								// 	// 			)
+								// 	// 			.then((res4) => {
+								// 	// 				const disList = res4.data.options;
+
+								// 	// 				/* selection algorithm of ansList should be here. random selection for now */
+								// 	// 				const answer = getMultipleRandom(ansList, 1);
+								// 	// 				const distractor = getMultipleRandom(
+								// 	// 					disList,
+								// 	// 					disList.length < 3 ? disList.length : 3
+								// 	// 				);
+
+								// 	// 				//shuffle array
+								// 	// 				setOptions(shuffle(answer.concat(distractor)));
+								// 	// 			});
+								// 	// 	});
+								// } else {
+								// 	if(
+								// 		clusters.filter((c) => c.ansExist && !c.disExist).length === 0 &&
+								// 		clusters.filter((c) => c.disExist === true).length >= 3
+								// 	) {
+
+								// 		setIsOptionValid(true)
+								// 	} else {
+								// 		setIsOptionValid(false);
+								// 	}
+									
+								// }
 							})
 							.catch((err) => console.log(err));
 					}

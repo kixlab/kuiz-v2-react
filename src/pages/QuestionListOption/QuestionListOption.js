@@ -85,10 +85,8 @@ const QuestionListOption = (props) => {
 							q._id
 					)
 					.then(async (res) => {
-						console.log("await1")
 						if (cType) {
 							if (res.data.data.qinfo.cluster.length < 3) {
-								console.log("await2a")
 								valid[i] = false
 								return await false
 							} else {
@@ -100,8 +98,6 @@ const QuestionListOption = (props) => {
 										}
 									)
 									.then(async (res2) => {
-										console.log("await2b")
-										console.log("res2:", res2.data)
 										const clusters = await res2.data.clusters;
 										if (
 											clusters.filter((c) => c.ansExist === true).length >= 1 &&

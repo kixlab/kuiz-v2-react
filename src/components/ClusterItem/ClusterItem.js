@@ -27,11 +27,10 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 		}),
 	}));
 	const doLike = () => {
+		console.log("DOLIKE")
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${
-					process.env.REACT_APP_PORT
-				}/question/option/${like ? "dislike" : "like"}`,
+				`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`,
 				{
 					oid: repOption._id,
 					isAns: repOption.is_answer,

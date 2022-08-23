@@ -43,9 +43,7 @@ const OptionItem = ({ optionInfo, id }) => {
 	const doLike = () => {
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${
-					process.env.REACT_APP_PORT
-				}/question/option/${like ? "dislike" : "like"}`,
+				`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`,
 				{
 					oid: optionInfo._id,
 					isAns: optionInfo.is_answer,

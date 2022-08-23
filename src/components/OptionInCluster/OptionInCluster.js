@@ -28,9 +28,7 @@ const OptionInCluster = ({ option }) => {
 	const doLike = () => {
 		axios
 			.post(
-				`${process.env.REACT_APP_REQ_END}:${
-					process.env.REACT_APP_PORT
-				}/question/option/${like ? "dislike" : "like"}`,
+				`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`,
 				{
 					oid: option._id,
 					isAns: option.is_answer,

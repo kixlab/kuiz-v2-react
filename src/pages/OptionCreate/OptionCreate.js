@@ -84,6 +84,8 @@ const OptionCreate = (props) => {
 			)
 			.then((res) => {
 				setMyOption(res.data.option);
+				getOptionCluster(qid);
+				getOptionList(qid);
 				setPageStat(false);
 				reset();
 			});
