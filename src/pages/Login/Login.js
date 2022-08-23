@@ -14,7 +14,6 @@ import kakao from "../../assets/kakao_login_medium_wide.png";
 import "./Login.scss";
 
 const Login = (props) => {
-
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
@@ -27,7 +26,7 @@ const Login = (props) => {
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 	const saveUserEmail = () => {
-		console.log("EMAIL:", email)
+		console.log("EMAIL:", email);
 		dispatch(setUserEmail(email));
 	};
 
@@ -41,7 +40,7 @@ const Login = (props) => {
 					navigate("/" + uInfo.classes[0]);
 				}
 			}
-		} 
+		}
 	});
 	return (
 		<div id="login">
@@ -65,14 +64,11 @@ const Login2 = (props) => {
 	function handleCallbackResponse(response) {
 		var userObject = jwt_decode(response.credential);
 		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/auth/register`,
-				{
-					email: userObject.email,
-					name: userObject.name,
-					image: userObject.picture,
-				}
-			)
+			.post(`${process.env.REACT_APP_BACK_END}/auth/register`, {
+				email: userObject.email,
+				name: userObject.name,
+				image: userObject.picture,
+			})
 			.then((res) => {
 				if (res.data.success) {
 					dispatch(loginUser(res.data.user));
