@@ -72,18 +72,18 @@ function QstemEditor(props) {
 			},
 		},
 	};
-	function uploadCallback(file) {
-		let uploadedImages = uploadImages;
-		const imageObject = {
-			file: file,
-			localSrc: URL.createObjectURL(file),
-		};
-		uploadedImages.push(imageObject);
-		setUploadImages(uploadedImages);
-		return new Promise((resolve, reject) => {
-			resolve({ data: { link: imageObject.localSrc } });
-		});
-	}
+	// function uploadCallback(file) {
+	// 	let uploadedImages = uploadImages;
+	// 	const imageObject = {
+	// 		file: file,
+	// 		localSrc: URL.createObjectURL(file),
+	// 	};
+	// 	uploadedImages.push(imageObject);
+	// 	setUploadImages(uploadedImages);
+	// 	return new Promise((resolve, reject) => {
+	// 		resolve({ data: { link: imageObject.localSrc } });
+	// 	});
+	// }
 
 	const selectTemplate = (e) => {
 		setTemplate(e.target.value);
@@ -126,6 +126,7 @@ function QstemEditor(props) {
 	};
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 
+	
 	const setMsg = props.setMsg;
 	const checkForm = (qobj) => {
 		const rawString = qobj.raw_string;
@@ -315,6 +316,9 @@ function QstemEditor(props) {
 							<Form.Item name="description">
 								<div className="qstem-editor">
 									<Editor
+										localization={{
+											locale: 'ko',
+										  }}
 										editorState={editorState.editorState}
 										onEditorStateChange={handleEditorChange}
 										wrapperClassName="wrapper-class"
@@ -327,7 +331,7 @@ function QstemEditor(props) {
 											textAlign: { inDropdown: true },
 											link: { inDropdown: true },
 											history: { inDropdown: false },
-											image: { uploadCallback: uploadCallback },
+											// image: { uploadCallback: uploadCallback },
 										}}
 									/>
 								</div>
