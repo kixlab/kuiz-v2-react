@@ -36,9 +36,9 @@ const Question = (props) => {
 		var index = array.map(x => {
 			return x._id;
 		}).indexOf(id);
-		console.log("index:", index)
-		const array2 = array.filter((a, i) => i !== index)
-		return array2;
+		array.splice(index, 1)
+		// const array2 = array.filter((a, i) => i !== index)
+		return array;
 	}
 
 	const getQinfo = (qid) => {

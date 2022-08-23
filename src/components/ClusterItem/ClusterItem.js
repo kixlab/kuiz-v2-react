@@ -18,6 +18,7 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 	const [optionList, setOptionList] = useState([]);
 	const [repOption, setRepOption] = useState()
 	const repOid = type?clusterInfo.ansRep._id : clusterInfo.disRep._id
+	const [showLike, setShowLike] = useState(false)
 
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: "option",
@@ -59,16 +60,17 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				if (type) {
 					const newOptionList = res.data.ansList
 					setOptionList(newOptionList);
+					if(newOptionList.length>1){
+						setShowLike(true)
+					} else {
+						setShowLike(false)
+					}
 
 					const newRepOption = newOptionList.filter(o => {
 						if(o._id === repOid) {
-							console.log("TRUE")
 							return o
 						}
 					})
-					console.log("LIKED:", newRepOption)
-					// console.log("newRepOption:", newRepOption)
-					// debugger;
 					setRepOption(newRepOption[0])
 					if(newRepOption[0].liked.includes(uid)){
 						setLike(true)
@@ -79,6 +81,11 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				} else {
 					const newOptionList = res.data.disList
 					setOptionList(newOptionList);
+					if(newOptionList.length>1){
+						setShowLike(true)
+					} else {
+						setShowLike(false)
+					}
 					const newRepOption = newOptionList.filter(o => o._id === repOid)
 					setRepOption(newRepOption[0])
 					if(newRepOption[0].liked.includes(uid)){
@@ -111,14 +118,15 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 							? clusterInfo.ansRep.option_text
 							: clusterInfo.disRep.option_text}
 					</div>
-					{detail?<div onClick={(e) => doLike()} className="likes-container">
-						{like ? (
-							<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
-						) : (
-							<FavoriteBorderIcon color="action" fontSize="small" />
-						)}
-						{likeNum}
-					</div>:<></>}
+					{detail?
+						(showLike?<div onClick={(e) => doLike()} className="likes-container">
+							{like ? (
+								<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
+							) : (
+								<FavoriteBorderIcon color="action" fontSize="small" />
+							)}
+							{likeNum}
+						</div>:<></>):<></>}
 				</div>
 				
 				
