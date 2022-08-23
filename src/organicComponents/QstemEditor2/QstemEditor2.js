@@ -28,14 +28,14 @@ var ObjectID = require("bson-objectid");
 
 const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 	const navigate = useNavigate();
-    const [template, setTemplate] = useState([]);
-    const selectTemplate = (e) => {
+	const [template, setTemplate] = useState([]);
+	const selectTemplate = (e) => {
 		setTemplate(e.target.value);
 		setEditorState({
 			editorState: insertTemplate(e.target.value, editorState),
 		});
 	};
-    function insertTemplate(templateToInsert, editorState) {
+	function insertTemplate(templateToInsert, editorState) {
 		const currentContent = editorState.editorState.getCurrentContent(),
 			currentSelection = editorState.editorState.getSelection();
 		const newContent = Modifier.replaceText(
@@ -54,7 +54,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 		);
 	}
 	const [uploadImages, setUploadImages] = useState([]);
-    const ITEM_HEIGHT = 48;
+	const ITEM_HEIGHT = 48;
 	const ITEM_PADDING_TOP = 8;
 	const MenuProps = {
 		PaperProps: {
@@ -65,7 +65,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 		},
 	};
 
-    const templateList = [
+	const templateList = [
 		"What might occur if … ?",
 		"What is the difference between … and … ?",
 		"How are … and … similar?",
@@ -146,8 +146,8 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 
 	return (
 		<div id="qstemeditor">
-            <div>
-            <FormControl id="template">
+			<div>
+				<FormControl id="template">
 					<InputLabel id="demo-multiple-checkbox-label">
 						문제 형식 예시
 					</InputLabel>
@@ -168,7 +168,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 						))}
 					</Select>
 				</FormControl>
-            </div>
+			</div>
 			<Row justify="center">
 				<Col span="12">
 					<Form
@@ -183,7 +183,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 									onEditorStateChange={handleEditorChange}
 									wrapperClassName="wrapper-class"
 									editorClassName="editor"
-									placeholder="  Generate your Q-stem here!"
+									placeholder="문제 내용을 입력해 주세요."
 									toolbarClassName="toolbar-class"
 									toolbar={{
 										// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지

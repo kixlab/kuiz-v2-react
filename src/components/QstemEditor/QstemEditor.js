@@ -36,7 +36,7 @@ function QstemEditor(props) {
 	const cid = props.cid;
 	const [template, setTemplate] = useState([]);
 	const [answer, setAnswer] = useState();
-	const [explanation, setExplanation] = useState()
+	const [explanation, setExplanation] = useState();
 
 	const templateList = [
 		"What might occur if … ?",
@@ -175,42 +175,35 @@ function QstemEditor(props) {
 			return;
 		}
 		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/question/qstem/create`,
-				{
-					qstemObj: qstemObj,
-					cid: cid,
-					answer_text: answer,
-				}
-			)
+			.post(`${process.env.REACT_APP_BACK_END}/question/qstem/create`, {
+				qstemObj: qstemObj,
+				cid: cid,
+				answer_text: answer,
+			})
 			.then((res) => {
 				axios
 
-					.post(
-						`${process.env.REACT_APP_BACK_END}/question/option/create`,
-						{
-							optionData: {
-								author: ObjectID(uid),
-								option_text: answer,
-								is_answer: true,
-								explanation: explanation,
-								class: ObjectID(cid),
-								qstem: ObjectID(res.data.data),
-								plausible: { similar: [], difference: [] },
-								cluster: [],
-							},
-							dependency: [],
-						}
-					)
+					.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
+						optionData: {
+							author: ObjectID(uid),
+							option_text: answer,
+							is_answer: true,
+							explanation: explanation,
+							class: ObjectID(cid),
+							qstem: ObjectID(res.data.data),
+							plausible: { similar: [], difference: [] },
+							cluster: [],
+						},
+						dependency: [],
+					})
 
 					.then((res2) => {
 						setMsg("Successfuly made question stem!");
-						if(props.classType){
+						if (props.classType) {
 							navigate("/" + cid + "/question/" + res.data.data + "/create");
 						} else {
 							navigate("/" + cid + "/question/" + res.data.data);
 						}
-						
 					});
 			});
 	};
@@ -247,32 +240,26 @@ function QstemEditor(props) {
 			return;
 		}
 		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/question/qstem/create`,
-				{
-					qstemObj: qstemObj,
-					cid: cid,
-					answer_text: answer,
-				}
-			)
+			.post(`${process.env.REACT_APP_BACK_END}/question/qstem/create`, {
+				qstemObj: qstemObj,
+				cid: cid,
+				answer_text: answer,
+			})
 			.then((res) => {
 				axios
-					.post(
-						`${process.env.REACT_APP_BACK_END}/question/option/create`,
-						{
-							optionData: {
-								author: ObjectID(uid),
-								option_text: answer,
-								is_answer: true,
-								explanation: explanation,
-								class: ObjectID(cid),
-								qstem: ObjectID(res.data.data),
-								plausible: { similar: [], difference: [] },
-								cluster: [],
-							},
-							dependency:[]
-						}
-					)
+					.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
+						optionData: {
+							author: ObjectID(uid),
+							option_text: answer,
+							is_answer: true,
+							explanation: explanation,
+							class: ObjectID(cid),
+							qstem: ObjectID(res.data.data),
+							plausible: { similar: [], difference: [] },
+							cluster: [],
+						},
+						dependency: [],
+					})
 					.then((res2) => {
 						setMsg("Successfuly made question stem!");
 						navigate("/" + cid + "/question/" + res.data.data);
@@ -331,7 +318,7 @@ function QstemEditor(props) {
 										onEditorStateChange={handleEditorChange}
 										wrapperClassName="wrapper-class"
 										editorClassName="editor"
-										placeholder="  Generate your Q-stem here!"
+										placeholder="문제 내용을 입력해 주세요."
 										toolbarClassName="toolbar-class"
 										toolbar={{
 											// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
@@ -359,14 +346,12 @@ function QstemEditor(props) {
 						placeholder="문제의 정답을 입력해 주세요."
 						className="objective-input"
 					/>
-					<div className="helper-text">
-						정답에 대한 설명이 필요하다면 적어주세요ㅁ.
-					</div>
+					<div className="helper-text">정답에 대한 해설을 입력해 주세요.</div>
 					<TextField
 						fullWidth
 						value={explanation}
 						onChange={(e) => setExplanation(e.target.value)}
-						placeholder="정답에 대해 설명이 필요하다면 입력해 주세요."
+						placeholder="정답에 대한 해설을 입력해 주세요."
 						className="objective-input"
 					/>
 				</div>
