@@ -304,6 +304,7 @@ function QstemEditor(props) {
 				</FormControl>
 			</div>
 			<div>
+				<div>
 				<Row justify="center">
 					<Col span="12">
 						<Form
@@ -334,6 +335,8 @@ function QstemEditor(props) {
 						</Form>
 					</Col>
 				</Row>
+				</div>
+				
 				<div>
 					<h3>정답</h3>
 					<div className="helper-text">
