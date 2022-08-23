@@ -19,7 +19,7 @@ var ObjectID = require("bson-objectid");
 
 const OptionInput = ({ setMyOption, setPageStat }) => {
 	const [option, setOption] = useState("");
-	const [isAnswer, setIsAnswer] = useState(true);
+	const [isAnswer, setIsAnswer] = useState();
 	const [explanation, setExplanation] = useState("");
 	const [similar, setSimilar] = useState([]);
 	const [difference, setDifference] = useState([]);

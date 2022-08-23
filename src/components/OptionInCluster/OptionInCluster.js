@@ -11,6 +11,8 @@ const OptionInCluster = ({ option }) => {
 	const [like, setLike] = useState();
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const [likeNum, setLikeNum] = useState()
+	const similar = option.plausible.similar
+	const difference = option.plausible.difference
 
 	const userLike = (arr, user) => {
 		if (arr.includes(user)) {
@@ -56,7 +58,18 @@ const OptionInCluster = ({ option }) => {
 				{option.isAnswer ? "Answer" : "Distractor"}
 			</div> */}
 			<div className="option-text">{option.option_text}</div>
-
+			<div className="tags">
+				<div className="tags-container">
+					{similar.map((option) => {
+						return <div className="similarTag tag">{option}</div>;
+					})}
+				</div>
+				<div className="tags-container">
+					{difference.map((option) => {
+						return <div className="differenceTag tag">{option}</div>;
+					})}
+				</div>
+			</div>
 			<div onClick={(e) => doLike()} className="likes-container">
 				{like ? (
 					<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />

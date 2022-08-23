@@ -19,6 +19,9 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 	const [repOption, setRepOption] = useState()
 	const repOid = type?clusterInfo.ansRep._id : clusterInfo.disRep._id
 	const [showLike, setShowLike] = useState(false)
+	const rep = type?clusterInfo.ansRep:clusterInfo.disRep
+
+
 
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: "option",
@@ -114,9 +117,20 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				</div> */}
 				<div className="cluster-container">
 					<div className="option-text">
-						{type
-							? clusterInfo.ansRep.option_text
-							: clusterInfo.disRep.option_text}
+						{rep.option_text}
+					</div>
+					<div className="tags">
+						<div className="tags-container">
+							
+							{rep && rep.plausible.similar.map((option) => {
+								return <div className="similarTag tag">{option}</div>;
+							})}
+						</div>
+						<div className="tags-container">
+							{rep && rep.plausible.difference.map((option) => {
+								return <div className="differenceTag tag">{option}</div>;
+							})}
+						</div>
 					</div>
 					{detail?
 						(showLike?<div onClick={(e) => doLike()} className="likes-container">
