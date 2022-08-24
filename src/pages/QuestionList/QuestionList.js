@@ -105,12 +105,10 @@ const QuestionList = (props) => {
 											)
 											.then(async (res2) => {
 												const clusters = await res2.data.clusters;
-												if (
-													clusters.filter((c) => c.ansExist === true).length >=
-														1 &&
-													clusters.filter((c) => c.disExist === true).length >=
-														2
-												) {
+												const ans = clusters.filter((c) => c.ansExist).length
+												const dis = clusters.filter((c) => c.disExist).length
+												const ov = clusters.filter((c) => c.ansExist && c.disExist).length
+												if (ans + dis - ov >=4) {
 													valid[i] = true;
 													return await true;
 												} else {
@@ -152,7 +150,7 @@ const QuestionList = (props) => {
 								const clusters = res2.data.clusters;
 								if (
 									clusters.filter((c) => c.ansExist === true).length >= 1 &&
-									clusters.filter((c) => c.disExist === true).length >= 2
+									clusters.filter((c) => c.disExist === true).length >= 3
 								) {
 									return true;
 								} else {
@@ -193,7 +191,7 @@ const QuestionList = (props) => {
 			</div>
 
 			{questionList.filter((q, j) => validList[j]).length === 0 ? (
-				<div className="no-question-msg">문제를 로딩 중입니다 :)</div>
+				<div className="no-question-msg">풀 수 있는 문제가 아직 없습니다.</div>
 			) : (
 				<div>
 					{questionList

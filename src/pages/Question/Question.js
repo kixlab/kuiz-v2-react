@@ -65,18 +65,18 @@ const Question = (props) => {
 								var dis = clusters.filter((c) => c.disExist)
 								var ov = clusters.filter((c) => c.ansExist && c.disExist)
 								
-								if(ans.length + dis.length - ov.length >=3 && dis.length>=2){
-									if(ans.length - ov.length > 0 && dis.length < 3) {
+								if(ans.length + dis.length - ov.length >=4 && dis.length>=3){
+									if(ans.length - ov.length > 0 && dis.length < 4) {
 										console.log("case1")
 										var ansList = getMultipleRandom(ans.filter(a => !a.disExist), 1)
-										var disList = getMultipleRandom(dis, 2)
+										var disList = getMultipleRandom(dis, 3)
 										setOptions(shuffle(ansList.map(a => a.ansRep).concat(disList.map(d => d.disRep))))
 										setIsOptionValid(true)
 									} else {
 										console.log("case2")
 										var ansList = getMultipleRandom(ans,1)
 										dis = removeById(dis, ansList[0]._id)
-										var disList = getMultipleRandom(dis, dis.length < 3 ? 2 : 3);
+										var disList = getMultipleRandom(dis, dis.length < 4 ? 3 : 4);
 										setOptions(shuffle(ansList.map(a => a.ansRep).concat(disList.map(d => d.disRep))))
 										setIsOptionValid(true)
 									}
