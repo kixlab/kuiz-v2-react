@@ -99,7 +99,6 @@ const OptionCreate = (props) => {
 
 	useEffect(() => {
 		if (isLoggedIn) {
-		
 			getOptionCluster(qid);
 			getOptionList(qid);
 		} else {

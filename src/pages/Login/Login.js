@@ -13,7 +13,7 @@ import axios from "axios";
 import kakao from "../../assets/kakao_login_medium_wide.png";
 import "./Login.scss";
 
-const Login = (props) => {
+const Login2 = (props) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [user, setUser] = useState({});
@@ -57,10 +57,7 @@ const Login = (props) => {
 		</div>
 	);
 };
-const Login2 = (props) => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const [user, setUser] = useState({});
+const Login = (props) => {
 	function handleCallbackResponse(response) {
 		var userObject = jwt_decode(response.credential);
 		axios
@@ -86,17 +83,33 @@ const Login2 = (props) => {
 				}
 			});
 	}
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const [user, setUser] = useState({});
+	const uInfo = useSelector((state) => state.userInfo.userInfo);
+	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		/*global google*/
-		google.accounts.id.initialize({
-			client_id: process.env.REACT_APP_CLIENT_ID,
-			callback: handleCallbackResponse,
-		});
-
-		google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-			theme: "outline",
-			size: "large",
-		});
+		if (isLoggedIn) {
+			console.log("Logged In!")
+			if (uInfo !== {}) {
+				if (uInfo.classes.length === 0) {
+					navigate("/enroll");
+				} else {
+					navigate("/" + uInfo.classes[0]);
+				}
+			}
+		} else {
+			google.accounts.id.initialize({
+				client_id: process.env.REACT_APP_CLIENT_ID,
+				callback: handleCallbackResponse,
+			});
+	
+			google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+				theme: "outline",
+				size: "large",
+			});
+		}
 	}, []);
 	return (
 		<div>
