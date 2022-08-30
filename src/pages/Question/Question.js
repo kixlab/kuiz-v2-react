@@ -194,6 +194,21 @@ const Question = (props) => {
 		}
 		setAnsVisible(!ansVisible);
 	};
+
+	const background = (index) => {
+		if(!ansVisible){
+			return 
+		} else {
+			if(index === answer){
+				return "answer"
+			} else {
+				if(index === selected){
+					return "wrong-selected"
+				}
+			}
+			return "other"
+		}
+	}
 	useEffect(() => {
 		if (isLoggedIn) {
 			getQinfo(qid);
@@ -227,7 +242,7 @@ const Question = (props) => {
 					<div id="question-options">
 						{options &&
 							options.map((option, index) => (
-								<div className="question-option-item">
+								<div className="question-option-item" id={background(index)}>
 									<input
 										key={index}
 										checked={selected === index}
@@ -263,9 +278,8 @@ const Question = (props) => {
 						</button>
 						{ansVisible &&
 							(cType ? (
-								<div id="answer-wrapper">
-									{/* <div>answer: {options[answer].option_text}</div> */}
-									{/* <div>answer: {options.filter((o,i) => i === answer)}</div> */}
+								<div id="option-wrapper">
+									<div>answer: {options[answer].option_text}</div>
 									{options.map((option) => {
 										return (
 											<div className="answer-option">

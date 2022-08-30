@@ -20,7 +20,7 @@
 
 	#question-explanation {
 		place-self: start stretch;
-		#answer-wrapper {
+		#option-wrapper {
 			.answer-option {
 				background-color: #f2f5f8;
 				border-radius: 12px;
@@ -52,6 +52,13 @@
 		&:hover {
 			background-color: #f2f5f8;
 		}
+		border-radius: 4px;
+	}
+	#answer{
+		background-color: #D8E3D1;
+	}
+	#wrong-selected{
+		background-color: #EACFCF;
 	}
 
 	.nav-button {
