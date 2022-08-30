@@ -145,14 +145,14 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				
 				
 				
-				<button onClick={(e) => getOptions()} className="cluster-show-button">
+				{showLike && <button onClick={(e) => getOptions()} className="cluster-show-button">
 					내용이 같은 다른 선택지 보기
 					{detail ? (
 						<i className="fa-solid fa-chevron-up"></i>
 					) : (
 						<i className="fa-solid fa-chevron-down"></i>
 					)}
-				</button>
+				</button>}
 				{detail ? (
 					<div className="cluster-subitems">
 						{optionList.map((option) => {
