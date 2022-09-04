@@ -2,6 +2,14 @@
 	display: grid;
 	grid-template-columns: 350px auto;
 
+	.hidden{
+		visibility: hidden;
+		color: #3d73dd;
+	}
+	.show{
+		visibility: visible;
+		color: #3d73dd;
+	}
 	#left-sidebar {
 		max-width: 350px;
 		background-color: white;
@@ -9,6 +17,7 @@
 		display: grid;
 		grid-template-rows: 30% auto auto;
 		height: calc(100vh - 112px);
+		
 
 		#main-logo {
 			text-align: left;

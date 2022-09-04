@@ -15,6 +15,7 @@ function Navbar(props) {
 	const user_name = useSelector((state) => state.userInfo.userInfo.name);
 	const isAdmin = useSelector((state) => state.userInfo.userInfo.isAdmin);
 	const navigate = useNavigate();
+	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
 
 	const moveToCreateStem = () => {
 		navigate("/" + cid + "/createstem");
@@ -26,9 +27,13 @@ function Navbar(props) {
 		navigate("/" + cid + "/qlist");
 	};
 
+	useEffect(() => {
+		console.log("login:", isLoggedIn?"true":"false")
+	},[])
+
 	return (
-		<div id="left-sidebar">
-			<div>
+		<div id="left-sidebar"className={isLoggedIn?"show":"hidden"} >
+			<div >
 				<div id="main-logo" onClick={(e) => navigate("/" + cid)}>
 					KUIZ
 				</div>
