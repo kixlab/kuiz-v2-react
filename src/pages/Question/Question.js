@@ -220,7 +220,7 @@ const Question = (props) => {
 
 	return (
 		<div id="question-screen-wrapper">
-			<div id="question-nav">문제 풀기</div>
+			<div id="question-nav"></div>
 			<div id="question-screen">
 				<Link
 					to={"/" + cid + "/qlist"}

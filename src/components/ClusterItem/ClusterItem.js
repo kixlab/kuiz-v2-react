@@ -112,9 +112,9 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				style={{ border: isDragging ? "5px solid pink" : "0px" }}
 				className="option-components"
 			>
-				{/* <div className={type ? "answer-label" : "distractor-label"}>
+				<div className={type ? "answer-label" : "distractor-label"}>
 					{type ? "Answer" : "Distractor"}
-				</div> */}
+				</div>
 				<div className="cluster-container">
 					<div className="option-text">
 						{rep.option_text}
