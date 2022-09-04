@@ -165,13 +165,14 @@ const OptionInput = ({ setMyOption, setPageStat }) => {
 							onChange={setExpValue}
 						/>
 					</div>
+					<div className="submit-button">
+						<Button variant="contained" onClick={submit}>
+							다음
+						</Button>
+					</div>
 				</div>
 			</div>
-			<div className="submit-button">
-				<Button variant="contained" onClick={submit}>
-					다음
-				</Button>
-			</div>
+			
 		</div>
 	);
 };
