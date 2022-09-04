@@ -77,6 +77,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 		"Which best explains the cause of ...?",
 		"Which is an example of ...?",
 	];
+	
 	const templatelist_kor = [
 		"다음 중 ...의 경우 발생할 수 있는 일로 가장 적합한 것은 무엇인가?",
 		"다음 중 ...와 ...의 차이를 가장 잘 설명한 것은 무엇인가?",

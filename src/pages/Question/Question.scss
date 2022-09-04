@@ -20,6 +20,27 @@
 
 	#question-explanation {
 		place-self: start stretch;
+		#explanation {
+			background-color: #F2F5F8;
+			// border: #3d73dd 1px solid ;
+			border-radius: 10px;
+			padding: 10px 15px 15px 15px;
+			.ans-check{
+				font-size: small;
+				padding-bottom: 5px;
+				background-color: white;
+				padding: 5px;
+				width: max-content;
+				margin-bottom: 10px;
+				border-radius: 5px;
+				.correct{
+					color: green;
+				}
+				.incorrect{
+					color: red;
+				}
+			}
+		}
 		#option-wrapper {
 			.answer-option {
 				background-color: #f2f5f8;

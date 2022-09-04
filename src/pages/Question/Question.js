@@ -290,9 +290,13 @@ const Question = (props) => {
 									})}
 								</div>
 							) : (
-								<div className="explanation">
-									<div>answer : {options[answer].option_text}</div>
-									explanation : {qinfo.explanation}
+								<div id="explanation">
+									<div className="ans-check">
+										{(selected === answer)?<div className="correct">정답입니다!</div>:<div className="incorrect">오답입니다!</div>}
+									</div>
+									<div>정답 : {options[answer].option_text}</div>
+									<hr/>
+									해설 : {qinfo.explanation}
 								</div>
 							))}
 					</div>
