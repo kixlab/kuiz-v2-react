@@ -108,7 +108,7 @@ const OptionCreate = (props) => {
 
 	return (
 		<div id="option-create-wrapper">
-			<div id="question-nav">새로운 선택지 추가하기</div>
+			<div id="question-nav"></div>
 			<div id="question-screen">
 				<Link
 					to={"/" + cid}
