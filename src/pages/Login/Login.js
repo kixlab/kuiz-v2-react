@@ -6,6 +6,7 @@ import {
 	logoutUser,
 	enrollClass,
 } from "../../features/authentication/userSlice";
+import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import { setUserEmail } from "../../features/authentication/userSlice";
 import axios from "axios";
@@ -88,6 +89,7 @@ const Login = (props) => {
 	const [user, setUser] = useState({});
 	const uInfo = useSelector((state) => state.userInfo.userInfo);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
+	const [agree, setAgree] = useState(true)
 	useEffect(() => {
 		/*global google*/
 		if (isLoggedIn) {
@@ -112,8 +114,16 @@ const Login = (props) => {
 		}
 	}, []);
 	return (
-		<div>
-			<div id="signInDiv"></div>
+		<div className="login">
+			<div id="main-logo" >KUIZ</div>
+			{/* <div id="intro">Welcome to KUIZ!!</div> */}
+			<div id="clause">
+				안내사항 어쩌구저쩌구
+				[수집하는 구글 계정 정보]
+				구글 계정 이메일 주소, 사용자 이름, 프로필 이미지 
+			</div>
+			{agree && <div id="signInDiv"></div>}
+			
 		</div>
 	);
 };
