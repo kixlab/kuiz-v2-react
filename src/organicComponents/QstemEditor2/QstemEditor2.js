@@ -66,28 +66,28 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 	};
 
 	const templateList = [
-		"What might occur if … ?",
-		"What is the difference between … and … ?",
-		"How are … and … similar?",
-		"… is a problem because …. . What is a possible solution for this?",
-		"How does … affect …?",
-		"What is the meaning of … ?",
-		"Why is …. important?",
-		"How is … related to …. ?",
-		"What causes …. ?",
-		"What is an example of … ?",
+		"Which is most likely to occur if ... ? ",
+		"Which is the difference between ... and ... ? ",
+		"Which best explains the similarity between ... and ... ?",
+		"... is a problem because ... . Which is a possible solution for this? ",
+		"Which best explains how  ... affect ... ?",
+		"Which best explains the meaning of ...?",
+		"Which best explains the importance of ... ?",
+		"Which best explains the relationship between  ... and  ...?",
+		"Which best explains the cause of ...?",
+		"Which is an example of ...?",
 	];
 	const templatelist_kor = [
-		"... 의 경우 어떤 일이 발생할 수 있는가?",
-		"... 와 ... 의 차이는 무엇인가?",
-		"... 와 ... 의 공통점/유사점은 무엇인가?",
-		"...로 인해 ... 라는 문제가 발생한다. 이에 대한 해결책으로 적절한 것은 무엇인가?",
-		"... 는 어떻게 ... 에 영향을 주는가?",
-		"... 의 의미는 무엇인가?",
-		"... 가 중요한 이유는 무엇인가?",
-		"... 와 ... 의 연관성은 무엇인가?",
-		"... 는 무엇으로 인해 발생하는가?",
-		"... 의 예시에는 무엇이 있는가?",
+		"다음 중 ...의 경우 발생할 수 있는 일로 가장 적합한 것은 무엇인가?",
+		"다음 중 ...와 ...의 차이를 가장 잘 설명한 것은 무엇인가?",
+		"다음 중 ...와 ...의 공통점을 가장 잘 설명한 것은 무엇인가?",
+		"...로 인해 ... 라는 문제가 발생한다. 다음 중 이에 대한 해결책으로 가장 적합한 것은?",
+		"다음 중 ...가 ...에 주는 영향에 대한 설명으로 가장 적절한 것은? ",
+		"다음 중 ...의 의미를 가장 잘 설명하는 것은?",
+		"다음 중 ...가 중요한 이유를 가장 잘 설명하는 것은?",
+		"다음 중 ...와 ...의 연관성에 대한 설명으로 가장 적절한 것은?",
+		"다음 중 ...가 발생하는 원인에 대해 가장 잘 설명한 것은?",
+		"다음 중 ...의 예시로 가장 적절한 것은? ",
 	];
 
 	function uploadCallback(file) {
