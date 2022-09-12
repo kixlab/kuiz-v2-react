@@ -2,6 +2,11 @@ import { HighlightOff, Tag } from "@mui/icons-material";
 import { FormControl, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useRef, useState } from "react";
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+
 import './InputTags.scss'
 
 const Tags = ({ data, handleDelete, type }) => {
@@ -43,9 +48,11 @@ function InputTags({handleDelete, handleOnSubmit, tags, type}) {
 
   const handleOnSubmit2 = (e) => {
     e.preventDefault();
-    if(tags.length<3){
-      handleOnSubmit(tagRef)
-      tagRef.current.value = "";
+    if(tagRef.current.value !== ""){
+      if(tags.length<3){
+        handleOnSubmit(tagRef)
+        tagRef.current.value = "";
+      }
     }
   };
   return (
@@ -57,10 +64,21 @@ function InputTags({handleDelete, handleOnSubmit, tags, type}) {
             fullWidth
             variant='filled'
             size='small'
-            sx={{ margin: "0.4rem 0.4rem 0.5rem 0.5rem" }}
+            sx={{ margin: "0.4rem 0.3rem 0.3rem 0.6rem" }}
             margin='none'
             placeholder={tags.length < 5 ? "Add tags" : ""}
             style={{width:"90%"}}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" color="primary">
+                    <div onClick={handleOnSubmit2}>
+                      <ArrowUpwardIcon />
+                    </div>
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Box sx={{ margin: "0 0.2rem 0.4rem 0.5rem", display:"flex"}}>
               {tags.map((data, index) => {

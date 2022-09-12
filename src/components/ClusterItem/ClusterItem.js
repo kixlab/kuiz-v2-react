@@ -19,11 +19,9 @@ const ClusterItem = ({ clusterInfo, id, type, isDraggable }) => {
 	const [optionList, setOptionList] = useState([]);
 	const [repOption, setRepOption] = useState()
 	const repOid = type?clusterInfo.ansRep._id : clusterInfo.disRep._id
-	const [showLike, setShowLike] = useState(false)
+	const [showLike, setShowLike] = useState(type?(clusterInfo.ansList.length <=1?false:true):(clusterInfo.disList.length <=1?false:true))
 	const draggable = isDraggable;
 	const rep = type?clusterInfo.ansRep:clusterInfo.disRep
-
-
 
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: "option",
@@ -34,7 +32,6 @@ const ClusterItem = ({ clusterInfo, id, type, isDraggable }) => {
 	}));
 	
 	const doLike = () => {
-		console.log("DOLIKE")
 		axios
 			.post(
 				`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`,
@@ -67,9 +64,9 @@ const ClusterItem = ({ clusterInfo, id, type, isDraggable }) => {
 					const newOptionList = res.data.ansList
 					setOptionList(newOptionList);
 					if(newOptionList.length>1){
-						setShowLike(true)
+						setShowLike(true);
 					} else {
-						setShowLike(false)
+						setShowLike(false);
 					}
 
 					const newRepOption = newOptionList.filter(o => {
@@ -79,9 +76,9 @@ const ClusterItem = ({ clusterInfo, id, type, isDraggable }) => {
 					})
 					setRepOption(newRepOption[0])
 					if(newRepOption[0].liked.includes(uid)){
-						setLike(true)
+						setLike(true);
 					} else {
-						setLike(false)
+						setLike(false);
 					}
 					setLikeNum(newRepOption[0].liked.length)
 				} else {
@@ -138,15 +135,15 @@ const ClusterItem = ({ clusterInfo, id, type, isDraggable }) => {
 							})}
 						</div>
 					</div>
-					{detail?
-						(showLike?<div onClick={(e) => doLike()} className="likes-container">
+					{detail && 
+						(showLike && <div onClick={(e) => doLike()} className="likes-container">
 							{like ? (
 								<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
 							) : (
 								<FavoriteBorderIcon color="action" fontSize="small" />
 							)}
 							{likeNum}
-						</div>:<></>):<></>}
+						</div>)}
 				</div>
 				
 				
