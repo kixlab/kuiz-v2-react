@@ -146,7 +146,7 @@ const OptionCreate = (props) => {
 							) : (
 								<ClusterList clusterList={cluster} />
 							)} */}
-							<ClusterList clusterList={cluster} />
+							<ClusterList clusterList={cluster} isDraggable={!pageStat} />
 						</div>
 						<div className="option-container">
 							{pageStat ? (
@@ -158,21 +158,27 @@ const OptionCreate = (props) => {
 								<div>
 									{ansList && disList && (
 										<div>
-											<div>내가 만든 선택지</div>
-											{myOption && myOption.option_text}
-
-											<OptionDependency
-												optionList={cluster}
-												label={"same"}
-												setDependency={setSameCluster}
-												available={myOption.is_answer}
-											/>
-											<OptionDependency
-												optionList={cluster}
-												label={"contradictory"}
-												setDependency={setContCluster}
-												available={!myOption.is_answer}
-											/>
+											<div className="my-option">
+												<div className="label">내가 만든 선택지</div>
+												{myOption && myOption.option_text}
+											</div>
+											<hr/>
+											<div className="dependency-title">선택지 간 관계성</div>
+											<div className="dependency-container">
+												<OptionDependency
+													optionList={cluster}
+													label={"같은 선택지"}
+													setDependency={setSameCluster}
+													available={myOption.is_answer}
+												/>
+												<OptionDependency
+													optionList={cluster}
+													label={"반대 선택지"}
+													setDependency={setContCluster}
+													available={!myOption.is_answer}
+												/>
+											</div>
+																			
 											<button id="submit-button" onClick={submitDependency}>
 												제출하기
 											</button>

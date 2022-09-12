@@ -3,6 +3,8 @@ import ClusterItem from "../ClusterItem/ClusterItem";
 import "./ClusterList.scss";
 const ClusterList = (props) => {
 
+	const draggable = props.isDraggable
+
 	return (
 		<div className="cluster-list">
 			<div className="option-list-title">선택지 목록</div>
@@ -11,7 +13,7 @@ const ClusterList = (props) => {
 				if (c.ansRep !== null) {
 					return (
 						<div id={c._id} className="option-item-wrapper">
-							<ClusterItem clusterInfo={c} id={c._id} type={true} />
+							<ClusterItem clusterInfo={c} id={c._id} type={true} isDraggable={draggable} />
 						</div>
 					);
 				}

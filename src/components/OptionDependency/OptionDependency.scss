@@ -1,26 +1,51 @@
+
+.dependency-label{
+	font-size: x-small;
+	background-color:#609CDC ;
+	color: white;
+	border-radius: 10px 10px 0px 0px;
+	padding: 5px 10px 5px 10px;
+	width: fit-content;
+}	
 .same {
 	min-height: 100px;
-	border: 1.5px solid black;
-	padding: 12px;
+	// background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+	border: 1.5px solid #609CDC;
+	background-color: white;
+	padding: 5px 5px 12px 7px;
+	// border-radius: 0px 0px 10px 10px;
+	border-radius: 0px 10px 10px 10px;
+	margin-bottom: 10px;
+	
 
-	.dependency-option {
-		padding: 12px;
-		border: 2px solid blue;
-		margin-bottom: 12px;
-		border-radius: 4px;
+	// .dependency-option {
+	// 	padding: 12px;
+	// 	border: 2px solid blue;
+	// 	margin-bottom: 12px;
+	// 	border-radius: 4px;
+	// 	display: flex;
+	// 	justify-content: space-between;
+	// 	.dependency-button {
+	// 		background: none;
+	// 		border: none;
+	// 		width: 20px;
+	// 		height: 20px;
+	// 		border: 1px solid gray;
+	// 		border-radius: 8px;
+	// 		color: white;
+	// 		background-color: gray;
+	// 		cursor: pointer;
+	// 		font-weight: 400;
+	// 	}
+	// }
+	.dependency-option{
+		text-align: left;
 		display: flex;
-		justify-content: space-between;
-		.dependency-button {
-			background: none;
-			border: none;
-			width: 20px;
-			height: 20px;
-			border: 1px solid gray;
-			border-radius: 8px;
-			color: white;
-			background-color: gray;
-			cursor: pointer;
-			font-weight: 400;
+		// background-color: aqua;
+		// justify-content: space-between;
+		.delete-icon{
+			padding-top:9px;
+			margin-left: 5px;
 		}
 	}
 }

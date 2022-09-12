@@ -9,8 +9,9 @@ import OptionInCluster from "../OptionInCluster/OptionInCluster";
 import { pink } from "@mui/material/colors";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
-const ClusterItem = ({ clusterInfo, id, type }) => {
+const ClusterItem = ({ clusterInfo, id, type, isDraggable }) => {
 	const uid = useSelector((state) => state.userInfo.userInfo._id)
 	const [like, setLike] = useState()
 	const [likeNum, setLikeNum] = useState()
@@ -19,6 +20,7 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 	const [repOption, setRepOption] = useState()
 	const repOid = type?clusterInfo.ansRep._id : clusterInfo.disRep._id
 	const [showLike, setShowLike] = useState(false)
+	const draggable = isDraggable;
 	const rep = type?clusterInfo.ansRep:clusterInfo.disRep
 
 
@@ -30,6 +32,7 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 			isDragging: !!monitor.isDragging(),
 		}),
 	}));
+	
 	const doLike = () => {
 		console.log("DOLIKE")
 		axios
@@ -104,13 +107,16 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 
 	return (
 		<div
-			id={type ? "answer-wrapper" : "distractor-wrapper"}
-			className="cluster-item"
+			id={type ? "answer-wrapper" : "distractor-wrapper" }
+			className={`cluster-item ${draggable?"drag":"undrag"}`}
+			ref={draggable?drag:null}
+			style={{ border: isDragging && "5px solid pink" }}
 		>
 			<div
-				ref={drag}
-				style={{ border: isDragging ? "5px solid pink" : "0px" }}
+				// ref={draggable?drag:null}
+				// style={{ border: isDragging ? "5px solid pink" : "0px" }}
 				className="option-components"
+				
 			>
 				<div className={type ? "answer-label" : "distractor-label"}>
 					{type ? "Answer" : "Distractor"}
@@ -166,6 +172,7 @@ const ClusterItem = ({ clusterInfo, id, type }) => {
 				)}
 				{/* <div>{clusterInfo._id}</div> */}
 			</div>
+			{draggable && <div className="dragger"><DragIndicatorIcon color="disabled"/></div>}
 		</div>
 	);
 };
