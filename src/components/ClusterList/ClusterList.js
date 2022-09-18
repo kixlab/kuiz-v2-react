@@ -23,7 +23,7 @@ const ClusterList = (props) => {
 				if (c.disRep !== null) {
 					return (
 						<div id={c._id} className="option-item-wrapper">
-							<ClusterItem clusterInfo={c} id={c._id} type={false} />
+							<ClusterItem clusterInfo={c} id={c._id} type={false} isDraggable={draggable}/>
 						</div>
 					);
 				}

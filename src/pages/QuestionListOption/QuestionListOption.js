@@ -20,6 +20,7 @@ import { ResetTvSharp } from "@mui/icons-material";
 const QuestionListOption = (props) => {
 	const [validList, setValidList] = useState([])
 	const [filter, setFilter] = useState(0)
+	const [sort, setSort] = useState(0)
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const cid = useParams().cid;

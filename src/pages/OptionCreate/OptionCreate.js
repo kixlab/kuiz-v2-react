@@ -158,10 +158,12 @@ const OptionCreate = (props) => {
 								<div>
 									{ansList && disList && (
 										<div>
-											<div className="my-option">
+											<div className="dependency-title">내가 만든 선택지</div>
+											{/* <div className="my-option">
 												<div className="label">내가 만든 선택지</div>
 												{myOption && myOption.option_text}
-											</div>
+											</div> */}
+											{myOption && myOption.option_text}
 											<hr/>
 											<div className="dependency-title">선택지 간 관계성</div>
 											<div className="dependency-container">

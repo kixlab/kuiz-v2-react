@@ -70,7 +70,8 @@ const OptionDependency = ({ optionList, label, setDependency, available }) => {
 							// </div>
 							<div>
 									<div className="dependency-option">
-										<Item>{available?cluster.ansRep.option_text:cluster.disRep.option_text}</Item>
+										<div className="dependency-option-item">{available?cluster.ansRep.option_text:cluster.disRep.option_text}</div>
+										{/* <Item>{available?cluster.ansRep.option_text:cluster.disRep.option_text}</Item> */}
 										<div className="delete-icon" onClick={(e) => removeOptionFromBoard(cluster._id)}>
 										<HighlightOffOutlinedIcon sx={{ fontSize: 18 }} color="action"/>
 										</div>
