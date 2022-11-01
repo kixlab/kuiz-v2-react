@@ -6,11 +6,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import draftToHtml from "draftjs-to-html";
-import OptionDependency from "../../components/OptionDependency/OptionDependency";
-import Button from "../../components/Button/Button";
 
 import ClusterItem from "../../components/ClusterItem/ClusterItem";
-import ClusterList from "../../components/ClusterList/ClusterList";
 
 import OptionItem from "../../components/OptionItem/OptionItem";
 
@@ -68,20 +65,6 @@ const OptionCreate = (props) => {
 				console.log(err);
 			});
 	};
-	// const submitDependency = () => {
-	// 	axios
-	// 		.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
-	// 			optionData: myOption,
-	// 			dependency: sameCluster.concat(contCluster),
-	// 		})
-	// 		.then((res) => {
-	// 			setMyOption(res.data.option);
-	// 			getOptionCluster(qid);
-	// 			getOptionList(qid);
-	// 			setPageStat(false);
-	// 			reset();
-	// 		});
-	// };
 
 	const reset = () => {
 		setPageStat(true);
@@ -98,7 +81,22 @@ const OptionCreate = (props) => {
 		}
 	}, []);
 
-	const filterOptions = (keyword) => {};
+	const filterOptions = (keyword) => {
+		setAnsList(
+			ansList.filter((option) => {
+				return option.plausible.similar.includes(keyword);
+			})
+		);
+		setDistList(
+			disList.filter((option) => {
+				return option.plausible.similar.includes(keyword);
+			})
+		);
+	};
+	const resetFilter = () => {
+		setAnsList(options.filter((op) => op.is_answer));
+		setDistList(options.filter((op) => !op.is_answer));
+	};
 
 	const proceedStep = () => {
 		setPageStat(false);
@@ -132,7 +130,20 @@ const OptionCreate = (props) => {
 						<div id="keywords-wrapper" className="section">
 							<div className="header">Keywords</div>
 							<div id="keywords-container">
-								<div className="keyword-item">Example Keyword</div>
+								<div
+									className="keyword-item"
+									onClick={() => {
+										filterOptions("ㅁㅁ");
+									}}>
+									Example Keyword
+								</div>
+								<div
+									className="keyword-item"
+									onClick={() => {
+										resetFilter();
+									}}>
+									Reset Keywords
+								</div>
 							</div>
 						</div>
 						<div id="options" className="section">
@@ -240,24 +251,28 @@ const OptionCreate = (props) => {
 							{groupMode ? (
 								<div>
 									{isAnswer
-										? cluster.map((c) => {
-												if (c.ansRep !== null) {
+										? cluster
+												.filter((c) => {
+													return c.ansRep !== null;
+												})
+												.map((c) => {
 													return (
 														<div id={c._id} className="option-item-wrapper" key={c._id}>
 															<ClusterItem clusterInfo={c} id={c._id} type={true} />
 														</div>
 													);
-												}
-										  })
-										: cluster.map((c) => {
-												if (c.disRep !== null) {
+												})
+										: cluster
+												.filter((c) => {
+													return c.disRep !== null;
+												})
+												.map((c) => {
 													return (
 														<div id={c._id} className="option-item-wrapper" key={c._id}>
 															<ClusterItem clusterInfo={c} id={c._id} type={false} />
 														</div>
 													);
-												}
-										  })}
+												})}
 								</div>
 							) : (
 								<div>

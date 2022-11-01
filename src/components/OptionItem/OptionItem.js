@@ -64,7 +64,7 @@ const OptionItem = ({ optionInfo, id }) => {
 				<div className="option-text">{text}</div>
 				<div className="tags">
 					{similar.map((option) => {
-						return <div className="similarTag tag">{option}</div>;
+						return <div className="keyword-item">{option}</div>;
 					})}
 				</div>
 				{/* <div className="likes-container"> Use in Verification stage
