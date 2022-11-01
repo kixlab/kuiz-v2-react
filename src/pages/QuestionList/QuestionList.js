@@ -18,11 +18,9 @@ const QuestionList = (props) => {
 
 	const setCtype = () => {
 		if (cid != null || cid != "")
-			axios
-				.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid)
-				.then((res) => {
-					dispatch(enrollClass({ cid: cid, cType: res.data.cType }));
-				});
+			axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res) => {
+				dispatch(enrollClass({ cid: cid, cType: res.data.cType }));
+			});
 	};
 	const checkValidUser = () => {
 		axios
@@ -31,43 +29,34 @@ const QuestionList = (props) => {
 				uid: uid,
 			})
 			.then((res) => {
-				console.log("RES:", res.data);
+				// console.log("RES:", res.data);
 				if (res.data.inclass) {
-					console.log("case11");
-					axios
-						.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid)
-						.then((res2) => {
-							console.log("RES2:", res2.data);
-							dispatch(enrollClass({ cid: cid, cType: res2.data.cType }));
-							if (!res2.data.cType) {
-								console.log("case2");
-								navigate("/" + res.data.cid + "/qlist");
-							}
-							getQuestionList(res.data.cid);
-						});
+					// console.log("case11");
+					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res2) => {
+						// dispatch(enrollClass({ cid: cid, cType: res2.data.cType }));
+						// if (!res2.data.cType) {
+						// 	navigate("/" + res.data.cid + "/qlist");
+						// }
+						getQuestionList(res.data.cid);
+					});
 				} else {
 					if (!res.data.enrolled) {
-						console.log("case3");
+						// console.log("case3");
 						navigate("/enroll");
 					} else {
 						axios
-							.get(
-								`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` +
-									res.data.cid
-							)
+							.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + res.data.cid)
 							.then((res2) => {
-								dispatch(
-									enrollClass({ cid: res.data.cid, cType: res2.data.cType })
-								);
-								if (res2.data.cType) {
-									console.log("case4");
-									navigate("/" + res.data.cid);
-								} else {
-									console.log("case5");
-									navigate("/" + res.data.cid + "/qlist");
-								}
-								console.log("CIDtogetQ:", res.data.cid);
-								getQuestionList(res.data.cid);
+								// dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType }));
+								// if (res2.data.cType) {
+								// 	console.log("case4");
+								// 	navigate("/" + res.data.cid);
+								// } else {
+								// 	console.log("case5");
+								// 	navigate("/" + res.data.cid + "/qlist");
+								// }
+								// console.log("CIDtogetQ:", res.data.cid);
+								getQuestionList(res2.data.cid);
 							});
 					}
 				}
@@ -86,10 +75,7 @@ const QuestionList = (props) => {
 				const middleware = await Promise.all(
 					res.data.qstems.problemList.map(async (q, i) => {
 						await axios
-							.get(
-								`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` +
-									q._id
-							)
+							.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
 							.then(async (res) => {
 								if (cType) {
 									if (res.data.data.qinfo.cluster.length < 3) {
@@ -97,18 +83,15 @@ const QuestionList = (props) => {
 										return await false;
 									} else {
 										await axios
-											.post(
-												`${process.env.REACT_APP_BACK_END}/question/load/clusters`,
-												{
-													clusters: res.data.data.qinfo.cluster,
-												}
-											)
+											.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
+												clusters: res.data.data.qinfo.cluster,
+											})
 											.then(async (res2) => {
 												const clusters = await res2.data.clusters;
-												const ans = clusters.filter((c) => c.ansExist).length
-												const dis = clusters.filter((c) => c.disExist).length
-												const ov = clusters.filter((c) => c.ansExist && c.disExist).length
-												if (ans + dis - ov >=4) {
+												const ans = clusters.filter((c) => c.ansExist).length;
+												const dis = clusters.filter((c) => c.disExist).length;
+												const ov = clusters.filter((c) => c.ansExist && c.disExist).length;
+												if (ans + dis - ov >= 4) {
 													valid[i] = true;
 													return await true;
 												} else {
@@ -140,12 +123,9 @@ const QuestionList = (props) => {
 						return false;
 					} else {
 						await axios
-							.post(
-								`${process.env.REACT_APP_BACK_END}/question/load/clusters`,
-								{
-									clusters: res.data.data.qinfo.cluster,
-								}
-							)
+							.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
+								clusters: res.data.data.qinfo.cluster,
+							})
 							.then(async (res2) => {
 								const clusters = res2.data.clusters;
 								if (
@@ -181,37 +161,33 @@ const QuestionList = (props) => {
 		<div id="question-list-solve">
 			<div id="question-list-functions">
 				<div style={{ textDecoration: "none", color: "#000000" }}>
-					<Button navigateBy={moveToCreateOption} text="문제 만들러 가기" />
+					<Button navigateBy={moveToCreateOption} text="Create New Stem" />
 				</div>
 			</div>
 			<div id="question-list-header">
 				<div> No.</div>
-				<div> 문제 내용</div>
-				<div> 수정 시각</div>
+				<div> Question</div>
+				<div> Last Updated</div>
 			</div>
 
 			{questionList.filter((q, j) => validList[j]).length === 0 ? (
-				<div className="no-question-msg">풀 수 있는 문제가 아직 없습니다.</div>
+				<div className="no-question-msg">There are no questions to solve yet.</div>
 			) : (
 				<div>
 					{questionList
 						.filter((q, j) => validList[j])
 						.map((question, i) => (
 							<Link
+								key={question._id}
 								to={"/" + cid + "/question/" + question._id}
-								style={{ textDecoration: "none", color: "#000000" }}
-							>
+								style={{ textDecoration: "none", color: "#000000" }}>
 								<div id="question-list-wrapper">
 									<QuestionListItem2
 										id={question._id}
 										number={i + 1}
 										title={question.raw_string}
 										options={question.options}
-										date={
-											question.updatedAt
-												? question.updatedAt
-												: question.createdAt
-										}
+										date={question.updatedAt ? question.updatedAt : question.createdAt}
 										valid={validList.filter((q, j) => validList[j])[i]}
 									/>
 								</div>

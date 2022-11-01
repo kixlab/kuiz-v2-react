@@ -1,16 +1,4 @@
 #option-create-wrapper {
-	display: grid;
-	grid-template-rows: 36px auto;
-	place-items: stretch;
-	row-gap: 16px;
-	.introduce-content {
-		min-height: 100px;
-	}
-
-	#question-nav {
-		color: #3d73dd;
-	}
-
 	#question-screen {
 		background-color: white;
 		box-shadow: rgba(0, 0, 0, 0.25) 0 4px 4px;
@@ -20,44 +8,94 @@
 		display: grid;
 		grid-template-rows: 20px auto 1fr;
 		row-gap: 24px;
-		height: 90%;
+		min-height: 90%;
+	}
+
+	.section {
+		padding: 16px;
+		.header {
+			font-size: 20px;
+			font-weight: 700;
+			margin-bottom: 16px;
+		}
+		.sub-header {
+			font-size: 16px;
+			font-weight: 500;
+			margin-right: 8px;
+		}
+	}
+	#options-wrapper {
+		display: grid;
+		height: 100%;
+		grid-template-columns: 200px 1fr;
+		border: 1px solid gray;
+
+		#option-create {
+			input {
+				width: 100%;
+				padding: 4px 8px;
+				font-size: 1em;
+			}
+		}
+
+		#keywords-wrapper {
+			#keywords-container {
+				display: flex;
+				align-items: flex-start;
+				flex-direction: column;
+
+				.keyword-item {
+					background-color: #3d73dd;
+					padding: 8px;
+					border-radius: 8px;
+					color: white;
+					cursor: pointer;
+				}
+			}
+		}
+
+		#options {
+			display: grid;
+			// grid-template-rows: 1fr 200px;
+			#options-list {
+				overflow-y: auto;
+			}
+		}
+
+		.option-container {
+			height: inherit;
+			overflow-y: auto;
+			margin-bottom: 16px;
+		}
+	}
+
+	#clustering-wrapper {
+		#my-option {
+			.section-element {
+				display: flex;
+				align-items: center;
+			}
+
+			.keyword-item {
+				background-color: #3d73dd;
+				color: white;
+				padding: 4px 8px;
+				border-radius: 4px;
+			}
+		}
+		.view-mode-wrapper {
+			width: 100%;
+			justify-content: flex-end;
+			.view-mode {
+				margin: 0 8px;
+			}
+		}
 	}
 
 	.option-box {
 		display: flex;
 		justify-content: space-between;
 		min-height: 50%;
-	}
-	.option-container {
-		border: 1px solid #3d73dd;
-		border-radius: 10px;
-		width: 45%;
-		padding: 2%;
-		height: inherit;
-		overflow-y: auto;
-		// height: 95%;
-		.my-option{
-			border: #6C6B6B 1.5px solid;
-			color: #6C6B6B;
-			padding: 8px;
-			border-radius: 5px;
-			.label{
-				font-size: xx-small;
-				color: #6C6B6B;
-			}
-		}
-		.dependency-title{
-			margin-bottom: 7px;
-			color: #555555;
-			font-weight: 500;
-			font-size: 18px;
-		}
-		.dependency-container{
-			background-color: #F2F5F8;
-			padding: 8px 8px 5px 8px;
-			border-radius: 10px;
-			margin-bottom: 5px;
-		}
 	}
 
 	#submit-button {

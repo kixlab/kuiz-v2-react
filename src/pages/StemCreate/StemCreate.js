@@ -20,14 +20,9 @@ const StemCreate = (props) => {
 
 	const setCtype = () => {
 		if (cid != null || cid != "")
-			axios
-				.get(
-					`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` +
-						cid
-				)
-				.then((res) => {
-					dispatch(enrollClass({ cid: cid, cType: res.data.cType }));
-				});
+			axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res) => {
+				dispatch(enrollClass({ cid: cid, cType: res.data.cType }));
+			});
 	};
 
 	const [msg, setMsg] = useState("");
@@ -43,17 +38,14 @@ const StemCreate = (props) => {
 		<div id="question-screen-wrapper">
 			<div id="question-nav"></div>
 			<div id="question-screen">
-				<Link
-					to={"/" + cid}
-					style={{ textDecoration: "none", color: "#000000" }}
-				>
+				<Link to={"/" + cid} style={{ textDecoration: "none", color: "#000000" }}>
 					<div id="return-button">
 						<i className="fa-solid fa-arrow-left"></i> 목록으로 돌아가기
 					</div>
 				</Link>
 				<div>
 					<div>
-						<h2>새로운 문제 만들기</h2>
+						<h2>Create new Question Stem</h2>
 					</div>
 					<div>
 						<QstemEditor

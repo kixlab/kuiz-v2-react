@@ -1,14 +1,15 @@
 .custom-button {
-  background: none;
-  border: none;
-  background-color: white;
-  color: black;
-  box-shadow: rgba(0, 0, 0, 0.167) 0px 4px 8px;
-  font-size: 18px;
-  min-width: 200px;
-  height: 48px;
-  border-radius: 18px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
+	background: none;
+	border: none;
+	background-color: white;
+	color: black;
+	box-shadow: rgba(0, 0, 0, 0.167) 0px 4px 8px;
+	font-size: 16px;
+	min-width: 200px;
+	min-height: 48px;
+	border-radius: 8px;
+	display: grid;
+	place-items: center;
+	cursor: pointer;
+	padding: 12px;
 }

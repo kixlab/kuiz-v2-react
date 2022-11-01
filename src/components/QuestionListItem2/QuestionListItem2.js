@@ -3,15 +3,13 @@ import React, { useEffect, useState } from "react";
 import "./QuestionListItem2.scss";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
-import 'dayjs/locale/ko'
+import "dayjs/locale/en";
 var relativeTime = require("dayjs/plugin/relativeTime");
 
-
 dayjs.extend(relativeTime);
-dayjs.locale('ko');
+dayjs.locale("en");
 
 const QuestionListItem2 = (props) => {
-
 	const cType = useSelector((state) => state.userInfo.cType);
 
 	const formatDate = (date) => {
@@ -23,22 +21,22 @@ const QuestionListItem2 = (props) => {
 			const diff = (now.getTime() - createdAt.getTime()) / 60000;
 			const diffInt = Math.trunc(diff);
 
-			if (diffInt > 10080) {
-				const dateStringArray = createdAt.toString().split(" ");
-				const mmm = dateStringArray[1];
-				const month = createdAt.getMonth()
+			// if (diffInt > 10080) {
+			// 	const dateStringArray = createdAt.toString().split(" ");
+			// 	const mmm = dateStringArray[1];
+			// 	const month = createdAt.getMonth()
 
-				const dd = dateStringArray[2];
-				const HH = dateStringArray[4].substring(0, 2); // Hour in 24-hour format
-				const hh = HH > 12 ? String(HH - 12) : HH; // Hour in 12-hour format
-				const mm = dateStringArray[4].substring(3, 5);
-				const period = HH > 11 ? "PM" : "AM";
-				const exactDate =
-					 month+"/" + dd  +" "+ hh + ":" + mm +" "+period;
-				return exactDate;
-			} else {
-				return dayjs(date).fromNow();
-			}
+			// 	const dd = dateStringArray[2];
+			// 	const HH = dateStringArray[4].substring(0, 2); // Hour in 24-hour format
+			// 	const hh = HH > 12 ? String(HH - 12) : HH; // Hour in 12-hour format
+			// 	const mm = dateStringArray[4].substring(3, 5);
+			// 	const period = HH > 11 ? "PM" : "AM";
+			// 	const exactDate =
+			// 		 month+"/" + dd  +" "+ hh + ":" + mm +" "+period;
+			// 	return exactDate;
+			// } else {
+			return dayjs(date).fromNow();
+			// }
 		}
 	};
 	return (

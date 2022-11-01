@@ -1,14 +1,15 @@
-.drag{
+.drag {
 	box-shadow: 2px 2px 2px gray;
 }
 // .undrag{
 // 	box-shadow: 2px 2px 2px gray;
 // }
 .cluster-item {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	
+	width: 100%;
+	// display: flex;
+	// flex-direction: row;
+	// justify-content: space-between;
+
 	.similarTag {
 		background-color: #84e58d;
 	}
@@ -16,22 +17,8 @@
 		background-color: #f78e8e;
 	}
 
-	.option-components {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-bottom: 8px;
-		padding-top: 8px;
-		width: 100%;
-	}
-
 	.extra-wrapper {
 		align-self: flex-end;
-	}
-	.option-text {
-		vertical-align: middle;
 	}
 
 	.answer-label {
@@ -43,46 +30,17 @@
 		color: #3d73dd;
 	}
 
-	.tags-container {
-		display: flex;
-		flex-wrap: wrap;
-		.tag {
-			border-radius: 4px;
-			padding: 4px 6px;
-			margin: 0 5px 8px 0;
-			font-size: 10px;
-		}
-	}
-
-	.cluster-show-button {
-		background: none;
-		border: none;
-		i {
-			margin-left: 8px;
-		}
-	}
-
 	.cluster-subitems {
-		margin: 4px 0;
+		margin-left: 20px;
 	}
-	.cluster-container{
+	.cluster-container {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 	}
-	.dragger{
-		background-color: #EFEFEF;
+	.dragger {
+		background-color: #efefef;
 		border-radius: 0px 4px 4px 0px;
 		padding-top: 10px;
 	}
-}
-
-#answer-wrapper {
-	border: 2px solid #06c71f;
-	border-radius: 5px;
-}
-
-#distractor-wrapper {
-	border: 2px solid #3d73dd;
-	border-radius: 5px;
 }

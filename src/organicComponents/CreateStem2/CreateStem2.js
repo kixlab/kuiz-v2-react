@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg";
-import QstemEditor2 from "../../organicComponents/QstemEditor2/QstemEditor2";
-import OptionCreate2 from "../../organicComponents/OptionCreate2/OptionCreate2";
+import "react-draft-wysiwyg";
+import QstemEditor2 from "../QstemEditor2/QstemEditor2";
+import OptionCreate2 from "../OptionCreate2/OptionCreate2";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -47,33 +47,26 @@ const StemCreate2 = (props) => {
 			alert("Please check one answer");
 			return;
 		}
-		const blankAnswerOptionExists = optionList.find(
-			(option) => option.option_text === ""
-		);
+		const blankAnswerOptionExists = optionList.find((option) => option.option_text === "");
 		if (blankAnswerOptionExists) {
 			alert("Please fill in any blank answer options");
 			return;
 		}
 		if (explanation === null || explanation.match(/^\s*$/) !== null) {
-			alert(
-				"Please add an explanation about why the chosen option is the correct answer."
-			);
+			alert("Please add an explanation about why the chosen option is the correct answer.");
 			return;
 		}
 		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/question/organic/question/create`,
-				{
-					optionList: optionList,
-					qInfo: newQobj,
-					cid: cid,
-					explanation: explanation,
-				}
-			)
+			.post(`${process.env.REACT_APP_BACK_END}/question/organic/question/create`, {
+				optionList: optionList,
+				qInfo: newQobj,
+				cid: cid,
+				explanation: explanation,
+			})
 			.then((res) => {
 				if (res.data.success) {
 					console.log("success!");
-                    navigate("/"+cid+"/qlist")
+					navigate("/" + cid + "/qlist");
 				}
 			});
 	}
@@ -88,17 +81,13 @@ const StemCreate2 = (props) => {
 			alert("Please check one answer");
 			return;
 		}
-		const blankAnswerOptionExists = optionList.find(
-			(option) => option.option_text === ""
-		);
+		const blankAnswerOptionExists = optionList.find((option) => option.option_text === "");
 		if (blankAnswerOptionExists) {
 			alert("Please fill in any blank answer options");
 			return;
 		}
 		if (explanation === null || explanation.match(/^\s*$/) !== null) {
-			alert(
-				"Please add an explanation about why the chosen option is the correct answer."
-			);
+			alert("Please add an explanation about why the chosen option is the correct answer.");
 			return;
 		}
 	};
@@ -107,10 +96,7 @@ const StemCreate2 = (props) => {
 		<div id="question-screen-wrapper">
 			<div id="question-nav"></div>
 			<div id="question-screen">
-				<Link
-					to={"/" + cid + "/qlist"}
-					style={{ textDecoration: "none", color: "#000000" }}
-				>
+				<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
 					<div id="return-button">
 						<i className="fa-solid fa-arrow-left"></i> 목록으로 돌아가기
 					</div>

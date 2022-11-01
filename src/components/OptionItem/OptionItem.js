@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./OptionItem.scss";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useDrag } from "react-dnd";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+
 import axios from "axios";
 import { pink } from "@mui/material/colors";
 
@@ -12,8 +15,8 @@ const OptionItem = ({ optionInfo, id }) => {
 	const stat = useSelector((state) => state.pageStat.value);
 	const isAnswer = optionInfo.is_answer;
 	const text = optionInfo.option_text;
-	const similar = optionInfo.plausible.similar;
-	const difference = optionInfo.plausible.difference;
+	// const similar = optionInfo.plausible.similar;
+	// const difference = optionInfo.plausible.difference;
 	const explanation = optionInfo.explanation;
 	const oid = optionInfo._id;
 	const [like, setLike] = useState();
@@ -23,13 +26,6 @@ const OptionItem = ({ optionInfo, id }) => {
 		setDetail(!detail);
 	};
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const [{ isDragging }, drag] = useDrag(() => ({
-		type: "option",
-		item: { id: id },
-		collect: (monitor) => ({
-			isDragging: !!monitor.isDragging(),
-		}),
-	}));
 
 	const userLike = (arr, user) => {
 		if (arr.includes(user)) {
@@ -42,16 +38,18 @@ const OptionItem = ({ optionInfo, id }) => {
 
 	const doLike = () => {
 		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`,
-				{
-					oid: optionInfo._id,
-					isAns: optionInfo.is_answer,
-					uid: uid,
-					ocid: optionInfo.cluster[-1],
-				}
-			)
+			.post(`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`, {
+				oid: optionInfo._id,
+				isAns: optionInfo.is_answer,
+				uid: uid,
+				ocid: optionInfo.cluster[-1],
+			})
 			.then((res) => {
+				if (like) {
+					setLikeNum(likeNum - 1);
+				} else {
+					setLikeNum(likeNum + 1);
+				}
 				setLike(!like);
 			});
 	};
@@ -61,38 +59,27 @@ const OptionItem = ({ optionInfo, id }) => {
 	}, []);
 
 	return (
-		<div
-			id={isAnswer ? "answer-wrapper" : "distractor-wrapper"}
-			className="option-item"
-		>
-			<div
-				ref={drag}
-				style={{ border: isDragging ? "5px solid pink" : "0px" }}
-				className="option-components"
-			>
-				<div className={isAnswer ? "answer-label" : "distractor-label"}>
-					{isAnswer ? "Answer" : "Distractor"}
-				</div>
+		<div className={isAnswer ? "answer-wrapper option-item" : "distractor-wrapper option-item"}>
+			<div className="option-components">
 				<div className="option-text">{text}</div>
-				<div className="tags">
-					<div className="tags-container">
-						{similar.map((option) => {
-							return <div className="similarTag tag">{option}</div>;
-						})}
+				<div className="tags"></div>
+				<div className="likes-container">
+					<div className="like" onClick={(e) => doLike()}>
+						{like ? (
+							<ThumbUpAltIcon fontSize="small" />
+						) : (
+							<ThumbUpOffAltIcon color="action" fontSize="small" />
+						)}
+						<div className="count">{likeNum}</div>
 					</div>
-					<div className="tags-container">
-						{difference.map((option) => {
-							return <div className="differenceTag tag">{option}</div>;
-						})}
+					<div className="like" onClick={(e) => doLike()}>
+						{like ? (
+							<ThumbDownAltIcon fontSize="small" />
+						) : (
+							<ThumbDownOffAltIcon color="action" fontSize="small" />
+						)}
+						<div className="count">{likeNum}</div>
 					</div>
-				</div>
-				<div className="likes-container" onClick={(e) => doLike()}>
-					{like ? (
-						<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
-					) : (
-						<FavoriteBorderIcon color="action" fontSize="small" />
-					)}
-					{optionInfo.liked.length}
 				</div>
 				{/* {detail?<div>{explanation}<div onClick={changeDetailView}>hide</div></div>:<div onClick={changeDetailView}>0</div>} */}
 			</div>

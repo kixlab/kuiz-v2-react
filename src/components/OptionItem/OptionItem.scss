@@ -1,4 +1,8 @@
 .option-item {
+	margin-top: 12px;
+	background-color: rgb(235, 235, 235);
+	padding: 12px 16px;
+
 	.similarTag {
 		background-color: #84e58d;
 	}
@@ -8,7 +12,7 @@
 	.option-components {
 		display: flex;
 		justify-content: space-between;
-		padding: 8px 10px;
+		align-items: center;
 	}
 
 	.extra-wrapper {
@@ -16,15 +20,6 @@
 	}
 	.option-text {
 		vertical-align: middle;
-	}
-
-	.answer-label {
-		font-size: xx-small;
-		color: #06c71f;
-	}
-	.distractor-label {
-		font-size: xx-small;
-		color: #3d73dd;
 	}
 
 	.tags-container {
@@ -41,16 +36,15 @@
 	.likes-container {
 		display: flex;
 		align-items: center;
-		width: 30px;
+		.like {
+			display: flex;
+			justify-content: center;
+			padding: 4px 8px;
+			border: 1px solid black;
+			width: 36px;
+			.count {
+				margin-left: 4px;
+			}
+		}
 	}
-}
-
-#answer-wrapper {
-	border: 2px solid #06c71f;
-	border-radius: 5px;
-}
-
-#distractor-wrapper {
-	border: 2px solid #3d73dd;
-	border-radius: 5px;
 }

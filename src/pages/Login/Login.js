@@ -1,63 +1,14 @@
 import React, { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useSelector, useDispatch } from "react-redux";
-import {
-	loginUser,
-	logoutUser,
-	enrollClass,
-} from "../../features/authentication/userSlice";
-import Button from '@mui/material/Button';
+import { loginUser, logoutUser, enrollClass } from "../../features/authentication/userSlice";
+import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { setUserEmail } from "../../features/authentication/userSlice";
 import axios from "axios";
 
-import kakao from "../../assets/kakao_login_medium_wide.png";
 import "./Login.scss";
 
-const Login2 = (props) => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const [user, setUser] = useState({});
-	const uInfo = useSelector((state) => state.userInfo.userInfo);
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-	const [email, setEmail] = useState();
-
-	const REDIRECT_URI = `${process.env.REACT_APP_FRONT_END}/kakaologin`;
-
-	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-	const saveUserEmail = () => {
-		console.log("EMAIL:", email);
-		dispatch(setUserEmail(email));
-	};
-
-	useEffect(() => {
-		// props.funcNav(false)
-		if (isLoggedIn) {
-			if (uInfo !== {}) {
-				if (uInfo.classes.length === 0) {
-					navigate("/enroll");
-				} else {
-					navigate("/" + uInfo.classes[0]);
-				}
-			}
-		}
-	});
-	return (
-		<div id="login">
-			<h2>Welcome to KUIZ!</h2>
-			<div id="email-section">
-				<div>이메일 주소를 입력하세요:</div>
-				<input value={email} onChange={(e) => setEmail(e.target.value)} />
-			</div>
-			<div onClick={(e) => saveUserEmail()} className="login" id="kakao-login">
-				<a href={KAKAO_AUTH_URL}>
-					<img src={kakao}></img>
-				</a>
-			</div>
-		</div>
-	);
-};
 const Login = (props) => {
 	function handleCallbackResponse(response) {
 		var userObject = jwt_decode(response.credential);
@@ -89,16 +40,16 @@ const Login = (props) => {
 	const [user, setUser] = useState({});
 	const uInfo = useSelector((state) => state.userInfo.userInfo);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-	const [agree, setAgree] = useState(true)
+	const [agree, setAgree] = useState(true);
 	useEffect(() => {
 		/*global google*/
 		if (isLoggedIn) {
-			console.log("Logged In!")
 			if (uInfo !== {}) {
+				console.log(uInfo.classes);
 				if (uInfo.classes.length === 0) {
 					navigate("/enroll");
-				} else {
-					navigate("/" + uInfo.classes[0]);
+					// } else {
+					// 	navigate("/" + uInfo.classes[0]);
 				}
 			}
 		} else {
@@ -106,7 +57,7 @@ const Login = (props) => {
 				client_id: process.env.REACT_APP_CLIENT_ID,
 				callback: handleCallbackResponse,
 			});
-	
+
 			google.accounts.id.renderButton(document.getElementById("signInDiv"), {
 				theme: "outline",
 				size: "large",
@@ -115,15 +66,13 @@ const Login = (props) => {
 	}, []);
 	return (
 		<div className="login">
-			<div id="main-logo" >KUIZ</div>
+			<div id="main-logo">KUIZ</div>
 			{/* <div id="intro">Welcome to KUIZ!!</div> */}
 			<div id="clause">
-				안내사항 어쩌구저쩌구
-				[수집하는 구글 계정 정보]
-				구글 계정 이메일 주소, 사용자 이름, 프로필 이미지 
+				안내사항 어쩌구저쩌구 [수집하는 구글 계정 정보] 구글 계정 이메일 주소, 사용자 이름, 프로필
+				이미지
 			</div>
 			{agree && <div id="signInDiv"></div>}
-			
 		</div>
 	);
 };

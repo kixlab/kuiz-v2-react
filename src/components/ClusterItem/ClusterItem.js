@@ -3,173 +3,142 @@ import { useSelector, useDispatch } from "react-redux";
 import { changeOptionSelection } from "../../features/optionSelection/optionSlice";
 import { changePageStat } from "../../features/optionSelection/pageStatSlice";
 import "./ClusterItem.scss";
-import { useDrag } from "react-dnd";
+// import { useDrag } from "react-dnd";
+
 import axios from "axios";
-import OptionInCluster from "../OptionInCluster/OptionInCluster";
-import { pink } from "@mui/material/colors";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import OptionItem from "../OptionItem/OptionItem";
+
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 
 const ClusterItem = ({ clusterInfo, id, type, isDraggable }) => {
-	const uid = useSelector((state) => state.userInfo.userInfo._id)
-	const [like, setLike] = useState()
-	const [likeNum, setLikeNum] = useState()
+	const uid = useSelector((state) => state.userInfo.userInfo._id);
+	const [like, setLike] = useState();
+	const [likeNum, setLikeNum] = useState();
 	const [detail, setDetail] = useState(false);
 	const [optionList, setOptionList] = useState([]);
-	const [repOption, setRepOption] = useState()
-	const repOid = type?clusterInfo.ansRep._id : clusterInfo.disRep._id
-	const [showLike, setShowLike] = useState(type?(clusterInfo.ansList.length <=1?false:true):(clusterInfo.disList.length <=1?false:true))
+	const [repOption, setRepOption] = useState();
+	const repOid = type ? clusterInfo.ansRep._id : clusterInfo.disRep._id;
+	const [showLike, setShowLike] = useState(
+		type
+			? clusterInfo.ansList.length <= 1
+				? false
+				: true
+			: clusterInfo.disList.length <= 1
+			? false
+			: true
+	);
 	const draggable = isDraggable;
-	const rep = type?clusterInfo.ansRep:clusterInfo.disRep
+	const rep = type ? clusterInfo.ansRep : clusterInfo.disRep;
 
-	const [{ isDragging }, drag] = useDrag(() => ({
-		type: "option",
-		item: { id: id, type: type },
-		collect: (monitor) => ({
-			isDragging: !!monitor.isDragging(),
-		}),
-	}));
-	
+	// const [{ isDragging }, drag] = useDrag(() => ({
+	// 	type: "option",
+	// 	item: { id: id, type: type },
+	// 	collect: (monitor) => ({
+	// 		isDragging: !!monitor.isDragging(),
+	// 	}),
+	// }));
+
 	const doLike = () => {
 		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`,
-				{
-					oid: repOption._id,
-					isAns: repOption.is_answer,
-					uid: uid,
-					ocid: repOption.cluster[-1],
-				}
-			)
+			.post(`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`, {
+				oid: repOption._id,
+				isAns: repOption.is_answer,
+				uid: uid,
+				ocid: repOption.cluster[-1],
+			})
 			.then((res) => {
-				if(like){
-					setLikeNum(likeNum-1)
+				if (like) {
+					setLikeNum(likeNum - 1);
 				} else {
-					setLikeNum(likeNum+1)
+					setLikeNum(likeNum + 1);
 				}
 				setLike(!like);
-				
 			});
 	};
 
 	const getOptions = () => {
 		axios
 			.get(
-				`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?ocid=` +
-					clusterInfo._id
+				`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?ocid=` + clusterInfo._id
 			)
 			.then((res) => {
-				if (type) {
-					const newOptionList = res.data.ansList
-					setOptionList(newOptionList);
-					if(newOptionList.length>1){
-						setShowLike(true);
-					} else {
-						setShowLike(false);
-					}
+				const newOptionList = type ? res.data.ansList : res.data.disList;
+				setOptionList(newOptionList);
 
-					const newRepOption = newOptionList.filter(o => {
-						if(o._id === repOid) {
-							return o
-						}
-					})
-					setRepOption(newRepOption[0])
-					if(newRepOption[0].liked.includes(uid)){
-						setLike(true);
-					} else {
-						setLike(false);
-					}
-					setLikeNum(newRepOption[0].liked.length)
+				const newRepOption = newOptionList.filter((o) => o._id === repOid);
+				setRepOption(newRepOption[0]);
+				if (newRepOption[0].liked.includes(uid)) {
+					setLike(true);
 				} else {
-					const newOptionList = res.data.disList
-					setOptionList(newOptionList);
-					if(newOptionList.length>1){
-						setShowLike(true)
-					} else {
-						setShowLike(false)
-					}
-					const newRepOption = newOptionList.filter(o => o._id === repOid)
-					setRepOption(newRepOption[0])
-					if(newRepOption[0].liked.includes(uid)){
-						setLike(true)
-					} else {
-						setLike(false)
-					}
-					setLikeNum(newRepOption[0].liked.length)
+					setLike(false);
 				}
-				setDetail(!detail);
+				setLikeNum(newRepOption[0].liked.length);
 			});
 	};
+	// console.log(clusterInfo);
+	// getOptions();
+
+	useEffect(() => {
+		getOptions();
+	}, []);
 
 	return (
 		<div
-			id={type ? "answer-wrapper" : "distractor-wrapper" }
-			className={`cluster-item ${draggable?"drag":"undrag"}`}
-			ref={draggable?drag:null}
-			style={{ border: isDragging && "5px solid pink" }}
+			// id={type ? "answer-wrapper" : "distractor-wrapper"}
+			className="cluster-item"
+			// ref={draggable ? drag : null}
+			// style={{ border: isDragging && "5px solid pink" }}
 		>
-			<div
-				// ref={draggable?drag:null}
-				// style={{ border: isDragging ? "5px solid pink" : "0px" }}
-				className="option-components"
-				
-			>
-				<div className={type ? "answer-label" : "distractor-label"}>
-					{type ? "Answer" : "Distractor"}
-				</div>
-				<div className="cluster-container">
-					<div className="option-text">
-						{rep.option_text}
-					</div>
+			<div className={`option-item`}>
+				<div className="option-components">
+					<div className="option-text">{rep.option_text}</div>
 					<div className="tags">
-						<div className="tags-container">
-							
-							{rep && rep.plausible.similar.map((option) => {
-								return <div className="similarTag tag">{option}</div>;
-							})}
+						{/* <div className="tags-container">
+							{rep &&
+								rep.plausible.similar.map((option) => {
+									return <div className="similarTag tag">{option}</div>;
+								})}
 						</div>
 						<div className="tags-container">
-							{rep && rep.plausible.difference.map((option) => {
-								return <div className="differenceTag tag">{option}</div>;
-							})}
-						</div>
+							{rep &&
+								rep.plausible.difference.map((option) => {
+									return <div className="differenceTag tag">{option}</div>;
+								})}
+						</div> */}
 					</div>
-					{detail && 
-						(showLike && <div onClick={(e) => doLike()} className="likes-container">
+
+					<div onClick={(e) => doLike()} className="likes-container">
+						<div className="like" onClick={(e) => doLike()}>
 							{like ? (
-								<FavoriteIcon sx={{ color: pink[500] }} fontSize="small" />
+								<ThumbUpAltIcon fontSize="small" />
 							) : (
-								<FavoriteBorderIcon color="action" fontSize="small" />
+								<ThumbUpOffAltIcon color="action" fontSize="small" />
 							)}
-							{likeNum}
-						</div>)}
-				</div>
-				
-				
-				
-				{showLike && <button onClick={(e) => getOptions()} className="cluster-show-button">
-					내용이 같은 다른 선택지 보기
-					{detail ? (
-						<i className="fa-solid fa-chevron-up"></i>
-					) : (
-						<i className="fa-solid fa-chevron-down"></i>
-					)}
-				</button>}
-				{detail ? (
-					<div className="cluster-subitems">
-						{optionList.map((option) => {
-							if(option._id != repOid){
-								return <OptionInCluster option={option} />
-							}
-						})}
+							<div className="count">{likeNum}</div>
+						</div>
+						<div className="like" onClick={(e) => doLike()}>
+							{like ? (
+								<ThumbDownAltIcon fontSize="small" />
+							) : (
+								<ThumbDownOffAltIcon color="action" fontSize="small" />
+							)}
+							<div className="count">{likeNum}</div>
+						</div>
 					</div>
-				) : (
-					<></>
-				)}
-				{/* <div>{clusterInfo._id}</div> */}
+				</div>
 			</div>
-			{draggable && <div className="dragger"><DragIndicatorIcon color="disabled"/></div>}
+
+			<div className="cluster-subitems">
+				{optionList.map((option) => {
+					if (option._id != repOid) {
+						return <OptionItem optionInfo={option} key={option._id} />;
+					}
+				})}
+			</div>
 		</div>
 	);
 };

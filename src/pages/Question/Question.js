@@ -127,77 +127,93 @@ const Question = (props) => {
 
 	const reportErr = () => {};
 
-	return (
-		<div id="question-screen-wrapper">
-			<div id="question-screen">
-				<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
-					<div id="return-button">
-						<i className="fa-solid fa-arrow-left"></i> Return to Question List
-					</div>
-				</Link>
-				{qinfo && (
-					<div
-						dangerouslySetInnerHTML={{
-							__html: draftToHtml(JSON.parse(qinfo.stem_text)),
-						}}
-						className="introduce-content"
-					/>
-				)}
-
-				<div id="question-options">
-					{options &&
-						options.map((option, index) => (
-							<div className="question-option-item" id={background(index)} key={index}>
-								<input
-									key={index}
-									checked={selected === index}
-									type="radio"
-									onChange={(e) => {
-										setSelected(index);
-										setIsSolved(true);
-									}}
-									id={option.option_text}
-								/>
-								<label htmlFor={option.option_text}>{option.option_text}</label>
-							</div>
-						))}
+	return ansVisible ? (
+		<div id="question-screen">
+			<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
+				<div id="return-button">
+					<i className="fa-solid fa-arrow-left"></i> Return to Question List
 				</div>
+			</Link>
+			{qinfo && (
+				<div
+					dangerouslySetInnerHTML={{
+						__html: draftToHtml(JSON.parse(qinfo.stem_text)),
+					}}
+					className="introduce-content"
+				/>
+			)}
 
-				<div id="question-explanation">
-					<button id="hide-answer" onClick={() => checkAnswer()} disabled={!isSolved}>
-						Check Answer
-						{ansVisible ? (
-							<i className="fa-solid fa-chevron-up"></i>
-						) : (
-							<i className="fa-solid fa-chevron-down"></i>
-						)}
-					</button>
-					<button id="shuffle-answer" onClick={() => shuffleOptions()}>
-						Shuffle Answers
-					</button>
+			<div>{qinfo.explanation}</div>
+		</div>
+	) : (
+		<div id="question-screen">
+			<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
+				<div id="return-button">
+					<i className="fa-solid fa-arrow-left"></i> Return to Question List
+				</div>
+			</Link>
+			{qinfo && (
+				<div
+					dangerouslySetInnerHTML={{
+						__html: draftToHtml(JSON.parse(qinfo.stem_text)),
+					}}
+					className="introduce-content"
+				/>
+			)}
 
-					<button id="report-error" onClick={() => shuffleOptions()}>
-						Report Question Error
-					</button>
-					{ansVisible && (
-						<div id="option-wrapper">
-							<div>answer: {options[answer].option_text}</div>
-							{options.map((option) => {
-								return (
-									<div className="answer-option">
-										<div className="option-text">{option.option_text}</div>
-										<div className="option-exp">{option.explanation}</div>
-									</div>
-								);
-							})}
+			<div id="question-options">
+				{options &&
+					options.map((option, index) => (
+						<div className="question-option-item" id={background(index)} key={index}>
+							<input
+								key={index}
+								checked={selected === index}
+								type="radio"
+								onChange={(e) => {
+									setSelected(index);
+									setIsSolved(true);
+								}}
+								id={option.option_text}
+							/>
+							<label htmlFor={option.option_text}>{option.option_text}</label>
 						</div>
-					)}
-				</div>
-
-				<Link to={"/" + cid + "/question/" + qid + "/create"}>
-					<button className="nav-button">선택지 추가하기</button>
-				</Link>
+					))}
 			</div>
+
+			<div id="question-explanation">
+				<button id="hide-answer" onClick={() => checkAnswer()} disabled={!isSolved}>
+					Check Answer
+					{ansVisible ? (
+						<i className="fa-solid fa-chevron-up"></i>
+					) : (
+						<i className="fa-solid fa-chevron-down"></i>
+					)}
+				</button>
+				<button id="shuffle-answer" onClick={() => shuffleOptions()}>
+					Shuffle Answers
+				</button>
+
+				<button id="report-error" onClick={() => shuffleOptions()}>
+					Report Question Error
+				</button>
+				{ansVisible && (
+					<div id="option-wrapper">
+						<div>answer: {options[answer].option_text}</div>
+						{options.map((option) => {
+							return (
+								<div className="answer-option">
+									<div className="option-text">{option.option_text}</div>
+									<div className="option-exp">{option.explanation}</div>
+								</div>
+							);
+						})}
+					</div>
+				)}
+			</div>
+
+			<Link to={"/" + cid + "/question/" + qid + "/create"}>
+				<button className="nav-button">선택지 추가하기</button>
+			</Link>
 		</div>
 	);
 };
