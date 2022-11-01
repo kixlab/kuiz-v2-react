@@ -6,6 +6,8 @@ import draftToHtml from "draftjs-to-html";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
+import OptionItem from "../../components/OptionItem/OptionItem";
+import ClusterItem from "../../components/ClusterItem/ClusterItem";
 import "./Question.scss";
 
 var ObjectID = require("bson-objectid");
@@ -26,6 +28,8 @@ const Question = (props) => {
 
 	const [ans, setAns] = useState([]);
 	const [dis, setDis] = useState([]);
+
+	const [clusters, setClusters] = useState([]);
 
 	function getMultipleRandom(arr, num) {
 		const shuffled = [...arr].sort(() => 0.5 - Math.random());
@@ -55,15 +59,18 @@ const Question = (props) => {
 					clusters: res.data.data.qinfo.cluster,
 				})
 				.then((res2) => {
-					const clusters = res2.data.clusters;
-					var ans = clusters.filter((c) => c.ansExist);
-					var dis = clusters.filter((c) => c.disExist);
+					const cluster = res2.data.clusters;
+					var ans = cluster.filter((c) => c.ansExist);
+					var dis = cluster.filter((c) => c.disExist);
 
 					var ansList = getMultipleRandom(ans, 1);
 					var disList = getMultipleRandom(dis, 3);
 
 					optionList = shuffle(ansList.map((a) => a.ansRep).concat(disList.map((d) => d.disRep)));
 
+					setClusters(cluster);
+					setAns(ans);
+					setDis(dis);
 					setOptions(optionList);
 					setIsOptionValid(true);
 
@@ -127,25 +134,7 @@ const Question = (props) => {
 
 	const reportErr = () => {};
 
-	return ansVisible ? (
-		<div id="question-screen">
-			<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
-				<div id="return-button">
-					<i className="fa-solid fa-arrow-left"></i> Return to Question List
-				</div>
-			</Link>
-			{qinfo && (
-				<div
-					dangerouslySetInnerHTML={{
-						__html: draftToHtml(JSON.parse(qinfo.stem_text)),
-					}}
-					className="introduce-content"
-				/>
-			)}
-
-			<div>{qinfo.explanation}</div>
-		</div>
-	) : (
+	return (
 		<div id="question-screen">
 			<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
 				<div id="return-button">
@@ -180,23 +169,37 @@ const Question = (props) => {
 					))}
 			</div>
 
-			<div id="question-explanation">
-				<button id="hide-answer" onClick={() => checkAnswer()} disabled={!isSolved}>
-					Check Answer
-					{ansVisible ? (
-						<i className="fa-solid fa-chevron-up"></i>
-					) : (
-						<i className="fa-solid fa-chevron-down"></i>
-					)}
-				</button>
-				<button id="shuffle-answer" onClick={() => shuffleOptions()}>
-					Shuffle Answers
-				</button>
+			{ansVisible ? (
+				<div>
+					{/* <div>{qinfo.explanation}</div> */}
+					{ans.map((c) => {
+						return (
+							<div id={c._id} className="option-item-wrapper" key={c._id}>
+								<ClusterItem clusterInfo={c} id={c._id} type={true} />
+							</div>
+						);
+					})}
+					{dis.map((c) => {
+						return (
+							<div id={c._id} className="option-item-wrapper" key={c._id}>
+								<ClusterItem clusterInfo={c} id={c._id} type={false} />
+							</div>
+						);
+					})}
+				</div>
+			) : (
+				<div id="question-explanation">
+					<button id="hide-answer" onClick={() => checkAnswer()} disabled={!isSolved}>
+						Check Answer
+					</button>
+					<button id="shuffle-answer" onClick={() => shuffleOptions()}>
+						Shuffle Answers
+					</button>
 
-				<button id="report-error" onClick={() => shuffleOptions()}>
-					Report Question Error
-				</button>
-				{ansVisible && (
+					<button id="report-error" onClick={() => shuffleOptions()}>
+						Report Question Error
+					</button>
+					{/* {ansVisible && (
 					<div id="option-wrapper">
 						<div>answer: {options[answer].option_text}</div>
 						{options.map((option) => {
@@ -208,8 +211,9 @@ const Question = (props) => {
 							);
 						})}
 					</div>
-				)}
-			</div>
+				)} */}
+				</div>
+			)}
 
 			<Link to={"/" + cid + "/question/" + qid + "/create"}>
 				<button className="nav-button">선택지 추가하기</button>
