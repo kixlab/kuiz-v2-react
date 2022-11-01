@@ -15,7 +15,7 @@ const OptionItem = ({ optionInfo, id }) => {
 	const stat = useSelector((state) => state.pageStat.value);
 	const isAnswer = optionInfo.is_answer;
 	const text = optionInfo.option_text;
-	// const similar = optionInfo.plausible.similar;
+	const similar = optionInfo.plausible.similar;
 	// const difference = optionInfo.plausible.difference;
 	const explanation = optionInfo.explanation;
 	const oid = optionInfo._id;
@@ -62,8 +62,12 @@ const OptionItem = ({ optionInfo, id }) => {
 		<div className={isAnswer ? "answer-wrapper option-item" : "distractor-wrapper option-item"}>
 			<div className="option-components">
 				<div className="option-text">{text}</div>
-				<div className="tags"></div>
-				<div className="likes-container">
+				<div className="tags">
+					{similar.map((option) => {
+						return <div className="similarTag tag">{option}</div>;
+					})}
+				</div>
+				{/* <div className="likes-container"> Use in Verification stage
 					<div className="like" onClick={(e) => doLike()}>
 						{like ? (
 							<ThumbUpAltIcon fontSize="small" />
@@ -80,8 +84,7 @@ const OptionItem = ({ optionInfo, id }) => {
 						)}
 						<div className="count">{likeNum}</div>
 					</div>
-				</div>
-				{/* {detail?<div>{explanation}<div onClick={changeDetailView}>hide</div></div>:<div onClick={changeDetailView}>0</div>} */}
+				</div> */}
 			</div>
 		</div>
 	);
