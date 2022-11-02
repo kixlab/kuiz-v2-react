@@ -10,17 +10,17 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import axios from "axios";
 import { pink } from "@mui/material/colors";
 
-const OptionItem = ({ optionInfo, id }) => {
+const VerificationOptionItem = ({ optionInfo, id }) => {
 	const dispatch = useDispatch();
 	const stat = useSelector((state) => state.pageStat.value);
 	const isAnswer = optionInfo.is_answer;
 	const text = optionInfo.option_text;
 	const similar = optionInfo.plausible.similar;
 	// const difference = optionInfo.plausible.difference;
+	const explanation = optionInfo.explanation;
+	const oid = optionInfo._id;
 	const [like, setLike] = useState();
 	const [likeNum, setLikeNum] = useState();
-
-	const [selected, setSelected] = useState(false);
 
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 
@@ -59,12 +59,9 @@ const OptionItem = ({ optionInfo, id }) => {
 		<div className={isAnswer ? "answer-wrapper option-item" : "distractor-wrapper option-item"}>
 			<div className="option-components">
 				<div className="option-text">{text}</div>
-				<div className="tags">
-					{similar.map((option) => {
-						return <div className="keyword-item">{option}</div>;
-					})}
-				</div>
-				{/* <div className="likes-container"> Use in Verification stage
+				<div className="selection-rate">10%</div>
+				<div className="likes-container">
+					{/* Use in Verification stage */}
 					<div className="like" onClick={(e) => doLike()}>
 						{like ? (
 							<ThumbUpAltIcon fontSize="small" />
@@ -81,10 +78,10 @@ const OptionItem = ({ optionInfo, id }) => {
 						)}
 						<div className="count">{likeNum}</div>
 					</div>
-				</div> */}
+				</div>
 			</div>
 		</div>
 	);
 };
 
-export default OptionItem;
+export default VerificationOptionItem;

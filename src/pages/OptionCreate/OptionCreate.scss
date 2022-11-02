@@ -27,7 +27,7 @@
 	#options-wrapper {
 		display: grid;
 		height: 100%;
-		grid-template-columns: 200px 1fr;
+		grid-template-columns: 250px 1fr;
 		border: 1px solid gray;
 
 		#option-create {
@@ -39,10 +39,13 @@
 		}
 
 		#keywords-wrapper {
+			display: grid;
+			grid-template-rows: auto 1fr;
 			#keywords-container {
 				display: flex;
 				align-items: flex-start;
 				flex-direction: column;
+				justify-content: space-between;
 
 				.keyword-item {
 					background-color: #3d73dd;
@@ -50,13 +53,18 @@
 					border-radius: 8px;
 					color: white;
 					cursor: pointer;
+					margin-bottom: 12px;
+				}
+				.reset-item {
+					background-color: rgb(223, 223, 223);
+					color: black;
 				}
 			}
 		}
 
 		#options {
 			display: grid;
-			// grid-template-rows: 1fr 200px;
+			grid-template-rows: 1fr auto;
 			#options-list {
 				overflow-y: auto;
 			}

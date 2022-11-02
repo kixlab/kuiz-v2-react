@@ -1,0 +1,41 @@
+.option-item {
+	margin-top: 12px;
+	background-color: rgb(235, 235, 235);
+	padding: 12px 16px;
+
+	.option-components {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.extra-wrapper {
+		align-self: flex-end;
+	}
+	.option-text {
+		vertical-align: middle;
+	}
+
+	.tags {
+		.keyword-item {
+			background-color: #3d73dd;
+			color: white;
+			padding: 4px 8px;
+			border-radius: 4px;
+		}
+	}
+	.likes-container {
+		display: flex;
+		align-items: center;
+		.like {
+			display: flex;
+			justify-content: center;
+			padding: 4px 8px;
+			border: 1px solid black;
+			width: 36px;
+			.count {
+				margin-left: 4px;
+			}
+		}
+	}
+}

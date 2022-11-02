@@ -130,19 +130,21 @@ const OptionCreate = (props) => {
 						<div id="keywords-wrapper" className="section">
 							<div className="header">Keywords</div>
 							<div id="keywords-container">
-								<div
-									className="keyword-item"
-									onClick={() => {
-										filterOptions("ㅁㅁ");
-									}}>
-									Example Keyword
+								<div>
+									<div
+										className="keyword-item"
+										onClick={() => {
+											filterOptions("ㅁㅁ");
+										}}>
+										Example Keyword
+									</div>
 								</div>
 								<div
-									className="keyword-item"
+									className="keyword-item reset-item"
 									onClick={() => {
 										resetFilter();
 									}}>
-									Reset Keywords
+									Reset Keyword Filter
 								</div>
 							</div>
 						</div>
@@ -233,7 +235,7 @@ const OptionCreate = (props) => {
 							<div className="header">
 								Select any options below that represent that same idea as your own option.
 							</div>
-							<div className="view-mode-wrapper" style={{ display: "flex" }}>
+							{/* <div className="view-mode-wrapper" style={{ display: "flex" }}>
 								<div
 									className="view-mode"
 									style={groupMode ? { fontWeight: "700" } : { fontWeight: "400" }}
@@ -274,26 +276,26 @@ const OptionCreate = (props) => {
 													);
 												})}
 								</div>
-							) : (
-								<div>
-									<div>Suggested Options</div>
-									{isAnswer
-										? ansList.map((item, index) => {
-												return (
-													<div key={index}>
-														<OptionItem optionInfo={item} id={item._id} />
-													</div>
-												);
-										  })
-										: disList.map((item, index) => {
-												return (
-													<div key={index}>
-														<OptionItem optionInfo={item} id={item._id} />
-													</div>
-												);
-										  })}
-								</div>
-							)}
+							) : ( */}
+							<div>
+								<div>Suggested Options</div>
+								{isAnswer
+									? ansList.map((item, index) => {
+											return (
+												<div key={index}>
+													<OptionItem optionInfo={item} id={item._id} />
+												</div>
+											);
+									  })
+									: disList.map((item, index) => {
+											return (
+												<div key={index}>
+													<OptionItem optionInfo={item} id={item._id} />
+												</div>
+											);
+									  })}
+							</div>
+							{/* )} */}
 						</div>
 
 						<button onClick={() => {}}>Submit</button>

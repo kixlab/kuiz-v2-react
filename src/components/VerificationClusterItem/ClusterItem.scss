@@ -1,0 +1,46 @@
+.drag {
+	box-shadow: 2px 2px 2px gray;
+}
+// .undrag{
+// 	box-shadow: 2px 2px 2px gray;
+// }
+.cluster-item {
+	width: 100%;
+	// display: flex;
+	// flex-direction: row;
+	// justify-content: space-between;
+
+	.similarTag {
+		background-color: #84e58d;
+	}
+	.differenceTag {
+		background-color: #f78e8e;
+	}
+
+	.extra-wrapper {
+		align-self: flex-end;
+	}
+
+	.answer-label {
+		font-size: xx-small;
+		color: #06c71f;
+	}
+	.distractor-label {
+		font-size: xx-small;
+		color: #3d73dd;
+	}
+
+	.cluster-subitems {
+		margin-left: 20px;
+	}
+	.cluster-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.dragger {
+		background-color: #efefef;
+		border-radius: 0px 4px 4px 0px;
+		padding-top: 10px;
+	}
+}

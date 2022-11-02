@@ -6,8 +6,9 @@ import draftToHtml from "draftjs-to-html";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
-import OptionItem from "../../components/OptionItem/OptionItem";
-import ClusterItem from "../../components/ClusterItem/ClusterItem";
+import VerificationOptionItem from "../../components/VerificationOptionItem/OptionItem";
+import VerificationClusterItem from "../../components/VerificationClusterItem/ClusterItem";
+
 import "./Question.scss";
 
 var ObjectID = require("bson-objectid");
@@ -15,7 +16,9 @@ var ObjectID = require("bson-objectid");
 const Question = (props) => {
 	const navigate = useNavigate();
 	const qid = useParams().id;
+	const [optionSet, setOptionSet] = useState([]);
 	const [options, setOptions] = useState([]);
+
 	const [qinfo, setQinfo] = useState();
 	const [ansVisible, setAnsVisible] = useState(false);
 	const cid = useParams().cid;
@@ -28,6 +31,7 @@ const Question = (props) => {
 
 	const [ans, setAns] = useState([]);
 	const [dis, setDis] = useState([]);
+	const [groupMode, setGroupMode] = useState(false);
 
 	const [clusters, setClusters] = useState([]);
 
@@ -71,7 +75,7 @@ const Question = (props) => {
 					setClusters(cluster);
 					setAns(ans);
 					setDis(dis);
-					setOptions(optionList);
+					setOptionSet(optionList);
 					setIsOptionValid(true);
 
 					optionList.map((o, i) => {
@@ -81,6 +85,7 @@ const Question = (props) => {
 					});
 				})
 				.catch((err) => console.log(err));
+			setOptions(res.data.data.options);
 			setQinfo(res.data.data.qinfo);
 		});
 	};
@@ -92,7 +97,7 @@ const Question = (props) => {
 				.post(`${process.env.REACT_APP_BACK_END}/question/solve`, {
 					qid: qid,
 					uid: uid,
-					initAns: options[selected]._id,
+					initAns: optionSet[selected]._id,
 					isCorrect: selected === answer,
 					optionSet: options.map((o) => ObjectID(o._id)),
 				})
@@ -132,7 +137,7 @@ const Question = (props) => {
 		setAnsVisible(false);
 	};
 
-	const reportErr = () => {};
+	// const reportErr = () => {};
 
 	return (
 		<div id="question-screen">
@@ -151,8 +156,8 @@ const Question = (props) => {
 			)}
 
 			<div id="question-options">
-				{options &&
-					options.map((option, index) => (
+				{optionSet &&
+					optionSet.map((option, index) => (
 						<div className="question-option-item" id={background(index)} key={index}>
 							<input
 								key={index}
@@ -171,21 +176,62 @@ const Question = (props) => {
 
 			{ansVisible ? (
 				<div>
+					<div className="objective-container">
+						Learning Objective : {qinfo && qinfo.learning_objective}
+					</div>
 					{/* <div>{qinfo.explanation}</div> */}
-					{ans.map((c) => {
-						return (
-							<div id={c._id} className="option-item-wrapper" key={c._id}>
-								<ClusterItem clusterInfo={c} id={c._id} type={true} />
+					<div>
+						{optionSet.map((option, index) => {
+							console.log(option);
+							// <VerificationOptionItem optionInfo={option} key={index} />
+						})}
+					</div>
+					<div className="section">
+						<div className="header">Review Other Options</div>
+						<div className="view-mode-wrapper" style={{ display: "flex" }}>
+							<div
+								className="view-mode"
+								style={groupMode ? { fontWeight: "700" } : { fontWeight: "400" }}
+								onClick={() => setGroupMode(true)}>
+								View by Cluster
 							</div>
-						);
-					})}
-					{dis.map((c) => {
-						return (
-							<div id={c._id} className="option-item-wrapper" key={c._id}>
-								<ClusterItem clusterInfo={c} id={c._id} type={false} />
+							|
+							<div
+								className="view-mode"
+								style={!groupMode ? { fontWeight: "700" } : { fontWeight: "400" }}
+								onClick={() => setGroupMode(false)}>
+								View Individually
 							</div>
-						);
-					})}
+						</div>
+						{groupMode ? (
+							<div>
+								{ans.map((c) => {
+									return (
+										<div id={c._id} className="option-item-wrapper" key={c._id}>
+											<VerificationClusterItem clusterInfo={c} id={c._id} type={true} />
+										</div>
+									);
+								})}
+								{dis.map((c) => {
+									return (
+										<div id={c._id} className="option-item-wrapper" key={c._id}>
+											<VerificationClusterItem clusterInfo={c} id={c._id} type={false} />
+										</div>
+									);
+								})}
+							</div>
+						) : (
+							<div>
+								{options.map((item, index) => {
+									return (
+										<div key={index}>
+											<VerificationOptionItem optionInfo={item} id={item._id} />
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
 				</div>
 			) : (
 				<div id="question-explanation">
@@ -199,24 +245,11 @@ const Question = (props) => {
 					<button id="report-error" onClick={() => shuffleOptions()}>
 						Report Question Error
 					</button>
-					{/* {ansVisible && (
-					<div id="option-wrapper">
-						<div>answer: {options[answer].option_text}</div>
-						{options.map((option) => {
-							return (
-								<div className="answer-option">
-									<div className="option-text">{option.option_text}</div>
-									<div className="option-exp">{option.explanation}</div>
-								</div>
-							);
-						})}
-					</div>
-				)} */}
 				</div>
 			)}
 
 			<Link to={"/" + cid + "/question/" + qid + "/create"}>
-				<button className="nav-button">선택지 추가하기</button>
+				<button className="nav-button">Add New Option</button>
 			</Link>
 		</div>
 	);
