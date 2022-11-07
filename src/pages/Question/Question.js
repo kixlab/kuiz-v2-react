@@ -60,7 +60,7 @@ const Question = (props) => {
 		axios.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid).then((res) => {
 			axios
 				.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-					clusters: res.data.data.qinfo.cluster,
+					clusters: res.data.qinfo.cluster,
 				})
 				.then((res2) => {
 					const cluster = res2.data.clusters;
@@ -85,8 +85,8 @@ const Question = (props) => {
 					});
 				})
 				.catch((err) => console.log(err));
-			setOptions(res.data.data.options);
-			setQinfo(res.data.data.qinfo);
+			setOptions(res.data.options);
+			setQinfo(res.data.qinfo);
 		});
 	};
 
