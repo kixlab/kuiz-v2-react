@@ -1,35 +1,33 @@
-import "./Navbar.scss";
-import { useLocation } from "react-router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
-import axios from "axios";
+import { useNavigate } from "react-router";
+import "./Navbar.scss";
 
 import Button from "../Button/Button";
 
 function Navbar(props) {
 	const cid = useSelector((state) => state.userInfo.cid);
 	const cType = useSelector((state) => state.userInfo.cType);
-	const profile = useSelector((state) => state.userInfo.userInfo.imageUrl);
-	const user_name = useSelector((state) => state.userInfo.userInfo.name);
-	const isAdmin = useSelector((state) => state.userInfo.userInfo.isAdmin);
+	const profile = useSelector((state) => state.userInfo.userInfo?.imageUrl);
+	const user_name = useSelector((state) => state.userInfo.userInfo?.name);
 	const navigate = useNavigate();
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-	const classes = useSelector((state) => state.userInfo.userInfo.classes);
 
-	const moveToCreateStem = () => {
+	const moveToCreateStem = useCallback(() => {
 		navigate("/" + cid + "/createstem");
-	};
-	const moveToCreateOption = () => {
+	}, [cid, navigate]);
+
+	const moveToCreateOption = useCallback(() => {
 		navigate("/" + cid);
-	};
-	const moveToQlist = () => {
+	},[cid, navigate]);
+
+	const moveToQlist = useCallback(() => {
 		navigate("/" + cid + "/qlist");
-	};
+	},[cid, navigate]);
 
 	useEffect(() => {
 		console.log("login:", isLoggedIn ? "true" : "false");
-	}, []);
+	}, [isLoggedIn]);
 
 	return (
 		<div id="left-sidebar" className={isLoggedIn ? "show" : "hidden"}>

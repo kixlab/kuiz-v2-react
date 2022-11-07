@@ -13,8 +13,8 @@ const Enroll = (props) => {
 	const dispatch = useDispatch();
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [code, setCode] = useState("");
-	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const email = useSelector((state) => state.userInfo.userInfo.email);
+	const uid = useSelector((state) => state.userInfo.userInfo?._id);
+	const email = useSelector((state) => state.userInfo.userInfo?.email);
 	const detectChange = (e) => {
 		setCode(e.target.value);
 	};

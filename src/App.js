@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 // import axios from "axios";
 
 function App() {
-	const isAdmin = useSelector((state) => state.userInfo.userInfo.isAdmin);
+	const isAdmin = useSelector((state) => state.userInfo.userInfo?.isAdmin);
 	const cType = useSelector((state) => state.userInfo.cType);
 
 	return (

@@ -1,15 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import "react-draft-wysiwyg";
-import QstemEditor2 from "../QstemEditor2/QstemEditor2";
-import OptionCreate2 from "../OptionCreate2/OptionCreate2";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
 import axios from "axios";
-
+import React, { useEffect, useRef, useState } from "react";
+import "react-draft-wysiwyg";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { Link } from "react-router-dom";
+import OptionCreate2 from "../OptionCreate2/OptionCreate2";
+import QstemEditor2 from "../QstemEditor2/QstemEditor2";
 import "./CreateStem2.scss";
-var ObjectID = require("bson-objectid");
 
 const StemCreate2 = (props) => {
 	const childRef = useRef(null);
@@ -18,7 +15,6 @@ const StemCreate2 = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 
 	const cid = useParams().cid;
-	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const [optionList, setOptionList] = useState([
 		{ option_text: "", is_answer: false },
 		{ option_text: "", is_answer: false },
@@ -29,11 +25,12 @@ const StemCreate2 = (props) => {
 	const [qObj, setQobj] = useState({});
 
 	const [msg, setMsg] = useState("");
+	
 	useEffect(() => {
 		if (!isLoggedIn) {
 			navigate("/" + cid);
 		}
-	}, []);
+	}, [cid, isLoggedIn, navigate]);
 
 	async function onSubmit() {
 		const newQobj = await childRef.current.submitStem();
@@ -64,10 +61,8 @@ const StemCreate2 = (props) => {
 				explanation: explanation,
 			})
 			.then((res) => {
-				if (res.data.success) {
-					console.log("success!");
-					navigate("/" + cid + "/qlist");
-				}
+				console.log("success!");
+				navigate("/" + cid + "/qlist");
 			});
 	}
 	const checkForm = (qobj) => {
