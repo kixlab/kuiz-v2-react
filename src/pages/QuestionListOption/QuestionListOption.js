@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
-import axios from "axios";
-import { NavLink, Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { enrollClass } from "../../features/authentication/userSlice";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import "./QuestionListOption.scss";
-import { ResetTvSharp } from "@mui/icons-material";
 
 const QuestionListOption = (props) => {
 	const [validList, setValidList] = useState([]);
 	const [filter, setFilter] = useState(0);
-	const [sort, setSort] = useState(0);
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const cid = useParams().cid;
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
@@ -76,20 +65,19 @@ const QuestionListOption = (props) => {
 			.get(`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` + cid)
 			.then(async (res) => {
 				const valid = [];
-				const problemList = res.data.qstems.problemList;
-				const middleware = await Promise.all(
-					res.data.qstems.problemList.map(async (q, i) => {
+				await Promise.all(
+					res.data.problemList.map(async (q, i) => {
 						await axios
 							.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
 							.then(async (res) => {
 								if (cType) {
-									if (res.data.data.qinfo.cluster.length < 3) {
+									if (res.data.qinfo.cluster.length < 3) {
 										valid[i] = false;
 										return await false;
 									} else {
 										await axios
 											.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-												clusters: res.data.data.qinfo.cluster,
+												clusters: res.data.qinfo.cluster,
 											})
 											.then(async (res2) => {
 												const clusters = await res2.data.clusters;
@@ -115,7 +103,7 @@ const QuestionListOption = (props) => {
 				);
 
 				setValidList(valid);
-				setQuestionList(res.data.qstems.problemList);
+				setQuestionList(res.data.problemList);
 			});
 	};
 	const moveToCreateStem = () => {

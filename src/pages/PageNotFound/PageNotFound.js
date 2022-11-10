@@ -1,17 +1,17 @@
-import React, {useEffect, useId} from "react"
-import { useSelector,useDispatch } from "react-redux"
+import axios from "axios"
+import React, { useCallback, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router"
 import { enrollClass } from "../../features/authentication/userSlice"
-import axios from "axios"
 
 const PageNotFound = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn)
-    const uid = useSelector((state) => state.userInfo.userInfo._id)
+    const isLoggedIn = useSelector((state) => state.userInfo?.isLoggedIn)
+    const uid = useSelector((state) => state.userInfo?.userInfo?._id)
 
-    const checkValidUser = () => {
+    const checkValidUser = useCallback(() => {
 		axios.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`,{
 			cid: "invalid",
 			uid: uid
@@ -35,7 +35,7 @@ const PageNotFound = () => {
                     })
             }
 		})
-	}
+	},[dispatch, navigate, uid])
 
     useEffect(() => {
         if(!isLoggedIn){
@@ -43,7 +43,8 @@ const PageNotFound = () => {
         } else {
             checkValidUser()
         }
-    },[])
+    },[checkValidUser, isLoggedIn, navigate])
+    
     return(
         <div>Page Not Found 404</div>
     )

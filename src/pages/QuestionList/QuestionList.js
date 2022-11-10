@@ -1,78 +1,27 @@
-import React, { useEffect, useState } from "react";
-
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import QuestionListItem2 from "../../components/QuestionListItem2/QuestionListItem2";
-import axios from "axios";
-import { NavLink, Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router";
-import { enrollClass } from "../../features/authentication/userSlice";
-import { useNavigate } from "react-router";
 
 import "./QuestionList.scss";
 
 const QuestionList = (props) => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 	const cid = useParams().cid;
-
-	const setCtype = () => {
-		if (cid != null || cid != "")
-			axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res) => {
-				dispatch(enrollClass({ cid: cid, cType: res.data.cType }));
-			});
-	};
-	const checkValidUser = () => {
-		axios
-			.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`, {
-				cid: cid,
-				uid: uid,
-			})
-			.then((res) => {
-				// console.log("RES:", res.data);
-				if (res.data.inclass) {
-					// console.log("case11");
-					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res2) => {
-						// dispatch(enrollClass({ cid: cid, cType: res2.data.cType }));
-						// if (!res2.data.cType) {
-						// 	navigate("/" + res.data.cid + "/qlist");
-						// }
-						getQuestionList(res.data.cid);
-					});
-				} else {
-					if (!res.data.enrolled) {
-						// console.log("case3");
-						navigate("/enroll");
-					} else {
-						axios
-							.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + res.data.cid)
-							.then((res2) => {
-								// dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType }));
-								// if (res2.data.cType) {
-								// 	console.log("case4");
-								// 	navigate("/" + res.data.cid);
-								// } else {
-								// 	console.log("case5");
-								// 	navigate("/" + res.data.cid + "/qlist");
-								// }
-								// console.log("CIDtogetQ:", res.data.cid);
-								getQuestionList(res2.data.cid);
-							});
-					}
-				}
-			});
-	};
+	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [questionList, setQuestionList] = useState([]);
 	const [validList, setValidList] = useState([]);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const cType = useSelector((state) => state.userInfo.cType);
-	const getQuestionList = (cid) => {
+	const getQuestionList = useCallback((cid) => {
 		axios
 			.get(`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` + cid)
 			.then(async (res) => {
 				const valid = [];
-				const problemList = res.data.qstems.problemList;
-				const middleware = await Promise.all(
+				await Promise.all(
 					res.data.qstems.problemList.map(async (q, i) => {
 						await axios
 							.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
@@ -112,9 +61,50 @@ const QuestionList = (props) => {
 				setValidList(valid);
 				setQuestionList(res.data.qstems.problemList);
 			});
-	};
+	},[cType]);
 
-	const getQinfo = async (qid) => {
+	const checkValidUser = useCallback(() => {
+		axios
+			.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`, {
+				cid: cid,
+				uid: uid,
+			})
+			.then((res) => {
+				// console.log("RES:", res.data);
+				if (res.data.inclass) {
+					// console.log("case11");
+					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res2) => {
+						// dispatch(enrollClass({ cid: cid, cType: res2.data.cType }));
+						// if (!res2.data.cType) {
+						// 	navigate("/" + res.data.cid + "/qlist");
+						// }
+						getQuestionList(res.data.cid);
+					});
+				} else {
+					if (!res.data.enrolled) {
+						// console.log("case3");
+						navigate("/enroll");
+					} else {
+						axios
+							.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + res.data.cid)
+							.then((res2) => {
+								// dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType }));
+								// if (res2.data.cType) {
+								// 	console.log("case4");
+								// 	navigate("/" + res.data.cid);
+								// } else {
+								// 	console.log("case5");
+								// 	navigate("/" + res.data.cid + "/qlist");
+								// }
+								// console.log("CIDtogetQ:", res.data.cid);
+								getQuestionList(res2.data.cid);
+							});
+					}
+				}
+			});
+	},[cid, getQuestionList, navigate, uid]);
+
+	const getQinfo = useCallback(async (qid) => {
 		await axios
 			.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid)
 			.then(async (res) => {
@@ -143,19 +133,19 @@ const QuestionList = (props) => {
 					return true;
 				}
 			});
-	};
+	},[cType]);
+
 	const moveToCreateOption = () => {
 		navigate("/" + cid + "/createstem");
 	};
 
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		if (isLoggedIn) {
 			checkValidUser();
 		} else {
 			navigate("/login");
 		}
-	}, []);
+	}, [checkValidUser, isLoggedIn, navigate]);
 
 	return (
 		<div id="question-list-solve">

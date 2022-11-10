@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser, logoutUser, enrollClass } from "../../features/authentication/userSlice";
 import axios from "axios";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { Send } from "@mui/icons-material";
+import { enrollClass, loginUser } from "../../features/authentication/userSlice";
 
 
 const Kakao = (props) => {
@@ -17,7 +16,37 @@ const Kakao = (props) => {
 
 
     const REDIRECT_URI = `${process.env.REACT_APP_FRONT_END}/kakaologin`
-    const getKakaoToken = () => {
+
+    const getUserInfo = useCallback(async () => {
+        try {
+
+            let data = await window.Kakao.API.request({
+                url: "/v2/user/me"
+            })
+
+            axios.post(`${process.env.REACT_APP_BACK_END}/auth/register`,{email: email, name:data.properties.nickname, image: data.properties.profile_image}).then(
+                (res) => {
+                    dispatch(loginUser(res.data.user))
+                    if(0 < res.data.user.classes.length){
+                        dispatch(enrollClass({cid:res.data.user.classes[0], cType:res.data.cType}))
+                        if(res.data.cType) {
+                            navigate('/'+res.data.user.classes[0])
+                        } else {
+                            navigate('/'+res.data.user.classes[0] +'/qlist')
+                        }
+                        
+                    } else {
+                        navigate('/enroll')
+                    }
+                }
+            )
+
+        } catch (err) {
+            console.log(err)
+        }
+    },[dispatch, email, navigate])
+
+    const getKakaoToken = useCallback(() => {
         console.log("getKakaoToken")
         fetch(`https://kauth.kakao.com/oauth/token`,{
             method:'POST',
@@ -34,38 +63,8 @@ const Kakao = (props) => {
                     console.log("Failed to get data")
                 }
             })
-    }
+    },[KAKAO_CODE, REDIRECT_URI, getUserInfo])
 
-    const getUserInfo = async () => {
-        try {
-
-            let data = await window.Kakao.API.request({
-                url: "/v2/user/me"
-            })
-
-            axios.post(`${process.env.REACT_APP_BACK_END}/auth/register`,{email: email, name:data.properties.nickname, image: data.properties.profile_image}).then(
-                (res) => {
-                    if(res.data.success){
-                        dispatch(loginUser(res.data.user))
-                        if(res.data.user.classes.length!=0){
-                            dispatch(enrollClass({cid:res.data.user.classes[0], cType:res.data.cType}))
-                            if(res.data.cType) {
-                                navigate('/'+res.data.user.classes[0])
-                            } else {
-                                navigate('/'+res.data.user.classes[0] +'/qlist')
-                            }
-                            
-                        } else {
-                            navigate('/enroll')
-                        }
-                    }
-                }
-            )
-
-        } catch (err) {
-            console.log(err)
-        }
-    }
     useEffect(()=>{
         console.log("UINFO:", uInfo)
         console.log("empty?:", Object.keys(uInfo).length === 0)
@@ -76,7 +75,7 @@ const Kakao = (props) => {
             getKakaoToken() 
         }          
              
-    },[])
+    },[getKakaoToken, navigate, uInfo])
 
     return (
     

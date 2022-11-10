@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
-import { useSelector, useDispatch } from "react-redux";
-import { loginUser, logoutUser, enrollClass } from "../../features/authentication/userSlice";
-import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
-import { setUserEmail } from "../../features/authentication/userSlice";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { enrollClass, loginUser } from "../../features/authentication/userSlice";
 
 import "./Login.scss";
 
@@ -19,28 +17,25 @@ const Login = (props) => {
 				image: userObject.picture,
 			})
 			.then((res) => {
-				if (res.data.success) {
-					dispatch(loginUser(res.data.user));
-					if (res.data.user.classes.length != 0) {
-						dispatch(
-							enrollClass({
-								cid: res.data.user.classes[0],
-								cType: res.data.cType,
-							})
-						);
-						navigate("/" + res.data.user.classes[0]);
-					} else {
-						navigate("/enroll");
-					}
+				dispatch(loginUser(res.data.user));
+				if (0 < res.data.user.classes.length) {
+					dispatch(
+						enrollClass({
+							cid: res.data.user.classes[0],
+							cType: res.data.cType,
+						})
+					);
+					navigate("/" + res.data.user.classes[0]);
+				} else {
+					navigate("/enroll");
 				}
 			});
 	}
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [user, setUser] = useState({});
 	const uInfo = useSelector((state) => state.userInfo.userInfo);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-	const [agree, setAgree] = useState(true);
+
 	useEffect(() => {
 		/*global google*/
 		if (isLoggedIn) {
@@ -72,7 +67,7 @@ const Login = (props) => {
 				안내사항 어쩌구저쩌구 [수집하는 구글 계정 정보] 구글 계정 이메일 주소, 사용자 이름, 프로필
 				이미지
 			</div>
-			{agree && <div id="signInDiv"></div>}
+			{<div id="signInDiv"></div>}
 		</div>
 	);
 };

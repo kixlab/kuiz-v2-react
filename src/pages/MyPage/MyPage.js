@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import ContentStateInlineStyle from "draft-js/lib/ContentStateInlineStyle";
 import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
+import { useDispatch } from "react-redux";
 
 import "./MyPage.scss";
-import { reactDraftWysiwyg } from "react-draft-wysiwyg";
+import { logoutUser } from "../../features/authentication/userSlice";
 
 const MyPage = (props) => {
 	const cid = useParams().cid;
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const navigate = useNavigate();
-	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const cType = useSelector((state) => state.userInfo.cType);
+	const uid = useSelector((state) => state.userInfo.userInfo?._id);
 	const [madeStem, setMadeStem] = useState();
 	const [madeOption, setMadeOption] = useState();
-	const [qlist, setQlist] = useState();
+	const dispatch = useDispatch();
 
-	const getMadeStem = () => {
+	const getMadeStem = useCallback(() => {
 		console.log("UID:", uid);
 		axios
 			.post(
@@ -29,9 +28,9 @@ const MyPage = (props) => {
 			.then((res) => {
 				setMadeStem(res.data.madeStem);
 			});
-	};
+	}, [uid]);
 
-	const getMadeOption = () => {
+	const getMadeOption = useCallback(() => {
 		axios
 			.post(
 				`${process.env.REACT_APP_BACK_END}/question/made/option`,
@@ -59,7 +58,11 @@ const MyPage = (props) => {
 						setMadeOption(newOptionList);
 					});
 			});
-	};
+	},[uid]);
+
+	const onLogout = useCallback(() => {
+		dispatch(logoutUser());
+	},[dispatch])
 
 	useEffect(() => {
 		if (!isLoggedIn) {
@@ -68,7 +71,7 @@ const MyPage = (props) => {
 			getMadeStem();
 			getMadeOption();
 		}
-	}, []);
+	}, [getMadeOption, getMadeStem, isLoggedIn, navigate]);
 
 	return (
 		<div id="mypage">
@@ -129,6 +132,7 @@ const MyPage = (props) => {
 					})}
 			</div>
 			<h3>내가 푼 문제들</h3>
+			<button onClick={onLogout}>로그아웃</button>
 		</div>
 	);
 };
