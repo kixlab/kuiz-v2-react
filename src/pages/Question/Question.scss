@@ -133,7 +133,7 @@
 		}
 	}
 
-	button {
+	.proceed-button {
 		background-image: none;
 		border: none;
 		height: 48px;
@@ -141,5 +141,7 @@
 		font-size: 14px;
 		border-radius: 8px;
 		margin: 8px auto;
+
+		cursor: pointer;
 	}
 }

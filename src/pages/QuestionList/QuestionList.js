@@ -16,52 +16,55 @@ const QuestionList = (props) => {
 	const [validList, setValidList] = useState([]);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const cType = useSelector((state) => state.userInfo.cType);
-	const getQuestionList = useCallback((cid) => {
-		axios
-			.get(`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` + cid)
-			.then(async (res) => {
-				const valid = [];
-				await Promise.all(
-					res.data.qstems.problemList.map(async (q, i) => {
-						await axios
-							.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
-							.then(async (res) => {
-								if (cType) {
-									if (res.data.data.qinfo.cluster.length < 3) {
-										valid[i] = false;
-										return await false;
+	const getQuestionList = useCallback(
+		(cid) => {
+			axios
+				.get(`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` + cid)
+				.then(async (res) => {
+					const valid = [];
+					await Promise.all(
+						res.data.problemList.map(async (q, i) => {
+							await axios
+								.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
+								.then(async (res) => {
+									if (cType) {
+										if (res.data.qinfo.cluster.length < 3) {
+											valid[i] = false;
+											return await false;
+										} else {
+											await axios
+												.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
+													clusters: res.data.qinfo.cluster,
+												})
+												.then(async (res2) => {
+													const clusters = await res2.data.clusters;
+													const ans = clusters.filter((c) => c.ansExist).length;
+													const dis = clusters.filter((c) => c.disExist).length;
+													const ov = clusters.filter((c) => c.ansExist && c.disExist).length;
+													if (ans + dis - ov >= 4) {
+														valid[i] = true;
+														return await true;
+													} else {
+														valid[i] = false;
+														return await false;
+													}
+												})
+												.catch(async (err) => await console.log(err));
+										}
 									} else {
-										await axios
-											.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-												clusters: res.data.data.qinfo.cluster,
-											})
-											.then(async (res2) => {
-												const clusters = await res2.data.clusters;
-												const ans = clusters.filter((c) => c.ansExist).length;
-												const dis = clusters.filter((c) => c.disExist).length;
-												const ov = clusters.filter((c) => c.ansExist && c.disExist).length;
-												if (ans + dis - ov >= 4) {
-													valid[i] = true;
-													return await true;
-												} else {
-													valid[i] = false;
-													return await false;
-												}
-											})
-											.catch(async (err) => await console.log(err));
+										valid[i] = true;
+										return true;
 									}
-								} else {
-									valid[i] = true;
-									return true;
-								}
-							});
-					})
-				);
+								});
+						})
+					);
 
-				setValidList(valid);
-				setQuestionList(res.data.qstems.problemList);
-			});
-	},[cType]);
+					setValidList(valid);
+					setQuestionList(res.data.problemList);
+				});
+		},
+		[cType]
+	);
 
 	const checkValidUser = useCallback(() => {
 		axios
@@ -102,38 +105,41 @@ const QuestionList = (props) => {
 					}
 				}
 			});
-	},[cid, getQuestionList, navigate, uid]);
+	}, [cid, getQuestionList, navigate, uid]);
 
-	const getQinfo = useCallback(async (qid) => {
-		await axios
-			.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid)
-			.then(async (res) => {
-				if (cType) {
-					if (res.data.data.qinfo.cluster.length < 3) {
-						return false;
+	const getQinfo = useCallback(
+		async (qid) => {
+			await axios
+				.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid)
+				.then(async (res) => {
+					if (cType) {
+						if (res.data.data.qinfo.cluster.length < 3) {
+							return false;
+						} else {
+							await axios
+								.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
+									clusters: res.data.data.qinfo.cluster,
+								})
+								.then(async (res2) => {
+									const clusters = res2.data.clusters;
+									if (
+										clusters.filter((c) => c.ansExist === true).length >= 1 &&
+										clusters.filter((c) => c.disExist === true).length >= 3
+									) {
+										return true;
+									} else {
+										return false;
+									}
+								})
+								.catch(async (err) => await console.log(err));
+						}
 					} else {
-						await axios
-							.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-								clusters: res.data.data.qinfo.cluster,
-							})
-							.then(async (res2) => {
-								const clusters = res2.data.clusters;
-								if (
-									clusters.filter((c) => c.ansExist === true).length >= 1 &&
-									clusters.filter((c) => c.disExist === true).length >= 3
-								) {
-									return true;
-								} else {
-									return false;
-								}
-							})
-							.catch(async (err) => await console.log(err));
+						return true;
 					}
-				} else {
-					return true;
-				}
-			});
-	},[cType]);
+				});
+		},
+		[cType]
+	);
 
 	const moveToCreateOption = () => {
 		navigate("/" + cid + "/createstem");

@@ -17,51 +17,55 @@ const OptionItem = ({ optionInfo, id }) => {
 	const text = optionInfo.option_text;
 	const similar = optionInfo.plausible.similar;
 	// const difference = optionInfo.plausible.difference;
-	const [like, setLike] = useState();
-	const [likeNum, setLikeNum] = useState();
+	// const [like, setLike] = useState();
+	// const [likeNum, setLikeNum] = useState();
 
-	const [selected, setSelected] = useState(false);
+	// const [selected, setSelected] = useState(false);
 
-	const uid = useSelector((state) => state.userInfo.userInfo._id);
+	// const uid = useSelector((state) => state.userInfo.userInfo._id);
 
-	const userLike = (arr, user) => {
-		if (arr.includes(user)) {
-			setLike(true);
-		} else {
-			setLike(false);
-		}
-		setLikeNum(optionInfo.liked.length);
-	};
+	// const userLike = (arr, user) => {
+	// 	if (arr.includes(user)) {
+	// 		setLike(true);
+	// 	} else {
+	// 		setLike(false);
+	// 	}
+	// 	setLikeNum(optionInfo.liked.length);
+	// };
 
-	const doLike = () => {
-		axios
-			.post(`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`, {
-				oid: optionInfo._id,
-				isAns: optionInfo.is_answer,
-				uid: uid,
-				ocid: optionInfo.cluster[-1],
-			})
-			.then((res) => {
-				if (like) {
-					setLikeNum(likeNum - 1);
-				} else {
-					setLikeNum(likeNum + 1);
-				}
-				setLike(!like);
-			});
-	};
+	// const doLike = () => {
+	// 	axios
+	// 		.post(`${process.env.REACT_APP_BACK_END}/question/option/${like ? "dislike" : "like"}`, {
+	// 			oid: optionInfo._id,
+	// 			isAns: optionInfo.is_answer,
+	// 			uid: uid,
+	// 			ocid: optionInfo.cluster[-1],
+	// 		})
+	// 		.then((res) => {
+	// 			if (like) {
+	// 				setLikeNum(likeNum - 1);
+	// 			} else {
+	// 				setLikeNum(likeNum + 1);
+	// 			}
+	// 			setLike(!like);
+	// 		});
+	// };
 
-	useEffect(() => {
-		userLike(optionInfo.liked, uid);
-	}, []);
+	// useEffect(() => {
+	// 	userLike(optionInfo.liked, uid);
+	// }, []);
 
 	return (
 		<div className={isAnswer ? "answer-wrapper option-item" : "distractor-wrapper option-item"}>
 			<div className="option-components">
 				<div className="option-text">{text}</div>
 				<div className="tags">
-					{similar.map((option) => {
-						return <div className="keyword-item">{option}</div>;
+					{similar.map((item) => {
+						return (
+							<div className="keyword-item" key={item}>
+								{item}
+							</div>
+						);
 					})}
 				</div>
 				{/* <div className="likes-container"> Use in Verification stage

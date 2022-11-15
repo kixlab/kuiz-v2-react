@@ -31,10 +31,22 @@
 		border: 1px solid gray;
 
 		#option-create {
-			input {
-				width: 100%;
-				padding: 4px 8px;
-				font-size: 1em;
+			display: grid;
+			row-gap: 12px;
+			// input {
+			// 	width: 100%;
+			// 	padding: 4px 8px;
+			// 	font-size: 1em;
+			// }
+			.radio {
+				justify-content: flex-start;
+				.radio-item {
+					display: flex;
+					margin-right: 16px;
+					label {
+						margin-right: 12px;
+					}
+				}
 			}
 		}
 

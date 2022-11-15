@@ -9,9 +9,16 @@ import draftToHtml from "draftjs-to-html";
 
 import ClusterItem from "../../components/ClusterItem/ClusterItem";
 
+/* Autocomplete components */
+import Chip from "@mui/material/Chip";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
+
 import OptionItem from "../../components/OptionItem/OptionItem";
 
 import "./OptionCreate.scss";
+import { AlignHorizontalLeftSharp } from "@mui/icons-material";
 var ObjectID = require("bson-objectid");
 
 const OptionCreate = (props) => {
@@ -23,17 +30,17 @@ const OptionCreate = (props) => {
 	const [qinfo, setQinfo] = useState();
 	const [options, setOptions] = useState();
 	const cid = useParams().cid;
+	const uid = useParams().uid;
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-	const [myOption, setMyOption] = useState();
-	const [cluster, setCluster] = useState();
+	// const [myOption, setMyOption] = useState();
+	const [cluster, setCluster] = useState([]);
 	// const [sameCluster, setSameCluster] = useState([]);
 	// const [contCluster, setContCluster] = useState([]);
 
+	// My option values
 	const [option, setOption] = useState("");
 	const [isAnswer, setIsAnswer] = useState();
 	const [keywords, setKeywords] = useState([]);
-
-	const [groupMode, setGroupMode] = useState(false);
 
 	const getOptionList = (qid) => {
 		axios.get(`${process.env.REACT_APP_BACK_END}/question/option/load?qid=` + qid).then((res) => {
@@ -43,6 +50,9 @@ const OptionCreate = (props) => {
 			setAnsList(ans);
 			setDistList(dis);
 			setQinfo(res.data.qinfo);
+
+			console.log(res.data.qinfo);
+			// setKeywords(res.data.qinfo.keywords);
 		});
 	};
 	const getOptionCluster = (qid) => {
@@ -55,6 +65,7 @@ const OptionCreate = (props) => {
 				console.log(err);
 			});
 	};
+
 	const getOptionByCluster = (cluserId) => {
 		axios
 			.get(`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?qid=` + qid)
@@ -102,6 +113,8 @@ const OptionCreate = (props) => {
 		setPageStat(false);
 	};
 
+	const keywordList = ["this", "that", "also this"];
+
 	return (
 		<div id="option-create-wrapper">
 			<div id="question-screen">
@@ -131,13 +144,17 @@ const OptionCreate = (props) => {
 							<div className="header">Keywords</div>
 							<div id="keywords-container">
 								<div>
-									<div
-										className="keyword-item"
-										onClick={() => {
-											filterOptions("ㅁㅁ");
-										}}>
-										Example Keyword
-									</div>
+									{/* {qinfo.keywords.map((item) => {
+										return (
+											<div
+												className="keyword-item"
+												onClick={() => {
+													filterOptions(item);
+												}}>
+												{item}
+											</div>
+										);
+									})} */}
 								</div>
 								<div
 									className="keyword-item reset-item"
@@ -172,16 +189,23 @@ const OptionCreate = (props) => {
 							<div id="option-create">
 								<div className="header">Create New Option</div>
 								<div className="d-flex">
-									<input
+									<TextField
+										fullWidth
+										value={option}
+										onChange={(e) => {
+											setOption(e.target.value);
+										}}
+									/>
+									{/* <input
 										value={option}
 										onChange={(e) => setOption(e.target.value)}
 										placeholder="Type to create option..."
 										className="objective-input"
-									/>
+									/> */}
 								</div>
 								<div className="d-flex">
 									Keywords:
-									<input
+									{/* <input
 										value={keywords.join(", ")}
 										onChange={(e) => {
 											// TODO: Fix
@@ -191,19 +215,50 @@ const OptionCreate = (props) => {
 										}}
 										placeholder="Type to search for keywords or add a new one"
 										className="objective-input"
+									/> */}
+									<Autocomplete
+										fullWidth
+										multiple
+										id="tags-outlined"
+										options={keywordList}
+										freeSolo
+										onChange={(e, value) => {
+											console.log(value);
+											setKeywords(value);
+										}}
+										renderTags={(value, getTagProps) =>
+											value.map((option, index) => (
+												<Chip variant="outlined" label={option} {...getTagProps({ index })} />
+											))
+										}
+										renderInput={(params) => (
+											<TextField {...params} placeholder="Option keywords" />
+										)}
 									/>
 								</div>
-								<div style={{ display: "flex" }}>
-									<div style={{ display: "flex" }}>
-										<label>Answer</label>
-										<input type="radio" onChange={(e) => setIsAnswer(true)} />
+								<div className="d-flex radio">
+									<div className="radio-item">
+										<label htmlFor="answer">Answer</label>
+										<input
+											type="radio"
+											name="answer"
+											value="answer"
+											onChange={(e) => setIsAnswer(true)}
+										/>
 									</div>
-									<div style={{ display: "flex" }}>
-										<label>Distractor</label>
-										<input type="radio" onChange={(e) => setIsAnswer(false)} />
+									<div className="radio-item">
+										<label htmlFor="distractor">Distractor</label>
+										<input
+											type="radio"
+											name="answer"
+											value="distractor"
+											onChange={(e) => setIsAnswer(false)}
+										/>
 									</div>
 								</div>
-								<button onClick={() => proceedStep()}>Next</button>
+								<button className="proceed-button" onClick={() => proceedStep()}>
+									Next
+								</button>
 							</div>
 						</div>
 					</div>
@@ -235,48 +290,7 @@ const OptionCreate = (props) => {
 							<div className="header">
 								Select any options below that represent that same idea as your own option.
 							</div>
-							{/* <div className="view-mode-wrapper" style={{ display: "flex" }}>
-								<div
-									className="view-mode"
-									style={groupMode ? { fontWeight: "700" } : { fontWeight: "400" }}
-									onClick={() => setGroupMode(true)}>
-									View by Cluster
-								</div>
-								|
-								<div
-									className="view-mode"
-									style={!groupMode ? { fontWeight: "700" } : { fontWeight: "400" }}
-									onClick={() => setGroupMode(false)}>
-									View Individually
-								</div>
-							</div>
-							{groupMode ? (
-								<div>
-									{isAnswer
-										? cluster
-												.filter((c) => {
-													return c.ansRep !== null;
-												})
-												.map((c) => {
-													return (
-														<div id={c._id} className="option-item-wrapper" key={c._id}>
-															<ClusterItem clusterInfo={c} id={c._id} type={true} />
-														</div>
-													);
-												})
-										: cluster
-												.filter((c) => {
-													return c.disRep !== null;
-												})
-												.map((c) => {
-													return (
-														<div id={c._id} className="option-item-wrapper" key={c._id}>
-															<ClusterItem clusterInfo={c} id={c._id} type={false} />
-														</div>
-													);
-												})}
-								</div>
-							) : ( */}
+
 							<div>
 								<div>Suggested Options</div>
 								{isAnswer
@@ -298,7 +312,32 @@ const OptionCreate = (props) => {
 							{/* )} */}
 						</div>
 
-						<button onClick={() => {}}>Submit</button>
+						<button
+							className="proceed-button"
+							onClick={() => {
+								const optionData = {
+									author: ObjectID(uid),
+									option_text: option,
+									is_answer: isAnswer,
+									class: ObjectID(cid),
+									qstem: ObjectID(qid),
+									plausible: {
+										similar: keywords,
+										difference: [],
+									},
+								};
+
+								axios
+									.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
+										optionData: optionData,
+										dependency: [],
+									})
+									.then(() => {
+										reset();
+									});
+							}}>
+							Submit
+						</button>
 					</div>
 				)}
 			</div>

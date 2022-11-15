@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //draft js part
 import { EditorState, convertToRaw, convertFromRaw, Modifier } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+
 import { Editor } from "react-draft-wysiwyg";
 //actions
 //ant part
@@ -27,7 +27,7 @@ import { display } from "@mui/system";
 var ObjectID = require("bson-objectid");
 
 function QstemEditor(props) {
-	const [objective, setObjective] = useState();
+	const [objective, setObjective] = useState("");
 	const updateObjective = (e) => {
 		setObjective(e.target.value);
 	};
@@ -35,8 +35,8 @@ function QstemEditor(props) {
 	const [uploadImages, setUploadImages] = useState([]);
 	const cid = props.cid;
 	const [template, setTemplate] = useState("");
-	const [answer, setAnswer] = useState();
-	const [explanation, setExplanation] = useState();
+	const [answer, setAnswer] = useState("");
+	const [explanation, setExplanation] = useState("");
 
 	const templateList = [
 		"Which is most likely to occur if ... ? ",
@@ -50,18 +50,18 @@ function QstemEditor(props) {
 		"Which best explains the cause of ...?",
 		"Which is an example of ...?",
 	];
-	const templatelist_kor = [
-		"다음 중 ...의 경우 발생할 수 있는 일로 가장 적합한 것은 무엇인가?",
-		"다음 중 ...와 ...의 차이를 가장 잘 설명한 것은 무엇인가?",
-		"다음 중 ...와 ...의 공통점을 가장 잘 설명한 것은 무엇인가?",
-		"...로 인해 ... 라는 문제가 발생한다. 다음 중 이에 대한 해결책으로 가장 적합한 것은?",
-		"다음 중 ...가 ...에 주는 영향에 대한 설명으로 가장 적절한 것은? ",
-		"다음 중 ...의 의미를 가장 잘 설명하는 것은?",
-		"다음 중 ...가 중요한 이유를 가장 잘 설명하는 것은?",
-		"다음 중 ...와 ...의 연관성에 대한 설명으로 가장 적절한 것은?",
-		"다음 중 ...가 발생하는 원인에 대해 가장 잘 설명한 것은?",
-		"다음 중 ...의 예시로 가장 적절한 것은? ",
-	];
+	// const templatelist_kor = [
+	// 	"다음 중 ...의 경우 발생할 수 있는 일로 가장 적합한 것은 무엇인가?",
+	// 	"다음 중 ...와 ...의 차이를 가장 잘 설명한 것은 무엇인가?",
+	// 	"다음 중 ...와 ...의 공통점을 가장 잘 설명한 것은 무엇인가?",
+	// 	"...로 인해 ... 라는 문제가 발생한다. 다음 중 이에 대한 해결책으로 가장 적합한 것은?",
+	// 	"다음 중 ...가 ...에 주는 영향에 대한 설명으로 가장 적절한 것은? ",
+	// 	"다음 중 ...의 의미를 가장 잘 설명하는 것은?",
+	// 	"다음 중 ...가 중요한 이유를 가장 잘 설명하는 것은?",
+	// 	"다음 중 ...와 ...의 연관성에 대한 설명으로 가장 적절한 것은?",
+	// 	"다음 중 ...가 발생하는 원인에 대해 가장 잘 설명한 것은?",
+	// 	"다음 중 ...의 예시로 가장 적절한 것은? ",
+	// ];
 	const ITEM_HEIGHT = 48;
 	const ITEM_PADDING_TOP = 8;
 	const MenuProps = {
@@ -72,37 +72,25 @@ function QstemEditor(props) {
 			},
 		},
 	};
-	// function uploadCallback(file) {
-	// 	let uploadedImages = uploadImages;
-	// 	const imageObject = {
-	// 		file: file,
-	// 		localSrc: URL.createObjectURL(file),
-	// 	};
-	// 	uploadedImages.push(imageObject);
-	// 	setUploadImages(uploadedImages);
-	// 	return new Promise((resolve, reject) => {
-	// 		resolve({ data: { link: imageObject.localSrc } });
+
+	// const selectTemplate = (e) => {
+	// 	setTemplate(e.target.value);
+	// 	setEditorState({
+	// 		editorState: insertTemplate(e.target.value, editorState),
 	// 	});
+	// };
+
+	// function insertTemplate(templateToInsert, editorState) {
+	// 	const currentContent = editorState.editorState.getCurrentContent(),
+	// 		currentSelection = editorState.editorState.getSelection();
+	// 	const newContent = Modifier.replaceText(currentContent, currentSelection, templateToInsert);
+	// 	const newEditorState = EditorState.push(
+	// 		editorState.editorState,
+	// 		newContent,
+	// 		"insert-characters"
+	// 	);
+	// 	return EditorState.forceSelection(newEditorState, newContent.getSelectionAfter());
 	// }
-
-	const selectTemplate = (e) => {
-		setTemplate(e.target.value);
-		setEditorState({
-			editorState: insertTemplate(e.target.value, editorState),
-		});
-	};
-
-	function insertTemplate(templateToInsert, editorState) {
-		const currentContent = editorState.editorState.getCurrentContent(),
-			currentSelection = editorState.editorState.getSelection();
-		const newContent = Modifier.replaceText(currentContent, currentSelection, templateToInsert);
-		const newEditorState = EditorState.push(
-			editorState.editorState,
-			newContent,
-			"insert-characters"
-		);
-		return EditorState.forceSelection(newEditorState, newContent.getSelectionAfter());
-	}
 
 	const post = "";
 
@@ -111,6 +99,7 @@ function QstemEditor(props) {
 	const editorContent = post
 		? EditorState.createWithContent(convertFromRaw(JSON.parse(description)))
 		: EditorState.createEmpty();
+
 	const [editorState, setEditorState] = useState({
 		editorState: editorContent,
 	});
@@ -120,22 +109,7 @@ function QstemEditor(props) {
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 
 	const setMsg = props.setMsg;
-	const checkForm = (qobj) => {
-		const rawString = qobj.raw_string;
-		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
-		if (rawString === null || wordcount < 1) {
-			alert("문제 내용을 입력해 주세요.");
-			return;
-		}
-		if (answer === null || answer.match(/^\s*$/) !== null) {
-			alert("정답을 입력해 주세요.");
-			return;
-		}
-		if (qobj.learning_objective === null) {
-			alert("학습 목표를 입력해 주세요.");
-			return;
-		}
-	};
+
 	const submitStem = () => {
 		const qstemObj = {
 			author: ObjectID(uid),
@@ -151,7 +125,7 @@ function QstemEditor(props) {
 
 		const rawString = qstemObj.raw_string;
 		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
-		if (rawString === null || wordcount < 3) {
+		if (rawString === null || wordcount < 1) {
 			alert("문제 내용을 입력해 주세요.");
 			return;
 		}
@@ -171,13 +145,12 @@ function QstemEditor(props) {
 			})
 			.then((res) => {
 				axios
-
 					.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
 						optionData: {
 							author: ObjectID(uid),
 							option_text: answer,
 							is_answer: true,
-							explanation: explanation,
+							// explanation: explanation,
 							class: ObjectID(cid),
 							qstem: ObjectID(res.data.data),
 							plausible: { similar: [], difference: [] },
@@ -197,138 +170,161 @@ function QstemEditor(props) {
 			});
 	};
 
-	const submitAndEnd = () => {
-		const qstemObj = {
-			author: ObjectID(uid),
-			stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
-			raw_string: editorState.editorState.getCurrentContent().getPlainText("\u0001"),
-			action_verb: props.verbs,
-			keyword: props.keywords,
-			class: ObjectID(cid),
-			options: [],
-			optionSets: [],
-			learning_objective: objective,
-		};
+	// const submitAndEnd = () => {
+	// 	const qstemObj = {
+	// 		author: ObjectID(uid),
+	// 		stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
+	// 		raw_string: editorState.editorState.getCurrentContent().getPlainText("\u0001"),
+	// 		action_verb: props.verbs,
+	// 		keyword: props.keywords,
+	// 		class: ObjectID(cid),
+	// 		options: [],
+	// 		optionSets: [],
+	// 		learning_objective: objective,
+	// 	};
 
-		const rawString = qstemObj.raw_string;
-		const wordcount = rawString.split(" ").filter((word) => word !== "").length;
-		if (rawString === null || wordcount < 3) {
-			alert("문제 내용을 입력해 주세요.");
-			return;
-		}
-		if (answer === null || answer.match(/^\s*$/) !== null) {
-			alert("정답을 입력해 주세요.");
-			return;
-		}
-		if (qstemObj.learning_objective === null) {
-			alert("학습 목표를 입력해 주세요.");
-			return;
-		}
-		axios
-			.post(`${process.env.REACT_APP_BACK_END}/question/qstem/create`, {
-				qstemObj: qstemObj,
-				cid: cid,
-				answer_text: answer,
-			})
-			.then((res) => {
-				axios
-					.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
-						optionData: {
-							author: ObjectID(uid),
-							option_text: answer,
-							is_answer: true,
-							explanation: explanation,
-							class: ObjectID(cid),
-							qstem: ObjectID(res.data.data),
-							plausible: { similar: [], difference: [] },
-							cluster: [],
-						},
-						dependency: [],
-					})
-					.then((res2) => {
-						setMsg("Successfuly made question stem!");
-						navigate("/" + cid + "/question/" + res.data.data);
-					});
-			});
-	};
+	// 	const rawString = qstemObj.raw_string;
+	// 	const wordcount = rawString.split(" ").filter((word) => word !== "").length;
+	// 	if (rawString === null || wordcount < 3) {
+	// 		alert("문제 내용을 입력해 주세요.");
+	// 		return;
+	// 	}
+	// 	if (answer === null || answer.match(/^\s*$/) !== null) {
+	// 		alert("정답을 입력해 주세요.");
+	// 		return;
+	// 	}
+	// 	if (qstemObj.learning_objective === null) {
+	// 		alert("학습 목표를 입력해 주세요.");
+	// 		return;
+	// 	}
+	// 	axios
+	// 		.post(`${process.env.REACT_APP_BACK_END}/question/qstem/create`, {
+	// 			qstemObj: qstemObj,
+	// 			cid: cid,
+	// 			answer_text: answer,
+	// 		})
+	// 		.then((res) => {
+	// 			axios
+	// 				.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
+	// 					optionData: {
+	// 						author: ObjectID(uid),
+	// 						option_text: answer,
+	// 						is_answer: true,
+	// 						explanation: explanation,
+	// 						class: ObjectID(cid),
+	// 						qstem: ObjectID(res.data.data),
+	// 						plausible: { similar: [], difference: [] },
+	// 						cluster: [],
+	// 					},
+	// 					dependency: [],
+	// 				})
+	// 				.then((res2) => {
+	// 					setMsg("Successfuly made question stem!");
+	// 					navigate("/" + cid + "/question/" + res.data.data);
+	// 				});
+	// 		});
+	// };
 	return (
 		<div id="qstemeditor">
-			<h3>Learning Objective</h3>
-
-			<TextField
-				fullWidth
-				value={objective}
-				onChange={updateObjective}
-				placeholder="What might we learn from solving this Question?"
-				className="objective-input"
-			/>
-			{/* <textarea value ={objective} onChange={updateObjective} placeholder="Learning Objective"/> */}
 			<div>
-				<h3>Question Stem</h3>
-				<div className="helper-text"></div>
+				<h3>Learning Objective</h3>
+				<div className="helper-text">What might we learn from solving this question?</div>
+				<TextField
+					fullWidth
+					value={objective}
+					onChange={updateObjective}
+					placeholder="Learning Objective"
+					className="objective-input"
+				/>
 			</div>
 
-			<Row justify="center">
-				<Col span="12">
-					<Form onFinish={submitStem} labelCol={{ span: 4 }} wrapperCol={{ span: 30 }}>
-						<Form.Item name="description">
-							<div className="qstem-editor">
-								<Editor
-									localization={{
-										locale: "en",
-									}}
-									editorState={editorState.editorState}
-									onEditorStateChange={handleEditorChange}
-									wrapperClassName="wrapper-class"
-									editorClassName="editor"
-									placeholder="Input your question here."
-									toolbarClassName="toolbar-class"
-									toolbar={{
-										// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
-										list: { inDropdown: true },
-										textAlign: { inDropdown: true },
-										link: { inDropdown: true },
-										history: { inDropdown: false },
-										// image: { uploadCallback: uploadCallback },
-									}}
-								/>
-							</div>
-						</Form.Item>
-					</Form>
-				</Col>
-			</Row>
-			<FormControl id="template">
-				<InputLabel id="demo-multiple-checkbox-label">
-					Stuck? Here are some Question Starters to help you out!
-				</InputLabel>
-				<Select
-					labelId="demo-multiple-checkbox-label"
-					id="demo-multiple-checkbox"
-					value={template}
-					onChange={selectTemplate}
-					input={<OutlinedInput label="Stuck? Here are some Question Starters to help you out!" />}
-					MenuProps={MenuProps}>
-					{templateList.map((t) => (
-						<MenuItem key={t} value={t}>
-							{/* <Checkbox checked={template.indexOf(t) > -1} /> */}
-							<ListItemText primary={t} />
-							{/* <div>Import</div> */}
-						</MenuItem>
-					))}
-				</Select>
-			</FormControl>
+			<div>
+				<h3>Question Stem</h3>
+				<div className="helper-text">Write down the content of your question here.</div>
+				<div className="helper-text">Stuck? Here are some question starters to help you out.</div>
+				<div className="qstem-editor">
+					<Editor
+						localization={{
+							locale: "en",
+						}}
+						editorState={editorState.editorState}
+						onEditorStateChange={handleEditorChange}
+						wrapperClassName="wrapper-class"
+						editorClassName="editor"
+						placeholder="Input your question here."
+						toolbarClassName="toolbar-class"
+						toolbar={{
+							// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
+							list: { inDropdown: true },
+							textAlign: { inDropdown: true },
+							link: { inDropdown: true },
+							history: { inDropdown: false },
+							// image: { uploadCallback: uploadCallback },
+						}}
+					/>
+				</div>
 
+				{/* <Row justify="center">
+					<Col span="12">
+						<Form onFinish={submitStem}>
+							<Form.Item name="description">
+								<div className="qstem-editor">
+									<Editor
+										localization={{
+											locale: "en",
+										}}
+										editorState={editorState.editorState}
+										onEditorStateChange={handleEditorChange}
+										wrapperClassName="wrapper-class"
+										editorClassName="editor"
+										placeholder="Input your question here."
+										toolbarClassName="toolbar-class"
+										toolbar={{
+											// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
+											list: { inDropdown: true },
+											textAlign: { inDropdown: true },
+											link: { inDropdown: true },
+											history: { inDropdown: false },
+											// image: { uploadCallback: uploadCallback },
+										}}
+									/>
+								</div>
+							</Form.Item>
+						</Form>
+					</Col>
+				</Row> */}
+				{/* <FormControl id="template">
+					<InputLabel id="demo-multiple-checkbox-label">
+						Stuck? Here are some Question Starters to help you out!
+					</InputLabel>
+					<Select
+						labelId="demo-multiple-checkbox-label"
+						id="demo-multiple-checkbox"
+						value={template}
+						onChange={selectTemplate}
+						input={
+							<OutlinedInput label="Stuck? Here are some Question Starters to help you out!" />
+						}
+						MenuProps={MenuProps}>
+						{templateList.map((t) => (
+							<MenuItem key={t} value={t}>
+								<ListItemText primary={t} />
+							</MenuItem>
+						))}
+					</Select>
+				</FormControl> */}
+			</div>
 			<div>
 				<h3>Answer & Explanation</h3>
 				<div className="helper-text">
-					Input an answer to this question. There can be more than one answer, but you may write
+					Suggest an answer to this question. There can be more than one answer, but you may write
 					only one here.
 				</div>
 				<TextField
 					fullWidth
 					value={answer}
 					onChange={(e) => setAnswer(e.target.value)}
-					placeholder="Input an answer to this question."
+					placeholder="Answer"
 					className="objective-input"
 				/>
 				<div className="helper-text">Write down the explanation for your answer.</div>
@@ -336,20 +332,15 @@ function QstemEditor(props) {
 					fullWidth
 					value={explanation}
 					onChange={(e) => setExplanation(e.target.value)}
-					placeholder="Write down the explanation for this question."
+					placeholder="Explanation"
 					className="objective-input"
 				/>
 			</div>
 
 			<div style={{ textAlign: "center", width: "100%" }}>
-				<Button
-					className="submit"
-					style={{ margin: "16px auto", display: "block" }}
-					onClick={submitStem}
-					type="primary"
-					htmlType="submit">
+				<button className="submit" onClick={submitStem}>
 					Submit
-				</Button>
+				</button>
 			</div>
 		</div>
 	);

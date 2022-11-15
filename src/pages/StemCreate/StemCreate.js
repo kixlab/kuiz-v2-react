@@ -40,7 +40,7 @@ const StemCreate = (props) => {
 			<div id="question-screen">
 				<Link to={"/" + cid} style={{ textDecoration: "none", color: "#000000" }}>
 					<div id="return-button">
-						<i className="fa-solid fa-arrow-left"></i> 목록으로 돌아가기
+						<i className="fa-solid fa-arrow-left"></i> Return to List
 					</div>
 				</Link>
 				<div>
