@@ -17,25 +17,28 @@
 	}
 
 	.tags {
+		display: flex;
 		.keyword-item {
+			margin-left: 8px;
 			background-color: #3d73dd;
 			color: white;
 			padding: 4px 8px;
 			border-radius: 4px;
 		}
 	}
-	.likes-container {
-		display: flex;
-		align-items: center;
-		.like {
-			display: flex;
-			justify-content: center;
-			padding: 4px 8px;
-			border: 1px solid black;
-			width: 36px;
-			.count {
-				margin-left: 4px;
-			}
+}
+
+#set-cluster {
+	.option-item {
+		cursor: pointer;
+		&.selected {
+			border: #3d73dd 2px solid;
+			padding: 10px 14px;
+		}
+
+		&:hover {
+			border: #7eaad9 2px solid;
+			padding: 10px 14px;
 		}
 	}
 }

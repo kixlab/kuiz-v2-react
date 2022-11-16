@@ -58,33 +58,54 @@ const Question = (props) => {
 	const getQinfo = (qid) => {
 		let optionList;
 		axios.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid).then((res) => {
-			axios
-				.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-					clusters: res.data.qinfo.cluster,
-				})
-				.then((res2) => {
-					const cluster = res2.data.clusters;
-					var ans = cluster.filter((c) => c.ansExist);
-					var dis = cluster.filter((c) => c.disExist);
+			const options = res.data.options;
 
-					var ansList = getMultipleRandom(ans, 1);
-					var disList = getMultipleRandom(dis, 3);
+			let ans = options.filter((c) => c.is_answer);
+			let dis = options.filter((c) => !c.is_answer);
 
-					optionList = shuffle(ansList.map((a) => a.ansRep).concat(disList.map((d) => d.disRep)));
+			var ansList = getMultipleRandom(ans, 1);
+			var disList = getMultipleRandom(dis, 3);
 
-					setClusters(cluster);
-					setAns(ans);
-					setDis(dis);
-					setOptionSet(optionList);
-					setIsOptionValid(true);
+			optionList = shuffle(ansList.concat(disList));
+			setAns(ans);
+			setDis(dis);
+			setOptionSet(optionList);
 
-					optionList.map((o, i) => {
-						if (o.is_answer) {
-							setAnswer(i);
-						}
-					});
-				})
-				.catch((err) => console.log(err));
+			optionList.map((o, i) => {
+				if (o.is_answer) {
+					setAnswer(i);
+				}
+			});
+
+			// 		var dis = cluster.filter((c) => c.disExist);
+
+			// axios
+			// 	.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
+			// 		clusters: res.data.qinfo.cluster,
+			// 	})
+			// 	.then((res2) => {
+			// 		const cluster = res2.data.clusters;
+			// 		var ans = cluster.filter((c) => c.ansExist);
+			// 		var dis = cluster.filter((c) => c.disExist);
+
+			// 		var ansList = getMultipleRandom(ans, 1);
+			// 		var disList = getMultipleRandom(dis, 3);
+
+			// 		optionList = shuffle(ansList.map((a) => a.ansRep).concat(disList.map((d) => d.disRep)));
+
+			// 		setClusters(cluster);
+			// 		setAns(ans);
+			// 		setDis(dis);
+			// 		setOptionSet(optionList);
+			// 		setIsOptionValid(true);
+
+			// 		optionList.map((o, i) => {
+			// 			if (o.is_answer) {
+			// 				setAnswer(i);
+			// 			}
+			// 		});
+			// 	})
+			// 	.catch((err) => console.log(err));
 			setOptions(res.data.options);
 			setQinfo(res.data.qinfo);
 		});
@@ -179,13 +200,8 @@ const Question = (props) => {
 					<div className="objective-container">
 						Learning Objective : {qinfo && qinfo.learning_objective}
 					</div>
-					{/* <div>{qinfo.explanation}</div> */}
-					<div>
-						{optionSet.map((option, index) => {
-							console.log(option);
-							// <VerificationOptionItem optionInfo={option} key={index} />
-						})}
-					</div>
+					<div>{qinfo.explanation}</div>
+
 					<div className="section">
 						<div className="header">Review Other Options</div>
 						<div className="view-mode-wrapper" style={{ display: "flex" }}>

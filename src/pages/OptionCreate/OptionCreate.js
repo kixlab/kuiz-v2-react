@@ -33,7 +33,7 @@ const OptionCreate = (props) => {
 	const uid = useParams().uid;
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	// const [myOption, setMyOption] = useState();
-	const [cluster, setCluster] = useState([]);
+	const [similarOptions, setSimilarOptions] = useState([]);
 	// const [sameCluster, setSameCluster] = useState([]);
 	// const [contCluster, setContCluster] = useState([]);
 
@@ -41,6 +41,8 @@ const OptionCreate = (props) => {
 	const [option, setOption] = useState("");
 	const [isAnswer, setIsAnswer] = useState();
 	const [keywords, setKeywords] = useState([]);
+
+	const [keywordSet, setKeywordSet] = useState([]);
 
 	const getOptionList = (qid) => {
 		axios.get(`${process.env.REACT_APP_BACK_END}/question/option/load?qid=` + qid).then((res) => {
@@ -50,42 +52,41 @@ const OptionCreate = (props) => {
 			setAnsList(ans);
 			setDistList(dis);
 			setQinfo(res.data.qinfo);
-
-			console.log(res.data.qinfo);
-			// setKeywords(res.data.qinfo.keywords);
+			setKeywordSet(res.data.qinfo.keyword);
 		});
 	};
-	const getOptionCluster = (qid) => {
-		axios
-			.get(`${process.env.REACT_APP_BACK_END}/question/load/cluster?qid=` + qid)
-			.then(async (res) => {
-				setCluster(res.data.cluster);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
+	// const getOptionCluster = (qid) => {
+	// 	axios
+	// 		.get(`${process.env.REACT_APP_BACK_END}/question/load/cluster?qid=` + qid)
+	// 		.then(async (res) => {
+	// 			setSimilarOptions(res.data.cluster);
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// };
 
-	const getOptionByCluster = (cluserId) => {
-		axios
-			.get(`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?qid=` + qid)
-			.then((res) => {
-				cluster.set(res.data.cluster);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
+	// const getOptionByCluster = (cluserId) => {
+	// 	axios
+	// 		.get(`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?qid=` + qid)
+	// 		.then((res) => {
+	// 			cluster.set(res.data.cluster);
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// };
 
 	const reset = () => {
 		setPageStat(true);
+		navigate("/" + cid);
 		// setSameCluster([]);
 		// setContCluster([]);
 	};
 
 	useEffect(() => {
 		if (isLoggedIn) {
-			getOptionCluster(qid);
+			// getOptionCluster(qid);
 			getOptionList(qid);
 		} else {
 			navigate("/login");
@@ -94,14 +95,18 @@ const OptionCreate = (props) => {
 
 	const filterOptions = (keyword) => {
 		setAnsList(
-			ansList.filter((option) => {
-				return option.plausible.similar.includes(keyword);
-			})
+			options
+				.filter((op) => op.is_answer)
+				.filter((option) => {
+					return option.keyWords.includes(keyword);
+				})
 		);
 		setDistList(
-			disList.filter((option) => {
-				return option.plausible.similar.includes(keyword);
-			})
+			options
+				.filter((op) => !op.is_answer)
+				.filter((option) => {
+					return option.keyWords.includes(keyword);
+				})
 		);
 	};
 	const resetFilter = () => {
@@ -113,7 +118,19 @@ const OptionCreate = (props) => {
 		setPageStat(false);
 	};
 
-	const keywordList = ["this", "that", "also this"];
+	const addToCluster = (id) => {
+		if (similarOptions.includes(id)) {
+			setSimilarOptions(
+				similarOptions.filter((item) => {
+					return item != id;
+				})
+			);
+		} else {
+			setSimilarOptions(similarOptions.push(id));
+		}
+	};
+
+	const keywordList = keywordSet;
 
 	return (
 		<div id="option-create-wrapper">
@@ -144,17 +161,18 @@ const OptionCreate = (props) => {
 							<div className="header">Keywords</div>
 							<div id="keywords-container">
 								<div>
-									{/* {qinfo.keywords.map((item) => {
+									{keywordSet.map((item, index) => {
 										return (
 											<div
 												className="keyword-item"
 												onClick={() => {
 													filterOptions(item);
-												}}>
+												}}
+												key={index}>
 												{item}
 											</div>
 										);
-									})} */}
+									})}
 								</div>
 								<div
 									className="keyword-item reset-item"
@@ -205,17 +223,6 @@ const OptionCreate = (props) => {
 								</div>
 								<div className="d-flex">
 									Keywords:
-									{/* <input
-										value={keywords.join(", ")}
-										onChange={(e) => {
-											// TODO: Fix
-											let value = e.target.value;
-											let arr = value.split(", ");
-											setKeywords(arr);
-										}}
-										placeholder="Type to search for keywords or add a new one"
-										className="objective-input"
-									/> */}
 									<Autocomplete
 										fullWidth
 										multiple
@@ -223,7 +230,6 @@ const OptionCreate = (props) => {
 										options={keywordList}
 										freeSolo
 										onChange={(e, value) => {
-											console.log(value);
 											setKeywords(value);
 										}}
 										renderTags={(value, getTagProps) =>
@@ -291,20 +297,32 @@ const OptionCreate = (props) => {
 								Select any options below that represent that same idea as your own option.
 							</div>
 
-							<div>
+							<div id="set-cluster">
 								<div>Suggested Options</div>
 								{isAnswer
 									? ansList.map((item, index) => {
 											return (
 												<div key={index}>
-													<OptionItem optionInfo={item} id={item._id} />
+													<OptionItem
+														optionInfo={item}
+														id={item._id}
+														onClick={() => {
+															addToCluster(item._id);
+														}}
+													/>
 												</div>
 											);
 									  })
 									: disList.map((item, index) => {
 											return (
 												<div key={index}>
-													<OptionItem optionInfo={item} id={item._id} />
+													<OptionItem
+														optionInfo={item}
+														id={item._id}
+														onClick={() => {
+															addToCluster(item._id);
+														}}
+													/>
 												</div>
 											);
 									  })}
@@ -321,16 +339,13 @@ const OptionCreate = (props) => {
 									is_answer: isAnswer,
 									class: ObjectID(cid),
 									qstem: ObjectID(qid),
-									plausible: {
-										similar: keywords,
-										difference: [],
-									},
+									keywords: keywords,
 								};
 
 								axios
 									.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
 										optionData: optionData,
-										dependency: [],
+										similarOptions: [],
 									})
 									.then(() => {
 										reset();

@@ -106,6 +106,18 @@ function QstemEditor(props) {
 	const handleEditorChange = (editorState) => {
 		setEditorState({ editorState });
 	};
+
+	const expContent = post
+		? EditorState.createWithContent(convertFromRaw(JSON.parse(description)))
+		: EditorState.createEmpty();
+
+	const [expState, setExpState] = useState({
+		editorState: expContent,
+	});
+	const handleExpChange = (editorState) => {
+		setExpState({ editorState });
+	};
+
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
 
 	const setMsg = props.setMsg;
@@ -264,35 +276,6 @@ function QstemEditor(props) {
 					/>
 				</div>
 
-				{/* <Row justify="center">
-					<Col span="12">
-						<Form onFinish={submitStem}>
-							<Form.Item name="description">
-								<div className="qstem-editor">
-									<Editor
-										localization={{
-											locale: "en",
-										}}
-										editorState={editorState.editorState}
-										onEditorStateChange={handleEditorChange}
-										wrapperClassName="wrapper-class"
-										editorClassName="editor"
-										placeholder="Input your question here."
-										toolbarClassName="toolbar-class"
-										toolbar={{
-											// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
-											list: { inDropdown: true },
-											textAlign: { inDropdown: true },
-											link: { inDropdown: true },
-											history: { inDropdown: false },
-											// image: { uploadCallback: uploadCallback },
-										}}
-									/>
-								</div>
-							</Form.Item>
-						</Form>
-					</Col>
-				</Row> */}
 				{/* <FormControl id="template">
 					<InputLabel id="demo-multiple-checkbox-label">
 						Stuck? Here are some Question Starters to help you out!
@@ -328,13 +311,33 @@ function QstemEditor(props) {
 					className="objective-input"
 				/>
 				<div className="helper-text">Write down the explanation for your answer.</div>
-				<TextField
+				<Editor
+					localization={{
+						locale: "en",
+					}}
+					editorState={expState.editorState}
+					onEditorStateChange={handleExpChange}
+					wrapperClassName="wrapper-class"
+					editorClassName="editor"
+					placeholder="Input your question here."
+					toolbarClassName="toolbar-class"
+					toolbar={{
+						// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
+						list: { inDropdown: true },
+						textAlign: { inDropdown: true },
+						link: { inDropdown: true },
+						history: { inDropdown: false },
+						// image: { uploadCallback: uploadCallback },
+					}}
+				/>
+
+				{/* <TextField
 					fullWidth
 					value={explanation}
 					onChange={(e) => setExplanation(e.target.value)}
 					placeholder="Explanation"
 					className="objective-input"
-				/>
+				/> */}
 			</div>
 
 			<div style={{ textAlign: "center", width: "100%" }}>

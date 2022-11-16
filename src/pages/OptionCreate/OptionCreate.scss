@@ -74,6 +74,13 @@
 			}
 		}
 
+		.tags {
+			display: flex;
+			.keyword-item {
+				margin-left: 8px;
+			}
+		}
+
 		#options {
 			display: grid;
 			grid-template-rows: 1fr auto;

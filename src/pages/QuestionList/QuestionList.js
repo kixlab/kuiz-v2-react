@@ -27,34 +27,42 @@ const QuestionList = (props) => {
 							await axios
 								.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
 								.then(async (res) => {
-									if (cType) {
-										if (res.data.qinfo.cluster.length < 3) {
-											valid[i] = false;
-											return await false;
-										} else {
-											await axios
-												.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-													clusters: res.data.qinfo.cluster,
-												})
-												.then(async (res2) => {
-													const clusters = await res2.data.clusters;
-													const ans = clusters.filter((c) => c.ansExist).length;
-													const dis = clusters.filter((c) => c.disExist).length;
-													const ov = clusters.filter((c) => c.ansExist && c.disExist).length;
-													if (ans + dis - ov >= 4) {
-														valid[i] = true;
-														return await true;
-													} else {
-														valid[i] = false;
-														return await false;
-													}
-												})
-												.catch(async (err) => await console.log(err));
-										}
-									} else {
+									const options = res.data.options;
+
+									const ans = options.filter((c) => c.is_answer);
+									const dis = options.filter((c) => !c.is_answer);
+
+									if (ans.length + dis.length >= 4) {
 										valid[i] = true;
-										return true;
+										return await true;
 									}
+									// await axios.get(
+									// 	`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id
+									// );
+									// if (res.data.qinfo.cluster.length < 3) {
+									// 	valid[i] = false;
+									// 	return await false;
+									// } else {
+									// 	await axios
+									// 		.get(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
+									// 			clusters: res.data.qinfo.cluster,
+									// 		})
+									// 		.then(async (res2) => {
+									// 			const clusters = await res2.data.clusters;
+
+									// 			const ans = clusters.filter((c) => c.ansExist).length;
+									// 			const dis = clusters.filter((c) => c.disExist).length;
+									// 			const ov = clusters.filter((c) => c.ansExist && c.disExist).length;
+									// 			if (ans + dis - ov >= 4) {
+									// 				valid[i] = true;
+									// 				return await true;
+									// 			} else {
+									// 				valid[i] = false;
+									// 				return await false;
+									// 			}
+									// 		})
+									// 		.catch(async (err) => await console.log(err));
+									// }
 								});
 						})
 					);
