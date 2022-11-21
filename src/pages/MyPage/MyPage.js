@@ -20,7 +20,7 @@ const MyPage = (props) => {
 
 	const getMadeStem = useCallback(() => {
 		axios.post(`${process.env.REACT_APP_BACK_END}/question/made/stem`, { uid: uid }).then((res) => {
-			setMadeStem(res.data.madeStem);
+			setMadeStem(res.data.madeStem.reverse());
 		});
 	}, [uid]);
 
@@ -59,8 +59,6 @@ const MyPage = (props) => {
 		}
 	}, [getMadeOption, getMadeStem, isLoggedIn, navigate]);
 
-	console.log(madeOption);
-
 	return (
 		<div id="mypage">
 			<h3>Questions that I made</h3>
@@ -80,7 +78,7 @@ const MyPage = (props) => {
 										number=">"
 										title={stem.raw_string}
 										options={stem.options}
-										date={stem.updatedAt ? stem.updatedAt : stem.createdAt}
+										date={stem.createdAt}
 									/>
 								</div>
 							</Link>
@@ -90,7 +88,7 @@ const MyPage = (props) => {
 			<h3>Options that I made</h3>
 			<div className="options-wrapper">
 				{madeOption &&
-					madeOption.map((option, i) => {
+					madeOption.reverse().map((option, i) => {
 						return (
 							<div key={option._id} className="option-item">
 								<div className="option-text-wrapper">
@@ -107,7 +105,7 @@ const MyPage = (props) => {
 								</div>
 								<div
 									className="option-nav"
-									onClick={(e) => navigate("/" + cid + "/question/" + option.qstem)}>
+									onClick={(e) => navigate("/" + cid + "/question/" + option.qstem + "/create")}>
 									Go to Question &nbsp;
 									<i className="fa-solid fa-arrow-right"></i>
 								</div>

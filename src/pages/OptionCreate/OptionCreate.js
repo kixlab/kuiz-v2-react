@@ -27,8 +27,9 @@ const OptionCreate = (props) => {
 	const [disList, setDistList] = useState();
 	const [qinfo, setQinfo] = useState();
 	const [options, setOptions] = useState();
+
 	const cid = useParams().cid;
-	const uid = useParams().uid;
+	const uid = useSelector((state) => state.userInfo.userInfo._id);
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [similarOptions, setSimilarOptions] = useState([]);
 
@@ -158,6 +159,9 @@ const OptionCreate = (props) => {
 	if (!keywordList.includes("Distractor - Form similar to answer")) {
 		keywordList.push("Distractor - Form similar to answer");
 	}
+
+	console.log(uid);
+
 	return (
 		<div id="option-create-wrapper">
 			<Link to={"/" + cid} style={{ textDecoration: "none", color: "#000000" }}>
