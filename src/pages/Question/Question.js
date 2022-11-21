@@ -58,54 +58,53 @@ const Question = (props) => {
 	const getQinfo = (qid) => {
 		let optionList;
 		axios.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid).then((res) => {
-			const options = res.data.options;
+			// const options = res.data.options;
 
-			let ans = options.filter((c) => c.is_answer);
-			let dis = options.filter((c) => !c.is_answer);
+			// let ans = options.filter((c) => c.is_answer);
+			// let dis = options.filter((c) => !c.is_answer);
 
-			var ansList = getMultipleRandom(ans, 1);
-			var disList = getMultipleRandom(dis, 3);
+			// var ansList = getMultipleRandom(ans, 1);
+			// var disList = getMultipleRandom(dis, 3);
 
-			optionList = shuffle(ansList.concat(disList));
-			setAns(ans);
-			setDis(dis);
-			setOptionSet(optionList);
+			// optionList = shuffle(ansList.concat(disList));
+			// setAns(ans);
+			// setDis(dis);
+			// setOptionSet(optionList);
 
-			optionList.map((o, i) => {
-				if (o.is_answer) {
-					setAnswer(i);
-				}
-			});
+			// optionList.map((o, i) => {
+			// 	if (o.is_answer) {
+			// 		setAnswer(i);
+			// 	}
+			// });
 
-			// 		var dis = cluster.filter((c) => c.disExist);
+			axios
+				.get(`${process.env.REACT_APP_BACK_END}/question/load/cluster?qid=` + qid)
+				.then((res2) => {
+					const cluster = res2.data.cluster;
 
-			// axios
-			// 	.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-			// 		clusters: res.data.qinfo.cluster,
-			// 	})
-			// 	.then((res2) => {
-			// 		const cluster = res2.data.clusters;
-			// 		var ans = cluster.filter((c) => c.ansExist);
-			// 		var dis = cluster.filter((c) => c.disExist);
+					var ans = cluster.filter((c) => c.representative.is_answer);
+					var dis = cluster.filter((c) => !c.representative.is_answer);
 
-			// 		var ansList = getMultipleRandom(ans, 1);
-			// 		var disList = getMultipleRandom(dis, 3);
+					var ansList = getMultipleRandom(ans, 1);
+					var disList = getMultipleRandom(dis, 3);
 
-			// 		optionList = shuffle(ansList.map((a) => a.ansRep).concat(disList.map((d) => d.disRep)));
+					optionList = shuffle(
+						ansList.map((a) => a.representative).concat(disList.map((d) => d.representative))
+					);
 
-			// 		setClusters(cluster);
-			// 		setAns(ans);
-			// 		setDis(dis);
-			// 		setOptionSet(optionList);
-			// 		setIsOptionValid(true);
+					setClusters(cluster);
+					setAns(ans);
+					setDis(dis);
+					setOptionSet(optionList);
+					setIsOptionValid(true);
 
-			// 		optionList.map((o, i) => {
-			// 			if (o.is_answer) {
-			// 				setAnswer(i);
-			// 			}
-			// 		});
-			// 	})
-			// 	.catch((err) => console.log(err));
+					optionList.map((o, i) => {
+						if (o.is_answer) {
+							setAnswer(i);
+						}
+					});
+				})
+				.catch((err) => console.log(err));
 			setOptions(res.data.options);
 			setQinfo(res.data.qinfo);
 		});

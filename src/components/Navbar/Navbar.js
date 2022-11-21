@@ -7,7 +7,6 @@ import Button from "../Button/Button";
 
 function Navbar(props) {
 	const cid = useSelector((state) => state.userInfo.cid);
-	const cType = useSelector((state) => state.userInfo.cType);
 	const profile = useSelector((state) => state.userInfo.userInfo?.imageUrl);
 	const user_name = useSelector((state) => state.userInfo.userInfo?.name);
 	const navigate = useNavigate();
@@ -19,11 +18,11 @@ function Navbar(props) {
 
 	const moveToCreateOption = useCallback(() => {
 		navigate("/" + cid);
-	},[cid, navigate]);
+	}, [cid, navigate]);
 
 	const moveToQlist = useCallback(() => {
 		navigate("/" + cid + "/qlist");
-	},[cid, navigate]);
+	}, [cid, navigate]);
 
 	useEffect(() => {
 		console.log("login:", isLoggedIn ? "true" : "false");
@@ -37,18 +36,20 @@ function Navbar(props) {
 				</div>
 				{/* <div>{cid}</div> */}
 			</div>
-			<div id="side-nav">
-				<Button navigateBy={moveToCreateStem} text="Create New Question Stem" />
-				{cType ? <Button navigateBy={moveToCreateOption} text="View Created Questions" /> : null}
-				<Button navigateBy={moveToQlist} text="Question Bank" />
-			</div>
+			{isLoggedIn && (
+				<div id="side-nav">
+					<Button navigateBy={moveToCreateStem} text="Create New Question" />
+					<Button navigateBy={moveToCreateOption} text="Create New Options" />
+					{/* <Button navigateBy={moveToQlist} text="Question Bank" /> */}
+				</div>
+			)}
 			<div className="profile">
 				<div className="profile-photo">
 					<img src={profile} width="100px" />
 				</div>
 				<div className="profile-name">{user_name}</div>
 				<div className="profile-nav" onClick={(e) => navigate("/" + cid + "/mypage")}>
-					MY PAGE &nbsp;
+					MY PAGE
 					<i className="fa-solid fa-arrow-right"></i>
 				</div>
 			</div>

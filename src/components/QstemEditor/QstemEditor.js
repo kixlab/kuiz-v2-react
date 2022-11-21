@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 //draft js part
 import { EditorState, convertToRaw, convertFromRaw, Modifier } from "draft-js";
 
 import { Editor } from "react-draft-wysiwyg";
 //actions
-//ant part
-import { Row, Col, Form, Input, Button, notification } from "antd";
+
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
+
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import ListItemText from "@mui/material/ListItemText";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
 
 import axios from "axios";
 import "./QstemEditor.scss";
 import { useNavigate } from "react-router-dom";
 
 // import Button from "../Button/Button.js";
-import { display } from "@mui/system";
 
 var ObjectID = require("bson-objectid");
 
@@ -32,9 +24,9 @@ function QstemEditor(props) {
 		setObjective(e.target.value);
 	};
 	const navigate = useNavigate();
-	const [uploadImages, setUploadImages] = useState([]);
+
 	const cid = props.cid;
-	const [template, setTemplate] = useState("");
+
 	const [answer, setAnswer] = useState("");
 	const [explanation, setExplanation] = useState("");
 
@@ -124,12 +116,14 @@ function QstemEditor(props) {
 
 	const submitStem = () => {
 		const qstemObj = {
-			author: ObjectID(uid),
+			uid: ObjectID(uid),
 			stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
 			raw_string: editorState.editorState.getCurrentContent().getPlainText("\u0001"),
+			explanation: JSON.stringify(convertToRaw(expState.editorState.getCurrentContent())),
+			// explanation: explanation,
 			action_verb: props.verbs,
-			keyword: props.keywords,
-			class: ObjectID(cid),
+			keyword: [],
+			cid: ObjectID(cid),
 			options: [],
 			optionSets: [],
 			learning_objective: objective,
@@ -165,19 +159,11 @@ function QstemEditor(props) {
 							// explanation: explanation,
 							class: ObjectID(cid),
 							qstem: ObjectID(res.data.data),
-							plausible: { similar: [], difference: [] },
-							cluster: [],
 						},
-						dependency: [],
+						similarOptions: [],
 					})
-
 					.then((res2) => {
-						setMsg("Successfuly made question stem!");
-						if (props.classType) {
-							navigate("/" + cid + "/question/" + res.data.data + "/create");
-						} else {
-							navigate("/" + cid + "/question/" + res.data.data);
-						}
+						navigate("/" + cid + "/question/" + res.data.data + "/create");
 					});
 			});
 	};
@@ -299,10 +285,7 @@ function QstemEditor(props) {
 			</div>
 			<div>
 				<h3>Answer & Explanation</h3>
-				<div className="helper-text">
-					Suggest an answer to this question. There can be more than one answer, but you may write
-					only one here.
-				</div>
+				<div className="helper-text">Suggest an answer to this question.</div>
 				<TextField
 					fullWidth
 					value={answer}
@@ -319,7 +302,7 @@ function QstemEditor(props) {
 					onEditorStateChange={handleExpChange}
 					wrapperClassName="wrapper-class"
 					editorClassName="editor"
-					placeholder="Input your question here."
+					placeholder="Input your explanation here."
 					toolbarClassName="toolbar-class"
 					toolbar={{
 						// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지

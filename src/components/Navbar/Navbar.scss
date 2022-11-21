@@ -2,10 +2,10 @@
 	display: grid;
 	grid-template-columns: 350px auto;
 
-	.hidden{
+	.hidden {
 		visibility: hidden;
 	}
-	.show{
+	.show {
 		visibility: visible;
 	}
 	#left-sidebar {
@@ -15,7 +15,6 @@
 		display: grid;
 		grid-template-rows: 30% auto auto;
 		height: calc(100vh - 112px);
-		
 
 		#main-logo {
 			text-align: left;
@@ -40,9 +39,12 @@
 	}
 
 	.profile {
-		place-self: center left;
+		place-self: end center;
 		display: grid;
 		row-gap: 16px;
+		border: 1px solid #d8d8d8;
+		padding: 24px;
+		border-radius: 8px;
 		.profile-photo {
 			border-radius: 50%;
 			width: 100px;
@@ -51,13 +53,20 @@
 		}
 
 		.profile-name {
-			font-weight: 600s;
+			font-weight: 600;
 		}
 
 		.profile-nav {
 			color: #3d73dd;
-			font-weight: 500;
+			font-weight: 900;
 			cursor: pointer;
+			&:hover {
+				text-decoration: underline;
+			}
+
+			i {
+				margin-left: 8px;
+			}
 		}
 	}
 }

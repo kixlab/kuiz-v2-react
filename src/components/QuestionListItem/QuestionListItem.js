@@ -6,11 +6,9 @@ import "dayjs/locale/ko";
 import { useSelector } from "react-redux";
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
-dayjs.locale("ko");
+dayjs.locale("en");
 
 const QuestionListItem = (props) => {
-	const cType = useSelector((state) => state.userInfo.cType);
-
 	const formatDate = (date) => {
 		if (date === "") {
 			setTimeout(formatDate, 100);
@@ -22,7 +20,7 @@ const QuestionListItem = (props) => {
 
 			if (diffInt > 10080) {
 				const dateStringArray = createdAt.toString().split(" ");
-				const mmm = dateStringArray[1];
+				// const mmm = dateStringArray[1];
 				const month = createdAt.getMonth();
 
 				const dd = dateStringArray[2];

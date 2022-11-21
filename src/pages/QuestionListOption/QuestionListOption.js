@@ -23,9 +23,7 @@ const QuestionListOption = (props) => {
 				uid: uid,
 			})
 			.then((res) => {
-				console.log("RES:", res.data);
 				if (res.data.inclass) {
-					console.log("case1");
 					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res2) => {
 						// dispatch(enrollClass({ cid: cid, cType: res2.data.cType }));
 						// if (!res2.data.cType) {
@@ -64,45 +62,7 @@ const QuestionListOption = (props) => {
 		axios
 			.get(`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` + cid)
 			.then(async (res) => {
-				const valid = [];
-				await Promise.all(
-					res.data.problemList.map(async (q, i) => {
-						await axios
-							.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
-							.then(async (res) => {
-								if (cType) {
-									if (res.data.qinfo.cluster.length < 3) {
-										valid[i] = false;
-										return await false;
-									} else {
-										await axios
-											.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-												clusters: res.data.qinfo.cluster,
-											})
-											.then(async (res2) => {
-												const clusters = await res2.data.clusters;
-												if (
-													clusters.filter((c) => c.ansExist === true).length >= 1 &&
-													clusters.filter((c) => c.disExist === true).length >= 2
-												) {
-													valid[i] = true;
-													return await true;
-												} else {
-													valid[i] = false;
-													return await false;
-												}
-											})
-											.catch(async (err) => await console.log(err));
-									}
-								} else {
-									valid[i] = true;
-									return true;
-								}
-							});
-					})
-				);
-
-				setValidList(valid);
+				console.log(res.data);
 				setQuestionList(res.data.problemList);
 			});
 	};

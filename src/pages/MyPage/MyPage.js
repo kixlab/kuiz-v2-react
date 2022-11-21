@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
+import QuestionListItem2 from "../../components/QuestionListItem2/QuestionListItem2";
 import { useDispatch } from "react-redux";
 
 import "./MyPage.scss";
@@ -19,50 +19,36 @@ const MyPage = (props) => {
 	const dispatch = useDispatch();
 
 	const getMadeStem = useCallback(() => {
-		console.log("UID:", uid);
-		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/question/made/stem`,
-				{ uid: uid }
-			)
-			.then((res) => {
-				setMadeStem(res.data.madeStem);
-			});
+		axios.post(`${process.env.REACT_APP_BACK_END}/question/made/stem`, { uid: uid }).then((res) => {
+			setMadeStem(res.data.madeStem);
+		});
 	}, [uid]);
 
 	const getMadeOption = useCallback(() => {
-		axios
-			.post(
-				`${process.env.REACT_APP_BACK_END}/question/made/option`,
-				{ uid, uid }
-			)
-			.then((res) => {
-				axios
-					.post(
-						`${process.env.REACT_APP_BACK_END}/question/qstembyoption`,
-						{
-							qstems: res.data.madeOption.map((o) => o.qstem),
-						}
-					)
-					.then((res2) => {
-						// setMadeOption(res.data.madeOption)
-						// setQlist(res2.data.qstems)
-						const optionList = res.data.madeOption;
-						const qlist = res2.data.qstems.map((qstem) => {
-							return { qinfo: qstem };
-						});
-						const newOptionList = optionList.map((option, index) => ({
-							...option,
-							...qlist[index],
-						}));
-						setMadeOption(newOptionList);
+		axios.post(`${process.env.REACT_APP_BACK_END}/question/made/option`, { uid }).then((res) => {
+			axios
+				.post(`${process.env.REACT_APP_BACK_END}/question/qstembyoption`, {
+					qstems: res.data.madeOption.map((o) => o.qstem),
+				})
+				.then((res2) => {
+					// setMadeOption(res.data.madeOption)
+					// setQlist(res2.data.qstems)
+					const optionList = res.data.madeOption;
+					const qlist = res2.data.qstems.map((qstem) => {
+						return { qinfo: qstem };
 					});
-			});
-	},[uid]);
+					const newOptionList = optionList.map((option, index) => ({
+						...option,
+						...qlist[index],
+					}));
+					setMadeOption(newOptionList);
+				});
+		});
+	}, [uid]);
 
 	const onLogout = useCallback(() => {
 		dispatch(logoutUser());
-	},[dispatch])
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (!isLoggedIn) {
@@ -75,20 +61,19 @@ const MyPage = (props) => {
 
 	return (
 		<div id="mypage">
-			<h3>내가 만든 질문</h3>
+			<h3>Questions that I made</h3>
 			<div className="stems-wrapper">
 				{madeStem &&
 					madeStem.map((stem) => {
 						return (
 							<Link
 								key={stem._id}
-								to={"/" + cid + "/question/" + stem._id}
-								style={{ textDecoration: "none", color: "#000000" }}
-							>
+								to={"/" + cid + "/question/" + stem._id + "/create/"}
+								style={{ textDecoration: "none", color: "#000000" }}>
 								<div id="stem-viewer">
 									{/* <div>{stem.raw_string}</div>
 								<div>{stem.updatedAt ? stem.updatedAt : stem.createdAt}</div> */}
-									<QuestionListItem
+									<QuestionListItem2
 										id={stem._id}
 										number=">"
 										title={stem.raw_string}
@@ -100,7 +85,7 @@ const MyPage = (props) => {
 						);
 					})}
 			</div>
-			<h3>내가 만든 선택지</h3>
+			<h3>Options that I made</h3>
 			<div className="options-wrapper">
 				{madeOption &&
 					madeOption.map((option, i) => {
@@ -120,10 +105,7 @@ const MyPage = (props) => {
 								</div>
 								<div
 									className="option-nav"
-									onClick={(e) =>
-										navigate("/" + cid + "/question/" + option.qstem)
-									}
-								>
+									onClick={(e) => navigate("/" + cid + "/question/" + option.qstem)}>
 									Go to Question &nbsp;
 									<i className="fa-solid fa-arrow-right"></i>
 								</div>
@@ -131,8 +113,8 @@ const MyPage = (props) => {
 						);
 					})}
 			</div>
-			<h3>내가 푼 문제들</h3>
-			<button onClick={onLogout}>로그아웃</button>
+			{/* <h3>내가 푼 문제들</h3> */}
+			<button onClick={onLogout}>Log Out</button>
 		</div>
 	);
 };

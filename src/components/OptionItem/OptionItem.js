@@ -5,7 +5,7 @@ import "./OptionItem.scss";
 import axios from "axios";
 import { pink } from "@mui/material/colors";
 
-const OptionItem = ({ optionInfo, id }) => {
+const OptionItem = ({ optionInfo, onClick }) => {
 	const dispatch = useDispatch();
 	const stat = useSelector((state) => state.pageStat.value);
 	const isAnswer = optionInfo.is_answer;
@@ -19,6 +19,7 @@ const OptionItem = ({ optionInfo, id }) => {
 			className={selected ? "selected option-item" : "option-item"}
 			onClick={() => {
 				setSelected(!selected);
+				onClick();
 			}}>
 			<div className="option-components">
 				<div className="option-text">{text}</div>

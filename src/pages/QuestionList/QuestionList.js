@@ -22,48 +22,29 @@ const QuestionList = (props) => {
 				.get(`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` + cid)
 				.then(async (res) => {
 					const valid = [];
+
 					await Promise.all(
 						res.data.problemList.map(async (q, i) => {
 							await axios
-								.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id)
-								.then(async (res) => {
-									const options = res.data.options;
 
-									const ans = options.filter((c) => c.is_answer);
-									const dis = options.filter((c) => !c.is_answer);
+								.get(`${process.env.REACT_APP_BACK_END}/question/load/cluster?qid=` + q._id)
+								.then(async (res2) => {
+									const clusters = await res2.data.cluster;
 
-									if (ans.length + dis.length >= 4) {
+									const ans = clusters.filter((c) => c.representative.is_answer).length;
+									const dis = clusters.filter((c) => !c.representative.is_answer).length;
+
+									if (ans + dis >= 4) {
 										valid[i] = true;
 										return await true;
+									} else {
+										valid[i] = false;
+										return await false;
 									}
-									// await axios.get(
-									// 	`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + q._id
-									// );
-									// if (res.data.qinfo.cluster.length < 3) {
-									// 	valid[i] = false;
-									// 	return await false;
-									// } else {
-									// 	await axios
-									// 		.get(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-									// 			clusters: res.data.qinfo.cluster,
-									// 		})
-									// 		.then(async (res2) => {
-									// 			const clusters = await res2.data.clusters;
-
-									// 			const ans = clusters.filter((c) => c.ansExist).length;
-									// 			const dis = clusters.filter((c) => c.disExist).length;
-									// 			const ov = clusters.filter((c) => c.ansExist && c.disExist).length;
-									// 			if (ans + dis - ov >= 4) {
-									// 				valid[i] = true;
-									// 				return await true;
-									// 			} else {
-									// 				valid[i] = false;
-									// 				return await false;
-									// 			}
-									// 		})
-									// 		.catch(async (err) => await console.log(err));
-									// }
-								});
+								})
+								.catch(async (err) => await console.log(err));
+							// }
+							// });
 						})
 					);
 
@@ -81,14 +62,8 @@ const QuestionList = (props) => {
 				uid: uid,
 			})
 			.then((res) => {
-				// console.log("RES:", res.data);
 				if (res.data.inclass) {
-					// console.log("case11");
 					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res2) => {
-						// dispatch(enrollClass({ cid: cid, cType: res2.data.cType }));
-						// if (!res2.data.cType) {
-						// 	navigate("/" + res.data.cid + "/qlist");
-						// }
 						getQuestionList(res.data.cid);
 					});
 				} else {

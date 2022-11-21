@@ -1,8 +1,8 @@
 .custom-button {
 	background: none;
 	border: none;
-	background-color: white;
-	color: black;
+	background-color: #3d73dd;
+	color: white;
 	box-shadow: rgba(0, 0, 0, 0.167) 0px 4px 8px;
 	font-size: 16px;
 	min-width: 200px;
@@ -12,4 +12,10 @@
 	place-items: center;
 	cursor: pointer;
 	padding: 12px;
+
+	font-weight: 700;
+
+	&:hover {
+		background-color: #7eaad9;
+	}
 }
