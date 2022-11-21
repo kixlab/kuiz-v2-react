@@ -29,11 +29,11 @@
 				border-radius: 4px;
 			}
 			.indicator-answer {
-				background-color: #06c71f;
+				background-color: green;
 			}
 
 			.indicator-distractor {
-				background-color: #3d73dd;
+				background-color: rgb(166, 9, 9);
 			}
 
 			.option-text {
@@ -51,5 +51,19 @@
 				top: -2px;
 			}
 		}
+	}
+	button {
+		background: none;
+		border: none;
+		height: 48px;
+		width: 300px;
+		background-color: #3d73dd;
+		color: white;
+		font-size: 14px;
+		font-weight: 700;
+		border-radius: 8px;
+		place-self: end;
+
+		cursor: pointer;
 	}
 }

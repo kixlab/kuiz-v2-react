@@ -265,24 +265,36 @@ const OptionCreate = (props) => {
 						<div id="option-create">
 							<div className="header">Create New Option</div>
 							<div className="d-flex radio">
-								<div className="radio-item">
-									<label htmlFor="answer">Answer</label>
+								<div
+									className={
+										isAnswer ? "radio-item radio-selected radio-answer" : "radio-answer radio-item"
+									}
+									onClick={() => setIsAnswer(true)}>
+									Answer
+									{/* <label htmlFor="answer">Answer</label>
 									<input
 										type="radio"
 										name="answer"
 										value="answer"
 										checked
 										onChange={() => setIsAnswer(true)}
-									/>
+									/> */}
 								</div>
-								<div className="radio-item">
-									<label htmlFor="distractor">Distractor</label>
+								<div
+									className={
+										!isAnswer
+											? "radio-item radio-selected radio-distractor"
+											: " radio-distractor radio-item"
+									}
+									onClick={() => setIsAnswer(false)}>
+									Distractor
+									{/* <label htmlFor="distractor">Distractor</label>
 									<input
 										type="radio"
 										name="answer"
 										value="distractor"
 										onChange={() => setIsAnswer(false)}
-									/>
+									/> */}
 								</div>
 							</div>
 							<div className="d-flex">

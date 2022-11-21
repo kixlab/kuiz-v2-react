@@ -62,7 +62,6 @@ const QuestionListOption = (props) => {
 		axios
 			.get(`${process.env.REACT_APP_BACK_END}/question/list/load?cid=` + cid)
 			.then(async (res) => {
-				console.log(res.data);
 				setQuestionList(res.data.problemList);
 			});
 	};

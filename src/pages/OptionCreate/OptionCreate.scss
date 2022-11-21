@@ -33,18 +33,41 @@
 		#option-create {
 			display: grid;
 			row-gap: 12px;
-			// input {
-			// 	width: 100%;
-			// 	padding: 4px 8px;
-			// 	font-size: 1em;
-			// }
+
 			.radio {
 				justify-content: flex-start;
+				// .radio-item {
+				// 	display: flex;
+				// 	margin-right: 16px;
+				// 	label {
+				// 		margin-right: 12px;
+				// 	}
+				// }
 				.radio-item {
-					display: flex;
+					padding: 8px 12px;
+					border: 2px solid;
+					border-radius: 20px;
+					font-weight: 700;
+					cursor: pointer;
 					margin-right: 16px;
-					label {
-						margin-right: 12px;
+					&:hover {
+						background-color: #e7e7e7;
+					}
+				}
+				.radio-answer {
+					border-color: green;
+					color: green;
+					&.radio-selected {
+						background-color: green;
+						color: white;
+					}
+				}
+				.radio-distractor {
+					border-color: rgb(166, 9, 9);
+					color: rgb(166, 9, 9);
+					&.radio-selected {
+						background-color: rgb(166, 9, 9);
+						color: white;
 					}
 				}
 			}

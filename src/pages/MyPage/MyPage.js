@@ -59,6 +59,8 @@ const MyPage = (props) => {
 		}
 	}, [getMadeOption, getMadeStem, isLoggedIn, navigate]);
 
+	console.log(madeOption);
+
 	return (
 		<div id="mypage">
 			<h3>Questions that I made</h3>
@@ -93,14 +95,14 @@ const MyPage = (props) => {
 							<div key={option._id} className="option-item">
 								<div className="option-text-wrapper">
 									{option.is_answer ? (
-										<div className="indicator-answer">정답</div>
+										<div className="indicator-answer">Answer</div>
 									) : (
-										<div className="indicator-distractor">오답</div>
+										<div className="indicator-distractor">Distractor</div>
 									)}
 									<div className="option-text">{option.option_text}</div>
 								</div>
-								<div>
-									<span style={{ color: "gray", margin: "8px" }}>ㄴ</span>
+								<div style={{ marginTop: "12px" }}>
+									<span style={{ color: "gray", margin: "0 8px", fontWeight: "700" }}>Q. </span>
 									{option.qinfo.raw_string}
 								</div>
 								<div
