@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { enrollClass, loginUser } from "../../features/authentication/userSlice";
@@ -8,7 +8,12 @@ import { enrollClass, loginUser } from "../../features/authentication/userSlice"
 import "./Login.scss";
 
 const Login = (props) => {
-	function handleCallbackResponse(response) {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const uInfo = useSelector((state) => state.userInfo.userInfo);
+	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
+
+	const handleCallbackResponse = useCallback(response => {
 		var userObject = jwt_decode(response.credential);
 		axios
 			.post(`${process.env.REACT_APP_BACK_END}/auth/register`, {
@@ -30,11 +35,7 @@ const Login = (props) => {
 					navigate("/enroll");
 				}
 			});
-	}
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const uInfo = useSelector((state) => state.userInfo.userInfo);
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
+	}, [dispatch, navigate])
 
 	useEffect(() => {
 		/*global google*/
@@ -58,7 +59,7 @@ const Login = (props) => {
 				size: "large",
 			});
 		}
-	}, []);
+	}, [handleCallbackResponse, isLoggedIn, navigate, uInfo]);
 	return (
 		<div className="login">
 			<div id="main-logo">KUIZ</div>
