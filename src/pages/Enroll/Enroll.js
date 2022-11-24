@@ -31,11 +31,12 @@ const Enroll = (props) => {
 				navigate("/" + res.data.cid);
 			});
 	};
+	
 	useEffect(() => {
 		if (!isLoggedIn) {
 			navigate("/login");
 		}
-	}, []);
+	}, [isLoggedIn, navigate]);
 	return (
 		<div id="enroll">
 			<div id="introduction">Enter your class code:</div>
