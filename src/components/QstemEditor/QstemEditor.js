@@ -239,7 +239,7 @@ function QstemEditor(props) {
 			<div>
 				<h3>Question Stem</h3>
 				<div className="helper-text">Write down the content of your question here.</div>
-				<div className="helper-text">Stuck? Here are some question starters to help you out.</div>
+				{/* <div className="helper-text">Stuck? Here are some question starters to help you out.</div> */}
 				<div className="qstem-editor">
 					<Editor
 						localization={{
