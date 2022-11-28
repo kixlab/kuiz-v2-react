@@ -13,7 +13,7 @@ function Navbar(props) {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 
 	const moveToCreateStem = useCallback(() => {
-		navigate("/" + cid + "/createstem");
+		navigate("/createstem");
 	}, [cid, navigate]);
 
 	const moveToCreateOption = useCallback(() => {

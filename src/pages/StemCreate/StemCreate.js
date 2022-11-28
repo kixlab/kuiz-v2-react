@@ -38,7 +38,7 @@ const StemCreate = (props) => {
 		<div id="question-screen-wrapper">
 			<div id="question-nav"></div>
 			<div id="question-screen">
-				<Link to={"/" + cid} style={{ textDecoration: "none", color: "#000000" }}>
+				<Link to={"/"} style={{ textDecoration: "none", color: "#000000" }}>
 					<div id="return-button">
 						<i className="fa-solid fa-arrow-left"></i> Return to List
 					</div>

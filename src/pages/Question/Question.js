@@ -161,7 +161,7 @@ const Question = (props) => {
 
 	return (
 		<div id="question-screen">
-			<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
+			<Link to={"/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
 				<div id="return-button">
 					<i className="fa-solid fa-arrow-left"></i> Return to Question List
 				</div>
@@ -263,7 +263,7 @@ const Question = (props) => {
 				</div>
 			)}
 
-			<Link to={"/" + cid + "/question/" + qid + "/create"}>
+			<Link to={"/question/" + qid + "/create"}>
 				<button className="nav-button">Add New Option</button>
 			</Link>
 		</div>

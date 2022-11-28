@@ -80,9 +80,9 @@ const QuestionListOption = (props) => {
 	return (
 		<div id="question-list">
 			<div id="question-list-functions">
-				<div style={{ textDecoration: "none", color: "#000000" }}>
+				{/* <div style={{ textDecoration: "none", color: "#000000" }}>
 					<Button navigateBy={moveToCreateStem} text="Create New Stem" />
-				</div>
+				</div> */}
 				{/* <div>
 					<Box sx={{ minWidth: 120 }}>
 						<FormControl fullWidth>
@@ -112,7 +112,7 @@ const QuestionListOption = (props) => {
 					{questionList
 						.map((question, i) => (
 							<Link
-								to={"/" + cid + "/question/" + question._id + "/create"}
+								to={"/question/" + question._id + "/create"}
 								key={question._id}
 								style={{ textDecoration: "none", color: "#000000" }}>
 								<div id="question-list-wrapper">
@@ -136,7 +136,7 @@ const QuestionListOption = (props) => {
 							.map((question, i) => (
 								<Link
 									key={question._id}
-									to={"/" + cid + "/question/" + question._id}
+									to={"/question/" + question._id}
 									style={{ textDecoration: "none", color: "#000000" }}>
 									<div id="question-list-wrapper">
 										<QuestionListItem
@@ -161,7 +161,7 @@ const QuestionListOption = (props) => {
 							.map((question, i) => (
 								<Link
 									key={question._id}
-									to={"/" + cid + "/question/" + question._id}
+									to={"/question/" + question._id}
 									style={{ textDecoration: "none", color: "#000000" }}>
 									<div id="question-list-wrapper">
 										<QuestionListItem

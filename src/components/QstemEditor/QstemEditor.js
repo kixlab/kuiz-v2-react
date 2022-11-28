@@ -283,17 +283,12 @@ function QstemEditor(props) {
 					</Select>
 				</FormControl> */}
 			</div>
+
 			<div>
-				<h3>Answer & Explanation</h3>
-				<div className="helper-text">Suggest an answer to this question.</div>
-				<TextField
-					fullWidth
-					value={answer}
-					onChange={(e) => setAnswer(e.target.value)}
-					placeholder="Answer"
-					className="objective-input"
-				/>
-				<div className="helper-text">Write down the explanation for your answer.</div>
+				<h3>Explanation</h3>
+				<div className="helper-text">
+					Write down the explanation for your question. Be as sspecific as possible!
+				</div>
 				<Editor
 					localization={{
 						locale: "en",
@@ -312,6 +307,17 @@ function QstemEditor(props) {
 						history: { inDropdown: false },
 						// image: { uploadCallback: uploadCallback },
 					}}
+				/>
+			</div>
+			<div>
+				<h3>Answer</h3>
+				<div className="helper-text">Suggest an answer to this question.</div>
+				<TextField
+					fullWidth
+					value={answer}
+					onChange={(e) => setAnswer(e.target.value)}
+					placeholder="Answer"
+					className="objective-input"
 				/>
 
 				{/* <TextField

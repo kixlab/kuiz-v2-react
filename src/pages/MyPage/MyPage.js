@@ -68,7 +68,7 @@ const MyPage = (props) => {
 						return (
 							<Link
 								key={stem._id}
-								to={"/" + cid + "/question/" + stem._id + "/create/"}
+								to={"/question/" + stem._id + "/create/"}
 								style={{ textDecoration: "none", color: "#000000" }}>
 								<div id="stem-viewer">
 									{/* <div>{stem.raw_string}</div>

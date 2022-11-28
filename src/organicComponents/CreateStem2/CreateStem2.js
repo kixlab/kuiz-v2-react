@@ -25,7 +25,7 @@ const StemCreate2 = (props) => {
 	const [qObj, setQobj] = useState({});
 
 	const [msg, setMsg] = useState("");
-	
+
 	useEffect(() => {
 		if (!isLoggedIn) {
 			navigate("/" + cid);
@@ -91,7 +91,7 @@ const StemCreate2 = (props) => {
 		<div id="question-screen-wrapper">
 			<div id="question-nav"></div>
 			<div id="question-screen">
-				<Link to={"/" + cid + "/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
+				<Link to={"/qlist"} style={{ textDecoration: "none", color: "#000000" }}>
 					<div id="return-button">
 						<i className="fa-solid fa-arrow-left"></i> 목록으로 돌아가기
 					</div>

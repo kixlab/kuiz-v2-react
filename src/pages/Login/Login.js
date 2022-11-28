@@ -66,7 +66,7 @@ const Login = (props) => {
 			{/* <div id="intro">Welcome to KUIZ!!</div> */}
 			<div id="clause">
 				<div>
-					<strong>KOR</strong>
+					<strong>&lt;KOR&gt;</strong>
 					<br />
 					안녕하세요, 카이스트 인터랙션 연구실 (KIXLAB) 연구팀입니다.
 					<br />
@@ -102,7 +102,7 @@ const Login = (props) => {
 					<br />
 				</div>
 				<div>
-					<strong>ENG</strong>
+					<strong>&lt;ENG&gt;</strong>
 					<br />
 					Hello, we are the research team from KAIST Interaction Lab (KIXLAB)
 					<br />
@@ -118,7 +118,7 @@ const Login = (props) => {
 					<br />
 					<br />
 					If you participate in this study, you will be given a task to create MCQ stems and options
-					based on your lecture materials
+					based on your lecture materials.
 					<br />
 					<br />
 					The system is currently on its pilot version, and we are currently running usability tests
