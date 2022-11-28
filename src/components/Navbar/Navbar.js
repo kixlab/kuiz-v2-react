@@ -48,7 +48,7 @@ function Navbar(props) {
 					<img src={profile} width="100px" />
 				</div>
 				<div className="profile-name">{user_name}</div>
-				<div className="profile-nav" onClick={(e) => navigate("/" + cid + "/mypage")}>
+				<div className="profile-nav" onClick={(e) => navigate("/mypage")}>
 					MY PAGE
 					<i className="fa-solid fa-arrow-right"></i>
 				</div>

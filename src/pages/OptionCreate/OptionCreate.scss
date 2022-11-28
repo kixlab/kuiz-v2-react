@@ -192,6 +192,10 @@
 
 	#question-content-wrapper {
 		height: fit-content;
+		#question-stem-content p {
+			font-size: 18px;
+			font-weight: 600;
+		}
 	}
 
 	.proceed-button {

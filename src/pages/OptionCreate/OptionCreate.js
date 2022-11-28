@@ -35,7 +35,7 @@ const OptionCreate = (props) => {
 
 	// My option values
 	const [option, setOption] = useState("");
-	const [isAnswer, setIsAnswer] = useState(true);
+	const [isAnswer, setIsAnswer] = useState();
 	const [keywords, setKeywords] = useState([]);
 
 	const ref = useRef(null);
@@ -153,14 +153,12 @@ const OptionCreate = (props) => {
 
 	let keywordList = keywordSet;
 
-	if (!keywordList.includes("Distractor - Common misconception")) {
-		keywordList.push("Distractor - Common misconception");
+	if (!keywordList.includes("Common misconception")) {
+		keywordList.push("Common misconception");
 	}
-	if (!keywordList.includes("Distractor - Form similar to answer")) {
-		keywordList.push("Distractor - Form similar to answer");
+	if (!keywordList.includes("Form similar to answer")) {
+		keywordList.push("Form similar to answer");
 	}
-
-	console.log(uid);
 
 	return (
 		<div id="option-create-wrapper">
@@ -175,7 +173,7 @@ const OptionCreate = (props) => {
 						dangerouslySetInnerHTML={{
 							__html: draftToHtml(JSON.parse(qinfo.stem_text)),
 						}}
-						className="introduce-content"
+						id="question-stem-content"
 					/>
 				)}
 				<div id="question-info">
@@ -271,7 +269,9 @@ const OptionCreate = (props) => {
 							<div className="d-flex radio">
 								<div
 									className={
-										isAnswer ? "radio-item radio-selected radio-answer" : "radio-answer radio-item"
+										isAnswer === true
+											? "radio-item radio-selected radio-answer"
+											: "radio-answer radio-item"
 									}
 									onClick={() => setIsAnswer(true)}>
 									Answer
@@ -286,7 +286,7 @@ const OptionCreate = (props) => {
 								</div>
 								<div
 									className={
-										!isAnswer
+										isAnswer === false
 											? "radio-item radio-selected radio-distractor"
 											: " radio-distractor radio-item"
 									}
@@ -309,7 +309,7 @@ const OptionCreate = (props) => {
 										setOption(e.target.value);
 									}}
 									inputRef={ref}
-									placeholder="Your Option..."
+									placeholder="Suggest an answer or distractor for this question"
 								/>
 								{/* <input
 										value={option}
@@ -337,7 +337,7 @@ const OptionCreate = (props) => {
 									renderInput={(params) => (
 										<TextField
 											{...params}
-											placeholder="Select categories for your option or add your own..."
+											placeholder="Select categories for your option or add your own"
 										/>
 									)}
 								/>

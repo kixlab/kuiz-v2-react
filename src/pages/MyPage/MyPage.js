@@ -14,9 +14,12 @@ const MyPage = (props) => {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const navigate = useNavigate();
 	const uid = useSelector((state) => state.userInfo.userInfo?._id);
-	const [madeStem, setMadeStem] = useState();
-	const [madeOption, setMadeOption] = useState();
+	const [madeStem, setMadeStem] = useState([]);
+	const [madeOption, setMadeOption] = useState([]);
 	const dispatch = useDispatch();
+
+	const [stemVisible, setStemVisible] = useState(false);
+	const [optionsVisible, setOptionsVisible] = useState(false);
 
 	const getMadeStem = useCallback(() => {
 		axios.post(`${process.env.REACT_APP_BACK_END}/question/made/stem`, { uid: uid }).then((res) => {
@@ -41,7 +44,7 @@ const MyPage = (props) => {
 						...option,
 						...qlist[index],
 					}));
-					setMadeOption(newOptionList);
+					setMadeOption(newOptionList.reverse());
 				});
 		});
 	}, [uid]);
@@ -61,57 +64,129 @@ const MyPage = (props) => {
 
 	return (
 		<div id="mypage">
-			<h3>Questions that I made</h3>
+			<h3>Created Question Stems ({madeStem.length})</h3>
 			<div className="stems-wrapper">
-				{madeStem &&
-					madeStem.map((stem) => {
-						return (
-							<Link
-								key={stem._id}
-								to={"/question/" + stem._id + "/create/"}
-								style={{ textDecoration: "none", color: "#000000" }}>
-								<div id="stem-viewer">
-									{/* <div>{stem.raw_string}</div>
+				{stemVisible
+					? madeStem.map((stem) => {
+							return (
+								<Link
+									key={stem._id}
+									to={"/question/" + stem._id + "/create/"}
+									style={{ textDecoration: "none", color: "#000000" }}>
+									<div id="stem-viewer">
+										{/* <div>{stem.raw_string}</div>
 								<div>{stem.updatedAt ? stem.updatedAt : stem.createdAt}</div> */}
-									<QuestionListItem2
-										id={stem._id}
-										number=">"
-										title={stem.raw_string}
-										options={stem.options}
-										date={stem.createdAt}
-									/>
-								</div>
-							</Link>
-						);
-					})}
+										<QuestionListItem2
+											id={stem._id}
+											number=">"
+											title={stem.raw_string}
+											options={stem.options}
+											date={stem.createdAt}
+										/>
+									</div>
+								</Link>
+							);
+					  })
+					: madeStem.slice(0, 5).map((stem) => {
+							return (
+								<Link
+									key={stem._id}
+									to={"/question/" + stem._id + "/create/"}
+									style={{ textDecoration: "none", color: "#000000" }}>
+									<div id="stem-viewer">
+										{/* <div>{stem.raw_string}</div>
+								<div>{stem.updatedAt ? stem.updatedAt : stem.createdAt}</div> */}
+										<QuestionListItem2
+											id={stem._id}
+											number=">"
+											title={stem.raw_string}
+											options={stem.options}
+											date={stem.createdAt}
+										/>
+									</div>
+								</Link>
+							);
+					  })}
+				{madeStem.length > 5 && (
+					<div
+						className="view-toggle"
+						onClick={() => {
+							setStemVisible(!stemVisible);
+						}}>
+						{stemVisible ? "Hide" : "Show All"}
+						{stemVisible ? (
+							<i className="fa-solid fa-chevron-up"></i>
+						) : (
+							<i className="fa-solid fa-chevron-down"></i>
+						)}
+					</div>
+				)}
 			</div>
-			<h3>Options that I made</h3>
+			<h3>Created Options ({madeOption.length})</h3>
 			<div className="options-wrapper">
-				{madeOption &&
-					madeOption.reverse().map((option, i) => {
-						return (
-							<div key={option._id} className="option-item">
-								<div className="option-text-wrapper">
-									{option.is_answer ? (
-										<div className="indicator-answer">Answer</div>
-									) : (
-										<div className="indicator-distractor">Distractor</div>
-									)}
-									<div className="option-text">{option.option_text}</div>
+				{optionsVisible
+					? madeOption.map((option) => {
+							return (
+								<div key={option._id} className="option-item">
+									<div className="option-text-wrapper">
+										{option.is_answer ? (
+											<div className="indicator-answer">Answer</div>
+										) : (
+											<div className="indicator-distractor">Distractor</div>
+										)}
+										<div className="option-text">{option.option_text}</div>
+									</div>
+									<div style={{ marginTop: "12px" }}>
+										<span style={{ color: "gray", margin: "0 8px", fontWeight: "700" }}>Q. </span>
+										{option.qinfo.raw_string}
+									</div>
+									<div
+										className="option-nav"
+										onClick={(e) => navigate("/" + cid + "/question/" + option.qstem + "/create")}>
+										Go to Question &nbsp;
+										<i className="fa-solid fa-arrow-right"></i>
+									</div>
 								</div>
-								<div style={{ marginTop: "12px" }}>
-									<span style={{ color: "gray", margin: "0 8px", fontWeight: "700" }}>Q. </span>
-									{option.qinfo.raw_string}
+							);
+					  })
+					: madeOption.slice(0, 5).map((option) => {
+							return (
+								<div key={option._id} className="option-item">
+									<div className="option-text-wrapper">
+										{option.is_answer ? (
+											<div className="indicator-answer">Answer</div>
+										) : (
+											<div className="indicator-distractor">Distractor</div>
+										)}
+										<div className="option-text">{option.option_text}</div>
+									</div>
+									<div style={{ marginTop: "12px" }}>
+										<span style={{ color: "gray", margin: "0 8px", fontWeight: "700" }}>Q. </span>
+										{option.qinfo.raw_string}
+									</div>
+									<div
+										className="option-nav"
+										onClick={(e) => navigate("/" + cid + "/question/" + option.qstem + "/create")}>
+										Go to Question &nbsp;
+										<i className="fa-solid fa-arrow-right"></i>
+									</div>
 								</div>
-								<div
-									className="option-nav"
-									onClick={(e) => navigate("/" + cid + "/question/" + option.qstem + "/create")}>
-									Go to Question &nbsp;
-									<i className="fa-solid fa-arrow-right"></i>
-								</div>
-							</div>
-						);
-					})}
+							);
+					  })}
+				{madeOption.length > 5 && (
+					<div
+						className="view-toggle"
+						onClick={() => {
+							setOptionsVisible(!optionsVisible);
+						}}>
+						{optionsVisible ? "Hide" : "Show All"}
+						{optionsVisible ? (
+							<i className="fa-solid fa-chevron-up"></i>
+						) : (
+							<i className="fa-solid fa-chevron-down"></i>
+						)}
+					</div>
+				)}
 			</div>
 			{/* <h3>내가 푼 문제들</h3> */}
 			<button onClick={onLogout}>Log Out</button>

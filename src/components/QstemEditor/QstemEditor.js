@@ -141,66 +141,12 @@ function QstemEditor(props) {
 						},
 						similarOptions: [],
 					})
-					.then((res2) => {
+					.then(() => {
 						navigate("/question/" + res.data.data + "/create");
 					});
 			});
 	};
 
-	// const submitAndEnd = () => {
-	// 	const qstemObj = {
-	// 		author: ObjectID(uid),
-	// 		stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
-	// 		raw_string: editorState.editorState.getCurrentContent().getPlainText("\u0001"),
-	// 		action_verb: props.verbs,
-	// 		keyword: props.keywords,
-	// 		class: ObjectID(cid),
-	// 		options: [],
-	// 		optionSets: [],
-	// 		learning_objective: objective,
-	// 	};
-
-	// 	const rawString = qstemObj.raw_string;
-	// 	const wordcount = rawString.split(" ").filter((word) => word !== "").length;
-	// 	if (rawString === null || wordcount < 3) {
-	// 		alert("문제 내용을 입력해 주세요.");
-	// 		return;
-	// 	}
-	// 	if (answer === null || answer.match(/^\s*$/) !== null) {
-	// 		alert("정답을 입력해 주세요.");
-	// 		return;
-	// 	}
-	// 	if (qstemObj.learning_objective === null) {
-	// 		alert("학습 목표를 입력해 주세요.");
-	// 		return;
-	// 	}
-	// 	axios
-	// 		.post(`${process.env.REACT_APP_BACK_END}/question/qstem/create`, {
-	// 			qstemObj: qstemObj,
-	// 			cid: cid,
-	// 			answer_text: answer,
-	// 		})
-	// 		.then((res) => {
-	// 			axios
-	// 				.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
-	// 					optionData: {
-	// 						author: ObjectID(uid),
-	// 						option_text: answer,
-	// 						is_answer: true,
-	// 						explanation: explanation,
-	// 						class: ObjectID(cid),
-	// 						qstem: ObjectID(res.data.data),
-	// 						plausible: { similar: [], difference: [] },
-	// 						cluster: [],
-	// 					},
-	// 					dependency: [],
-	// 				})
-	// 				.then((res2) => {
-	// 					setMsg("Successfuly made question stem!");
-	// 					navigate("/" + cid + "/question/" + res.data.data);
-	// 				});
-	// 		});
-	// };
 	return (
 		<div id="qstemeditor">
 			<div>
@@ -260,7 +206,7 @@ function QstemEditor(props) {
 					</Select>
 				</FormControl> */}
 			</div>
-      
+
 			<div>
 				<h3>Explanation</h3>
 				<Editor
@@ -271,7 +217,7 @@ function QstemEditor(props) {
 					onEditorStateChange={handleExpChange}
 					wrapperClassName="wrapper-class"
 					editorClassName="editor"
-					placeholder="Write down the explanation for your answer."
+					placeholder="Write down the explanation for your question. Be as specific as possible!"
 					toolbarClassName="toolbar-class"
 					toolbar={{
 						// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
@@ -294,7 +240,6 @@ function QstemEditor(props) {
 					className="objective-input"
 				/>
 			</div>
-
 
 			<div style={{ textAlign: "center", width: "100%" }}>
 				<button className="submit" onClick={submitStem}>
