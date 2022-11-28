@@ -3,7 +3,6 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import Button from "../../components/Button/Button";
 import QuestionListItem from "../../components/QuestionListItem/QuestionListItem";
 
 import "./QuestionListOption.scss";
@@ -14,7 +13,6 @@ const QuestionListOption = (props) => {
 	const navigate = useNavigate();
 	const cid = useParams().cid;
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const cType = useSelector((state) => state.userInfo.cType);
 
 	const checkValidUser = () => {
 		axios
@@ -34,7 +32,6 @@ const QuestionListOption = (props) => {
 					});
 				} else {
 					if (!res.data.enrolled) {
-						console.log("case3");
 						navigate("/enroll");
 					} else {
 						axios
@@ -65,9 +62,7 @@ const QuestionListOption = (props) => {
 				setQuestionList(res.data.problemList);
 			});
 	};
-	const moveToCreateStem = () => {
-		navigate("/" + cid + "/createstem");
-	};
+
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -79,28 +74,6 @@ const QuestionListOption = (props) => {
 
 	return (
 		<div id="question-list">
-			<div id="question-list-functions">
-				<div style={{ textDecoration: "none", color: "#000000" }}>
-					<Button navigateBy={moveToCreateStem} text="Create New Stem" />
-				</div>
-				{/* <div>
-					<Box sx={{ minWidth: 120 }}>
-						<FormControl fullWidth>
-							<InputLabel id="demo-simple-select-label">필터</InputLabel>
-							<Select
-								labelId="demo-simple-select-label"
-								id="demo-simple-select"
-								value={filter}
-								label="Age"
-								onChange={(e) => setFilter(e.target.value)}>
-								<MenuItem value={0}>전체 보기</MenuItem>
-								<MenuItem value={1}>선택지 부족</MenuItem>
-								<MenuItem value={2}>선택지 충분</MenuItem>
-							</Select>
-						</FormControl>
-					</Box>
-				</div> */}
-			</div>
 			<div id="question-list-header">
 				<div> No.</div>
 				<div> Question</div>
@@ -128,7 +101,7 @@ const QuestionListOption = (props) => {
 						))
 						.reverse()}
 				</div>
-			) : filter == 1 ? (
+			) : filter === 1 ? (
 				<div>
 					<div>
 						{questionList

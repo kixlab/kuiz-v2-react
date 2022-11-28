@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-//draft js part
-import { EditorState, convertToRaw, convertFromRaw, Modifier } from "draft-js";
-
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
-//actions
-
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
 import TextField from "@mui/material/TextField";
-
 import axios from "axios";
 import "./QstemEditor.scss";
 import { useNavigate } from "react-router-dom";
-
-// import Button from "../Button/Button.js";
 
 var ObjectID = require("bson-objectid");
 
@@ -28,7 +20,6 @@ function QstemEditor(props) {
 	const cid = props.cid;
 
 	const [answer, setAnswer] = useState("");
-	const [explanation, setExplanation] = useState("");
 
 	const templateList = [
 		"Which is most likely to occur if ... ? ",
@@ -54,16 +45,6 @@ function QstemEditor(props) {
 	// 	"다음 중 ...가 발생하는 원인에 대해 가장 잘 설명한 것은?",
 	// 	"다음 중 ...의 예시로 가장 적절한 것은? ",
 	// ];
-	const ITEM_HEIGHT = 48;
-	const ITEM_PADDING_TOP = 8;
-	const MenuProps = {
-		PaperProps: {
-			style: {
-				maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-				width: 250,
-			},
-		},
-	};
 
 	// const selectTemplate = (e) => {
 	// 	setTemplate(e.target.value);
@@ -111,8 +92,6 @@ function QstemEditor(props) {
 	};
 
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-
-	const setMsg = props.setMsg;
 
 	const submitStem = () => {
 		const qstemObj = {
@@ -226,19 +205,17 @@ function QstemEditor(props) {
 		<div id="qstemeditor">
 			<div>
 				<h3>Learning Objective</h3>
-				<div className="helper-text">What might we learn from solving this question?</div>
 				<TextField
 					fullWidth
 					value={objective}
 					onChange={updateObjective}
-					placeholder="Learning Objective"
+					placeholder="What might we learn from solving this question?"
 					className="objective-input"
 				/>
 			</div>
 
 			<div>
 				<h3>Question Stem</h3>
-				<div className="helper-text">Write down the content of your question here.</div>
 				{/* <div className="helper-text">Stuck? Here are some question starters to help you out.</div> */}
 				<div className="qstem-editor">
 					<Editor
@@ -249,7 +226,7 @@ function QstemEditor(props) {
 						onEditorStateChange={handleEditorChange}
 						wrapperClassName="wrapper-class"
 						editorClassName="editor"
-						placeholder="Input your question here."
+						placeholder="Write down the content of your question here."
 						toolbarClassName="toolbar-class"
 						toolbar={{
 							// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
@@ -284,16 +261,18 @@ function QstemEditor(props) {
 				</FormControl> */}
 			</div>
 			<div>
-				<h3>Answer & Explanation</h3>
-				<div className="helper-text">Suggest an answer to this question.</div>
+				<h3>Answer</h3>
 				<TextField
 					fullWidth
 					value={answer}
 					onChange={(e) => setAnswer(e.target.value)}
-					placeholder="Answer"
+					placeholder="Suggest an answer to this question."
 					className="objective-input"
 				/>
-				<div className="helper-text">Write down the explanation for your answer.</div>
+			</div>
+
+			<div>
+				<h3>Explanation</h3>
 				<Editor
 					localization={{
 						locale: "en",
@@ -302,7 +281,7 @@ function QstemEditor(props) {
 					onEditorStateChange={handleExpChange}
 					wrapperClassName="wrapper-class"
 					editorClassName="editor"
-					placeholder="Input your explanation here."
+					placeholder="Write down the explanation for your answer."
 					toolbarClassName="toolbar-class"
 					toolbar={{
 						// inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
@@ -313,14 +292,6 @@ function QstemEditor(props) {
 						// image: { uploadCallback: uploadCallback },
 					}}
 				/>
-
-				{/* <TextField
-					fullWidth
-					value={explanation}
-					onChange={(e) => setExplanation(e.target.value)}
-					placeholder="Explanation"
-					className="objective-input"
-				/> */}
 			</div>
 
 			<div style={{ textAlign: "center", width: "100%" }}>

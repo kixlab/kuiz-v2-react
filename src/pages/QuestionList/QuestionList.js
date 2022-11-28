@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import Button from "../../components/Button/Button";
 import QuestionListItem2 from "../../components/QuestionListItem2/QuestionListItem2";
 
 import "./QuestionList.scss";
@@ -68,21 +67,11 @@ const QuestionList = (props) => {
 					});
 				} else {
 					if (!res.data.enrolled) {
-						// console.log("case3");
 						navigate("/enroll");
 					} else {
 						axios
 							.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + res.data.cid)
 							.then((res2) => {
-								// dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType }));
-								// if (res2.data.cType) {
-								// 	console.log("case4");
-								// 	navigate("/" + res.data.cid);
-								// } else {
-								// 	console.log("case5");
-								// 	navigate("/" + res.data.cid + "/qlist");
-								// }
-								// console.log("CIDtogetQ:", res.data.cid);
 								getQuestionList(res2.data.cid);
 							});
 					}
@@ -124,10 +113,6 @@ const QuestionList = (props) => {
 		[cType]
 	);
 
-	const moveToCreateOption = () => {
-		navigate("/" + cid + "/createstem");
-	};
-
 	useEffect(() => {
 		if (isLoggedIn) {
 			checkValidUser();
@@ -138,11 +123,6 @@ const QuestionList = (props) => {
 
 	return (
 		<div id="question-list-solve">
-			<div id="question-list-functions">
-				<div style={{ textDecoration: "none", color: "#000000" }}>
-					<Button navigateBy={moveToCreateOption} text="Create New Stem" />
-				</div>
-			</div>
 			<div id="question-list-header">
 				<div> No.</div>
 				<div> Question</div>
