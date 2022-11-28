@@ -74,15 +74,6 @@ const QuestionList = (props) => {
 						axios
 							.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + res.data.cid)
 							.then((res2) => {
-								// dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType }));
-								// if (res2.data.cType) {
-								// 	console.log("case4");
-								// 	navigate("/" + res.data.cid);
-								// } else {
-								// 	console.log("case5");
-								// 	navigate("/" + res.data.cid + "/qlist");
-								// }
-								// console.log("CIDtogetQ:", res.data.cid);
 								getQuestionList(res2.data.cid);
 							});
 					}
@@ -125,7 +116,7 @@ const QuestionList = (props) => {
 	);
 
 	const moveToCreateOption = () => {
-		navigate("/" + cid + "/createstem");
+		navigate("/createstem");
 	};
 
 	useEffect(() => {

@@ -17,11 +17,11 @@ function Navbar(props) {
 	}, [cid, navigate]);
 
 	const moveToCreateOption = useCallback(() => {
-		navigate("/" + cid);
+		navigate("/");
 	}, [cid, navigate]);
 
 	const moveToQlist = useCallback(() => {
-		navigate("/" + cid + "/qlist");
+		navigate("/qlist");
 	}, [cid, navigate]);
 
 	useEffect(() => {

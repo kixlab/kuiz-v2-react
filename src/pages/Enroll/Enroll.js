@@ -28,10 +28,10 @@ const Enroll = (props) => {
 				const newInfo = { ...userInfo };
 				newInfo["classes"] = [res.data.cid];
 				dispatch(loginUser(newInfo));
-				navigate("/" + res.data.cid);
+				navigate("/");
 			});
 	};
-	
+
 	useEffect(() => {
 		if (!isLoggedIn) {
 			navigate("/login");

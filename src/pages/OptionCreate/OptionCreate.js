@@ -78,7 +78,7 @@ const OptionCreate = (props) => {
 	// };
 
 	const reset = () => {
-		navigate("/" + cid);
+		navigate("/");
 	};
 
 	useEffect(() => {

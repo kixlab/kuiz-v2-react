@@ -163,7 +163,7 @@ function QstemEditor(props) {
 						similarOptions: [],
 					})
 					.then((res2) => {
-						navigate("/" + cid + "/question/" + res.data.data + "/create");
+						navigate("/question/" + res.data.data + "/create");
 					});
 			});
 	};

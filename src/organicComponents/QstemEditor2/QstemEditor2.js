@@ -1,9 +1,4 @@
-import React, {
-	useState,
-	useEffect,
-	forwardRef,
-	useImperativeHandle,
-} from "react";
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //draft js part
 import { EditorState, convertToRaw, convertFromRaw, Modifier } from "draft-js";
@@ -38,20 +33,13 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 	function insertTemplate(templateToInsert, editorState) {
 		const currentContent = editorState.editorState.getCurrentContent(),
 			currentSelection = editorState.editorState.getSelection();
-		const newContent = Modifier.replaceText(
-			currentContent,
-			currentSelection,
-			templateToInsert
-		);
+		const newContent = Modifier.replaceText(currentContent, currentSelection, templateToInsert);
 		const newEditorState = EditorState.push(
 			editorState.editorState,
 			newContent,
 			"insert-characters"
 		);
-		return EditorState.forceSelection(
-			newEditorState,
-			newContent.getSelectionAfter()
-		);
+		return EditorState.forceSelection(newEditorState, newContent.getSelectionAfter());
 	}
 	const [uploadImages, setUploadImages] = useState([]);
 	const ITEM_HEIGHT = 48;
@@ -77,7 +65,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 		"Which best explains the cause of ...?",
 		"Which is an example of ...?",
 	];
-	
+
 	const templatelist_kor = [
 		"다음 중 ...의 경우 발생할 수 있는 일로 가장 적합한 것은 무엇인가?",
 		"다음 중 ...와 ...의 차이를 가장 잘 설명한 것은 무엇인가?",
@@ -123,25 +111,13 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 		submitStem() {
 			const qstemObj = {
 				author: ObjectID(uid),
-				stem_text: JSON.stringify(
-					convertToRaw(editorState.editorState.getCurrentContent())
-				),
-				raw_string: editorState.editorState
-					.getCurrentContent()
-					.getPlainText("\u0001"),
+				stem_text: JSON.stringify(convertToRaw(editorState.editorState.getCurrentContent())),
+				raw_string: editorState.editorState.getCurrentContent().getPlainText("\u0001"),
 				class: ObjectID(cid),
 				options: [],
 			};
 			setQobj(qstemObj);
 			return qstemObj;
-			// axios.post("http://localhost:4000/question/qstem/create",{qstemObj:qstemObj, cid:cid}).then(
-			//     (res)=>{
-			//         setMsg("Successfuly made question stem!")
-			//         navigate("/"+cid)
-			//         console.log("CID2:",cid)
-
-			//     }
-			// )
 		},
 	}));
 
@@ -149,17 +125,14 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 		<div id="qstemeditor">
 			<div>
 				<FormControl id="template">
-					<InputLabel id="demo-multiple-checkbox-label">
-						문제 형식 예시
-					</InputLabel>
+					<InputLabel id="demo-multiple-checkbox-label">문제 형식 예시</InputLabel>
 					<Select
 						labelId="demo-multiple-checkbox-label"
 						id="demo-multiple-checkbox"
 						value={template}
 						onChange={selectTemplate}
 						input={<OutlinedInput label="문제 형식 예시" />}
-						MenuProps={MenuProps}
-					>
+						MenuProps={MenuProps}>
 						{templatelist_kor.map((t) => (
 							<MenuItem key={t} value={t}>
 								{/* <Checkbox checked={template.indexOf(t) > -1} /> */}
@@ -175,8 +148,7 @@ const QstemEditor2 = forwardRef(({ cid, setQobj }, ref) => {
 					<Form
 						// onFinish={submitStem}
 						labelCol={{ span: 4 }}
-						wrapperCol={{ span: 20 }}
-					>
+						wrapperCol={{ span: 20 }}>
 						<Form.Item name="description">
 							<div className="qstem-editor">
 								<Editor

@@ -28,7 +28,7 @@ const StemCreate2 = (props) => {
 
 	useEffect(() => {
 		if (!isLoggedIn) {
-			navigate("/" + cid);
+			navigate("/");
 		}
 	}, [cid, isLoggedIn, navigate]);
 
@@ -62,7 +62,7 @@ const StemCreate2 = (props) => {
 			})
 			.then((res) => {
 				console.log("success!");
-				navigate("/" + cid + "/qlist");
+				navigate("/qlist");
 			});
 	}
 	const checkForm = (qobj) => {
