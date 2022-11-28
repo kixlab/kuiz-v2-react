@@ -142,7 +142,7 @@ function QstemEditor(props) {
 						similarOptions: [],
 					})
 					.then((res2) => {
-						navigate("/" + cid + "/question/" + res.data.data + "/create");
+						navigate("/question/" + res.data.data + "/create");
 					});
 			});
 	};
@@ -260,17 +260,7 @@ function QstemEditor(props) {
 					</Select>
 				</FormControl> */}
 			</div>
-			<div>
-				<h3>Answer</h3>
-				<TextField
-					fullWidth
-					value={answer}
-					onChange={(e) => setAnswer(e.target.value)}
-					placeholder="Suggest an answer to this question."
-					className="objective-input"
-				/>
-			</div>
-
+      
 			<div>
 				<h3>Explanation</h3>
 				<Editor
@@ -293,6 +283,18 @@ function QstemEditor(props) {
 					}}
 				/>
 			</div>
+
+			<div>
+				<h3>Answer</h3>
+				<TextField
+					fullWidth
+					value={answer}
+					onChange={(e) => setAnswer(e.target.value)}
+					placeholder="Suggest an answer to this question."
+					className="objective-input"
+				/>
+			</div>
+
 
 			<div style={{ textAlign: "center", width: "100%" }}>
 				<button className="submit" onClick={submitStem}>

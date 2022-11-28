@@ -13,15 +13,15 @@ function Navbar(props) {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 
 	const moveToCreateStem = useCallback(() => {
-		navigate("/" + cid + "/createstem");
+		navigate("/createstem");
 	}, [cid, navigate]);
 
 	const moveToCreateOption = useCallback(() => {
-		navigate("/" + cid);
+		navigate("/");
 	}, [cid, navigate]);
 
 	const moveToQlist = useCallback(() => {
-		navigate("/" + cid + "/qlist");
+		navigate("/qlist");
 	}, [cid, navigate]);
 
 	useEffect(() => {

@@ -78,7 +78,7 @@ const OptionCreate = (props) => {
 	// };
 
 	const reset = () => {
-		navigate("/" + cid);
+		navigate("/");
 	};
 
 	useEffect(() => {
@@ -164,7 +164,7 @@ const OptionCreate = (props) => {
 
 	return (
 		<div id="option-create-wrapper">
-			<Link to={"/" + cid} style={{ textDecoration: "none", color: "#000000" }}>
+			<Link to={"/"} style={{ textDecoration: "none", color: "#000000" }}>
 				<div id="return-button">
 					<i className="fa-solid fa-arrow-left"></i> Return to Question List
 				</div>
