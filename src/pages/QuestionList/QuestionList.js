@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import Button from "../../components/Button/Button";
 import QuestionListItem2 from "../../components/QuestionListItem2/QuestionListItem2";
 
 import "./QuestionList.scss";
@@ -68,7 +67,6 @@ const QuestionList = (props) => {
 					});
 				} else {
 					if (!res.data.enrolled) {
-						// console.log("case3");
 						navigate("/enroll");
 					} else {
 						axios
@@ -115,10 +113,6 @@ const QuestionList = (props) => {
 		[cType]
 	);
 
-	const moveToCreateOption = () => {
-		navigate("/createstem");
-	};
-
 	useEffect(() => {
 		if (isLoggedIn) {
 			checkValidUser();
@@ -129,11 +123,6 @@ const QuestionList = (props) => {
 
 	return (
 		<div id="question-list-solve">
-			<div id="question-list-functions">
-				<div style={{ textDecoration: "none", color: "#000000" }}>
-					<Button navigateBy={moveToCreateOption} text="Create New Stem" />
-				</div>
-			</div>
 			<div id="question-list-header">
 				<div> No.</div>
 				<div> Question</div>
