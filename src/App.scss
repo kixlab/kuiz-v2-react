@@ -13,33 +13,4 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 		monospace;
 }
-.app-wrapper {
-	// font-family: "Noto Sans", sans-serif;
-	display: grid;
-	grid-template-columns: 320px auto;
-	height: 100vh;
-	#left-sidebar {
-		max-width: 200px;
-		background-color: white;
-		padding: 56px 36px;
-		display: grid;
-		grid-template-rows: 30% auto;
 
-		#main-logo {
-			text-align: center;
-		}
-
-		#side-nav {
-			place-self: start;
-			display: grid;
-			row-gap: 36px;
-		}
-	}
-
-	main {
-		background-color: #f2f5f8;
-		padding: 36px;
-		display: grid;
-		place-items: stretch;
-	}
-}

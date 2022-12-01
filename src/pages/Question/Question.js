@@ -1,39 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router";
 import axios from "axios";
 import draftToHtml from "draftjs-to-html";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-
-import VerificationOptionItem from "../../components/VerificationOptionItem/OptionItem";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import VerificationClusterItem from "../../components/VerificationClusterItem/ClusterItem";
-
+import VerificationOptionItem from "../../components/VerificationOptionItem/OptionItem";
 import "./Question.scss";
 
-var ObjectID = require("bson-objectid");
+const ObjectID = require("bson-objectid");
 
 const Question = (props) => {
-	const navigate = useNavigate();
 	const qid = useParams().id;
 	const [optionSet, setOptionSet] = useState([]);
 	const [options, setOptions] = useState([]);
 
 	const [qinfo, setQinfo] = useState();
 	const [ansVisible, setAnsVisible] = useState(false);
-	const cid = useParams().cid;
 	const [selected, setSelected] = useState();
-	const cType = useSelector((state) => state.userInfo.cType);
 	const [answer, setAnswer] = useState(0);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const [isOptionValid, setIsOptionValid] = useState();
 	const [isSolved, setIsSolved] = useState();
 
 	const [ans, setAns] = useState([]);
 	const [dis, setDis] = useState([]);
 	const [groupMode, setGroupMode] = useState(false);
-
-	const [clusters, setClusters] = useState([]);
 
 	function getMultipleRandom(arr, num) {
 		const shuffled = [...arr].sort(() => 0.5 - Math.random());
@@ -44,39 +35,10 @@ const Question = (props) => {
 		array.sort(() => Math.random() - 0.5);
 		return array;
 	}
-	function removeById(array, id) {
-		var index = array
-			.map((x) => {
-				return x._id;
-			})
-			.indexOf(id);
-		array.splice(index, 1);
-		// const array2 = array.filter((a, i) => i !== index)
-		return array;
-	}
 
-	const getQinfo = (qid) => {
+	const getQinfo = useCallback((qid) => {
 		let optionList;
 		axios.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid).then((res) => {
-			// const options = res.data.options;
-
-			// let ans = options.filter((c) => c.is_answer);
-			// let dis = options.filter((c) => !c.is_answer);
-
-			// var ansList = getMultipleRandom(ans, 1);
-			// var disList = getMultipleRandom(dis, 3);
-
-			// optionList = shuffle(ansList.concat(disList));
-			// setAns(ans);
-			// setDis(dis);
-			// setOptionSet(optionList);
-
-			// optionList.map((o, i) => {
-			// 	if (o.is_answer) {
-			// 		setAnswer(i);
-			// 	}
-			// });
-
 			axios
 				.get(`${process.env.REACT_APP_BACK_END}/question/load/cluster?qid=` + qid)
 				.then((res2) => {
@@ -92,13 +54,11 @@ const Question = (props) => {
 						ansList.map((a) => a.representative).concat(disList.map((d) => d.representative))
 					);
 
-					setClusters(cluster);
 					setAns(ans);
 					setDis(dis);
 					setOptionSet(optionList);
-					setIsOptionValid(true);
 
-					optionList.map((o, i) => {
+					optionList.forEach((o, i) => {
 						if (o.is_answer) {
 							setAnswer(i);
 						}
@@ -108,9 +68,8 @@ const Question = (props) => {
 			setOptions(res.data.options);
 			setQinfo(res.data.qinfo);
 		});
-	};
+	}, []);
 
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const checkAnswer = () => {
 		if (!ansVisible) {
 			axios
@@ -143,12 +102,8 @@ const Question = (props) => {
 		}
 	};
 	useEffect(() => {
-		if (isLoggedIn) {
-			getQinfo(qid);
-		} else {
-			navigate("/login");
-		}
-	}, []);
+		getQinfo(qid);
+	}, [getQinfo, qid]);
 
 	const shuffleOptions = () => {
 		getQinfo(qid);
@@ -156,8 +111,6 @@ const Question = (props) => {
 		setSelected();
 		setAnsVisible(false);
 	};
-
-	// const reportErr = () => {};
 
 	return (
 		<div id="question-screen">

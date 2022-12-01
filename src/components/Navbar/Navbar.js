@@ -1,60 +1,82 @@
-import React, { useCallback, useEffect } from "react";
+import styled from "@emotion/styled";
+import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import "./Navbar.scss";
-
-import Button from "../Button/Button";
 
 function Navbar(props) {
 	const cid = useSelector((state) => state.userInfo.cid);
 	const profile = useSelector((state) => state.userInfo.userInfo?.imageUrl);
-	const user_name = useSelector((state) => state.userInfo.userInfo?.name);
 	const navigate = useNavigate();
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 
 	const moveToCreateStem = useCallback(() => {
 		navigate("/createstem");
-	}, [cid, navigate]);
+	}, [navigate]);
 
 	const moveToCreateOption = useCallback(() => {
 		navigate("/");
-	}, [cid, navigate]);
-
-	const moveToQlist = useCallback(() => {
-		navigate("/qlist");
-	}, [cid, navigate]);
-
-	useEffect(() => {
-		console.log("login:", isLoggedIn ? "true" : "false");
-	}, [isLoggedIn]);
+	}, [navigate]);
 
 	return (
-		<div id="left-sidebar" className={isLoggedIn ? "show" : "hidden"}>
-			<div>
-				<div id="main-logo" onClick={(e) => navigate("/" + cid)}>
-					KUIZ
-				</div>
-				{/* <div>{cid}</div> */}
-			</div>
-			{isLoggedIn && (
-				<div id="side-nav">
-					<Button navigateBy={moveToCreateStem} text="Create New Question" />
-					<Button navigateBy={moveToCreateOption} text="Create New Options" />
-					{/* <Button navigateBy={moveToQlist} text="Question Bank" /> */}
-				</div>
-			)}
-			<div className="profile">
-				<div className="profile-photo">
-					<img src={profile} width="100px" />
-				</div>
-				<div className="profile-name">{user_name}</div>
-				<div className="profile-nav" onClick={(e) => navigate("/mypage")}>
-					MY PAGE
-					<i className="fa-solid fa-arrow-right"></i>
-				</div>
-			</div>
-		</div>
+		<Container>
+			<Logo onClick={(e) => navigate("/" + cid)}>
+				KUIZ
+			</Logo>
+			{isLoggedIn && <>
+				<ProfileImage src={profile} />
+				<Menu>
+					<MenuButton onClick={moveToCreateStem}>Create Question</MenuButton>
+					<MenuButton onClick={moveToCreateOption}>Create Options</MenuButton>
+					<MenuButton onClick={() => navigate("/mypage")}>My Page</MenuButton>
+				</Menu>
+			</>}
+		</Container>
 	);
 }
+
+const Container = styled.div`
+	padding: 56px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-shadow: rgb(0 0 0 / 25%) 0 4px 4px;
+	background: white;
+`
+
+const Menu = styled.div`
+	place-self: start;
+	display: grid;
+	width: 100%;
+`
+
+const Logo = styled.div`
+	font-size: 48px;
+	font-weight: 900;
+	text-align: center;
+`
+
+const MenuButton = styled.button`
+	border: none;
+	width: 100%;
+	font-size: 16px;
+	padding: 24px;
+	background: transparent;
+	cursor: pointer;
+	color: #3d8add;
+
+	&:hover {
+		background: #f5f5f5;
+	}
+`
+
+const ProfileImage = styled.img`
+	border-radius: 50%;
+	width: 100px;
+	height: 100px;
+	overflow: hidden;
+	justify-self: center;
+	margin-top: 40px;
+	margin-bottom: 25px;
+`
 
 export default Navbar;

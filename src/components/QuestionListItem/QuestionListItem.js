@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
-
-import "./QuestionListItem.scss";
+import React from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
-import { useSelector } from "react-redux";
+import styled from "@emotion/styled";
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 dayjs.locale("en");
@@ -37,14 +35,29 @@ const QuestionListItem = (props) => {
 		}
 	};
 	return (
-		<div className="question-list-item">
-			<div className="question-list-number">{props.number}</div>
-			<div className="question-list-title">{props.title}</div>
-			<div className="question-list-optioncount">{props.options && props.options.length}</div>
-			<div className="question-list-date">{formatDate(props.date)}</div>
-			{/* <div className="question-list-date">{props.valid?"valid option set":"no valid option set"}</div> */}
-		</div>
+		<Container>
+			<Title>{props.title}</Title>
+			<div>{props.options && props.options.length}</div>
+			<div>{formatDate(props.date)}</div>
+		</Container>
 	);
 };
+
+const Container = styled.div`
+	display: grid;
+	grid-template-columns: auto 100px 150px;
+	place-items: center;
+	padding: 24px 0;
+	border-bottom: 0.5px solid #e1e9ff;
+
+	&:hover {
+		background-color: #f5f5f5;
+	}
+`
+
+
+const Title = styled.div`
+	text-align: center;
+`
 
 export default QuestionListItem;

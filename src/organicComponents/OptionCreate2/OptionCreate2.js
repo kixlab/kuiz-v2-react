@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import React, { useState } from "react";
 import "./OptionCreate2.scss";
 
 const OptionCreate2 = ({ optionList, updateOptionList, updateExplanation }) => {
-	const navigate = useNavigate();
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
-
 	const [answer, setAnswer] = useState(null);
 	const handleAnswer = (index) => {
 		const newList = optionList.map((o, i) => {
@@ -19,26 +14,6 @@ const OptionCreate2 = ({ optionList, updateOptionList, updateExplanation }) => {
 	const explanationHandler = (e) => {
 		updateExplanation(e.target.value);
 	};
-	const addOption = (e) => {
-		if (optionList.length < 5) {
-			updateOptionList(
-				optionList.concat({ option_text: "", is_answer: false })
-			);
-		} else {
-			alert("Too many options");
-		}
-	};
-
-	// const deleteOption = (index) => {
-	// 	if (optionList.length <= 2) {
-	// 		alert("You must provide at least two answer options.");
-	// 	} else {
-	// 		const newList = optionList.filter((o, i) => {
-	// 			return i !== index;
-	// 		});
-	// 		updateOptionList(newList);
-	// 	}
-	// };
 
 	const setOption = (e, index) => {
 		const newList = optionList.map((o, i) => {
@@ -48,12 +23,6 @@ const OptionCreate2 = ({ optionList, updateOptionList, updateExplanation }) => {
 		});
 		updateOptionList(newList);
 	};
-
-	useEffect(() => {
-		if (!isLoggedIn) {
-			navigate("/login");
-		}
-	}, []);
 
 	return (
 		<div id="option-creator">

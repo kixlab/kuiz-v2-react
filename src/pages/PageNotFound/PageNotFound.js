@@ -8,7 +8,6 @@ const PageNotFound = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const isLoggedIn = useSelector((state) => state.userInfo?.isLoggedIn);
 	const uid = useSelector((state) => state.userInfo?.userInfo?._id);
 
 	const checkValidUser = useCallback(() => {
@@ -40,12 +39,8 @@ const PageNotFound = () => {
 	}, [dispatch, navigate, uid]);
 
 	useEffect(() => {
-		if (!isLoggedIn) {
-			navigate("/login");
-		} else {
-			checkValidUser();
-		}
-	}, [checkValidUser, isLoggedIn, navigate]);
+		checkValidUser();
+	}, [checkValidUser]);
 
 	return <div>Page Not Found 404</div>;
 };

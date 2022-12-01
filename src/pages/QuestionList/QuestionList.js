@@ -4,17 +4,14 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import QuestionListItem2 from "../../components/QuestionListItem2/QuestionListItem2";
-
 import "./QuestionList.scss";
 
 const QuestionList = (props) => {
 	const navigate = useNavigate();
 	const cid = useParams().cid;
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [questionList, setQuestionList] = useState([]);
 	const [validList, setValidList] = useState([]);
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const cType = useSelector((state) => state.userInfo.cType);
 	const getQuestionList = useCallback(
 		(cid) => {
 			axios
@@ -42,8 +39,6 @@ const QuestionList = (props) => {
 									}
 								})
 								.catch(async (err) => await console.log(err));
-							// }
-							// });
 						})
 					);
 
@@ -51,7 +46,7 @@ const QuestionList = (props) => {
 					setQuestionList(res.data.problemList);
 				});
 		},
-		[cType]
+		[]
 	);
 
 	const checkValidUser = useCallback(() => {
@@ -79,47 +74,9 @@ const QuestionList = (props) => {
 			});
 	}, [cid, getQuestionList, navigate, uid]);
 
-	const getQinfo = useCallback(
-		async (qid) => {
-			await axios
-				.get(`${process.env.REACT_APP_BACK_END}/question/detail/load?qid=` + qid)
-				.then(async (res) => {
-					if (cType) {
-						if (res.data.data.qinfo.cluster.length < 3) {
-							return false;
-						} else {
-							await axios
-								.post(`${process.env.REACT_APP_BACK_END}/question/load/clusters`, {
-									clusters: res.data.data.qinfo.cluster,
-								})
-								.then(async (res2) => {
-									const clusters = res2.data.clusters;
-									if (
-										clusters.filter((c) => c.ansExist === true).length >= 1 &&
-										clusters.filter((c) => c.disExist === true).length >= 3
-									) {
-										return true;
-									} else {
-										return false;
-									}
-								})
-								.catch(async (err) => await console.log(err));
-						}
-					} else {
-						return true;
-					}
-				});
-		},
-		[cType]
-	);
-
 	useEffect(() => {
-		if (isLoggedIn) {
-			checkValidUser();
-		} else {
-			navigate("/login");
-		}
-	}, [checkValidUser, isLoggedIn, navigate]);
+		checkValidUser();
+	}, [checkValidUser]);
 
 	return (
 		<div id="question-list-solve">
