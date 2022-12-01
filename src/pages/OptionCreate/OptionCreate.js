@@ -258,7 +258,6 @@ const Container = styled.div`
 
 const Section = styled.div`
 	margin-bottom: 28px;
-	margin-top: 28px;
 `
 
 const Header = styled.div`
@@ -345,6 +344,7 @@ const Divider = styled.div`
 	width: calc(100% - 24px);
 	margin: auto;
 	background-color: #e0e0e0;
+	margin-bottom: 28px;
 `
 
 export default OptionCreate;

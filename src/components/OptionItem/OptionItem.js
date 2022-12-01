@@ -54,6 +54,7 @@ const Tag = styled.div`
 	padding: 4px 8px;
 	border-radius: 100px;
 	background: white;
+	font-size: 12px;
 `
 
 export default OptionItem;
