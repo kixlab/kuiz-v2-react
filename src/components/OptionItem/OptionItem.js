@@ -1,13 +1,15 @@
 import React from "react";
 import styled from "@emotion/styled"
+import { css } from "@emotion/react";
 
-const OptionItem = ({ optionInfo, onClick }) => {
+const OptionItem = ({ optionInfo, onClick, isSelected = false }) => {
 	const text = optionInfo.option_text;
 	const similar = optionInfo.keyWords;
 	const isAnswer = optionInfo.is_answer;
 
 	return (
 		<Container
+			isSelected={isSelected}
 			onClick={onClick}>
 			{isAnswer ? <Check>✓</Check> : <Cross>x</Cross>}
 			<span>{text}</span>
@@ -18,12 +20,14 @@ const OptionItem = ({ optionInfo, onClick }) => {
 	);
 };
 
-const Container = styled.div`
+const Container = styled.div`${({ isSelected }) => css`
 	margin: 6px 0;
 	background-color: rgb(235, 235, 235);
 	padding: 12px 16px;
 	justify-content: start;
+	border: 2px solid ${isSelected ? "#3d73dd" : "transparent"};
 	align-items: flex-start;
+`}
 `
 
 const Footer = styled.div`

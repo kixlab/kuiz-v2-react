@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import OptionItem from "../../components/OptionItem/OptionItem";
-import "./OptionCreate.scss";
 const ObjectID = require("bson-objectid");
 
 const OptionCreate = (props) => {
@@ -43,8 +42,8 @@ const OptionCreate = (props) => {
 		});
 	}, [navigate, qid]);
 
-	const proceedStep = () => {
-		let visibleList = isAnswer ? ansList : disList;
+	const proceedStep = useCallback(() => {
+		const visibleList = isAnswer ? ansList : disList;
 
 		if (visibleList.length > 0) {
 			setPageStat(false);
@@ -67,19 +66,17 @@ const OptionCreate = (props) => {
 					navigate("/");
 				});
 		}
-	};
+	},[ansList, cid, disList, isAnswer, keywords, navigate, option, qid, uid]);
 
-	const addToCluster = (id) => {
-		let arr = similarOptions;
-		if (arr.includes(id)) {
+	const addToCluster = useCallback((id) => {
+		if (similarOptions.includes(id)) {
 			setSimilarOptions(
-				arr.filter((item) => item !== id)
+				similarOptions.filter((item) => item !== id)
 			);
 		} else {
-			arr.push(id);
-			setSimilarOptions(arr);
+			setSimilarOptions([id, ...similarOptions]);
 		}
-	};
+	}, [similarOptions]);
 
 	const submit = useCallback(async () => {
 		const optionData = {
@@ -112,7 +109,7 @@ const OptionCreate = (props) => {
 	}
 
 	return (
-		<div id="option-create-wrapper">
+		<Container>
 			<Section>
 				<Header>Learning Objective</Header>
 				<p>{qinfo.learning_objective}</p>
@@ -175,7 +172,6 @@ const OptionCreate = (props) => {
 						<Autocomplete
 							fullWidth
 							multiple
-							id="tags-outlined"
 							options={keywordSet}
 							freeSolo
 							style={{marginBottom: 12}}
@@ -209,75 +205,56 @@ const OptionCreate = (props) => {
 				</>
 			) : (
 				// Adding Clusters
-				<div id="clustering-wrapper">
-					<div className="section" id="my-option">
-						<div className="header">Your option</div>
+				<>
+					<Section>
+						<Header>Your option</Header>
+						<OptionItem optionInfo={{
+							option_text: option,
+							keyWords: keywords,
+							is_answer: isAnswer,
+						}}/>
+					</Section>
 
-						<div
-							className={
-								isAnswer ? "answer-wrapper option-item" : "distractor-wrapper option-item"
-							}>
-							<div className="option-components">
-								<div className="option-text">{option}</div>
-								<div className="tags">
-									{keywords.map((item, index) => {
-										return (
-											<div className="keyword-item" key={index}>
-												{item}
-											</div>
-										);
-									})}
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="section">
-						<div className="header">
-							Select any options below that represent that same idea as your own option.
-						</div>
+					<Divider/>
 
-						<div id="set-cluster">
-							<div>Suggested Options</div>
-							{isAnswer
-								? ansList.map((item, index) => {
-										return (
-											<div key={index}>
-												<OptionItem
-													optionInfo={item}
-													id={item._id}
-													onClick={() => {
-														addToCluster(item._id);
-													}}
-												/>
-											</div>
-										);
-								  })
-								: disList.map((item, index) => {
-										return (
-											<div key={index}>
-												<OptionItem
-													optionInfo={item}
-													id={item._id}
-													onClick={() => {
-														addToCluster(item._id);
-													}}
-												/>
-											</div>
-										);
-								  })}
-						</div>
-					</div>
+					<Section>
+						<Instruction>
+							Select all options that are similar to your option.
+						</Instruction>
 
-					<button
-						className="proceed-button"
-						onClick={submit}>
-						Submit
-					</button>
-				</div>
+						{(isAnswer ? ansList : disList).map((item, index) => {
+							return (
+								<OptionItem
+									key={index}
+									optionInfo={item}
+									id={item._id}
+									onClick={() => {
+										addToCluster(item._id);
+									}}
+									isSelected={similarOptions.includes(item._id)}
+								/>
+							);
+						})}
+
+						<ProceedButton
+							onClick={submit}>
+							Submit
+						</ProceedButton>
+					</Section>
+				</>
 			)}
-		</div>
+		</Container>
 	);
 };
+
+const Container = styled.div`
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.25) 0 4px 4px;
+	padding: 36px;
+	border-radius: 8px;
+	min-height: 90%;
+	height: fit-content;
+`
 
 const Section = styled.div`
 	margin-bottom: 28px;
@@ -345,7 +322,7 @@ const Radio = styled.div`
 `
 
 const Instruction = styled.div`
-	font-size: 18px;
+	font-size: 22px;
 	margin-bottom: 8px;
 	font-weight: bold;
 `

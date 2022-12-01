@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import "./QstemEditor.scss";
+import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
+import React, { useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "./QstemEditor.scss";
 
 var ObjectID = require("bson-objectid");
 
@@ -184,27 +184,6 @@ function QstemEditor(props) {
 						}}
 					/>
 				</div>
-
-				{/* <FormControl id="template">
-					<InputLabel id="demo-multiple-checkbox-label">
-						Stuck? Here are some Question Starters to help you out!
-					</InputLabel>
-					<Select
-						labelId="demo-multiple-checkbox-label"
-						id="demo-multiple-checkbox"
-						value={template}
-						onChange={selectTemplate}
-						input={
-							<OutlinedInput label="Stuck? Here are some Question Starters to help you out!" />
-						}
-						MenuProps={MenuProps}>
-						{templateList.map((t) => (
-							<MenuItem key={t} value={t}>
-								<ListItemText primary={t} />
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl> */}
 			</div>
 
 			<div>
