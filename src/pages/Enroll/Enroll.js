@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import "./Enroll.scss";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { enrollClass, loginUser } from "../../features/authentication/userSlice";
+import "./Enroll.scss";
 
 const Enroll = (props) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [code, setCode] = useState("");
 	const uid = useSelector((state) => state.userInfo.userInfo?._id);
 	const email = useSelector((state) => state.userInfo.userInfo?.email);
@@ -32,11 +31,6 @@ const Enroll = (props) => {
 			});
 	};
 
-	useEffect(() => {
-		if (!isLoggedIn) {
-			navigate("/login");
-		}
-	}, [isLoggedIn, navigate]);
 	return (
 		<div id="enroll">
 			<div id="introduction">Enter your class code:</div>

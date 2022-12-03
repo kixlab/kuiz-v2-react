@@ -1,17 +1,14 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import QuestionListItem2 from "../../components/QuestionListItem2/QuestionListItem2";
-import { useDispatch } from "react-redux";
-
-import "./MyPage.scss";
 import { logoutUser } from "../../features/authentication/userSlice";
+import "./MyPage.scss";
 
 const MyPage = (props) => {
 	const cid = useParams().cid;
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const navigate = useNavigate();
 	const uid = useSelector((state) => state.userInfo.userInfo?._id);
 	const [madeStem, setMadeStem] = useState([]);
@@ -54,13 +51,9 @@ const MyPage = (props) => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (!isLoggedIn) {
-			navigate("/login");
-		} else {
-			getMadeStem();
-			getMadeOption();
-		}
-	}, [getMadeOption, getMadeStem, isLoggedIn, navigate]);
+		getMadeStem();
+		getMadeOption();
+	}, [getMadeOption, getMadeStem]);
 
 	return (
 		<div id="mypage">

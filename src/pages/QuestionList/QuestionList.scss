@@ -3,6 +3,7 @@
 	box-shadow: rgba(0, 0, 0, 0.25) 0 4px 4px;
 	padding: 36px;
 	border-radius: 8px;
+	overflow: hidden;
 
 	#question-list-header {
 		background-color: #e1e9ff;
@@ -10,19 +11,9 @@
 		height: 52px;
 	}
 
-	#question-list-header,
-	.question-list-item {
+	#question-list-header {
 		display: grid;
 		grid-template-columns: 100px auto 150px;
 		place-items: center;
-	}
-
-	.question-list-item {
-		padding: 24px 0;
-		border-bottom: 0.5px solid #e1e9ff;
-
-		&:hover {
-			font-weight: 600;
-		}
 	}
 }

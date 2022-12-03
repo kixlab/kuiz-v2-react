@@ -1,23 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router";
-import axios from "axios";
-
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import draftToHtml from "draftjs-to-html";
-
-import ClusterItem from "../../components/ClusterItem/ClusterItem";
-
-/* Autocomplete components */
-import Chip from "@mui/material/Chip";
+import styled from "@emotion/styled";
 import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
-
+import axios from "axios";
+import draftToHtml from "draftjs-to-html";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 import OptionItem from "../../components/OptionItem/OptionItem";
-
-import "./OptionCreate.scss";
-var ObjectID = require("bson-objectid");
+const ObjectID = require("bson-objectid");
 
 const OptionCreate = (props) => {
 	const [pageStat, setPageStat] = useState(true);
@@ -26,93 +18,32 @@ const OptionCreate = (props) => {
 	const [ansList, setAnsList] = useState();
 	const [disList, setDistList] = useState();
 	const [qinfo, setQinfo] = useState();
-	const [options, setOptions] = useState();
 
 	const cid = useParams().cid;
 	const uid = useSelector((state) => state.userInfo.userInfo._id);
-	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 	const [similarOptions, setSimilarOptions] = useState([]);
 
 	// My option values
 	const [option, setOption] = useState("");
 	const [isAnswer, setIsAnswer] = useState();
 	const [keywords, setKeywords] = useState([]);
-
 	const ref = useRef(null);
 	const [keywordSet, setKeywordSet] = useState([]);
 
-	const [infoVisible, setInfoVisible] = useState(true);
-
-	const getOptionList = (qid) => {
+	useEffect(() => {
 		axios.get(`${process.env.REACT_APP_BACK_END}/question/option/load?qid=` + qid).then((res) => {
 			const ans = res.data.options.filter((op) => op.is_answer === true);
 			const dis = res.data.options.filter((op) => op.is_answer === false);
 
-			setOptions(res.data.options);
 			setAnsList(ans);
 			setDistList(dis);
 			setQinfo(res.data.qinfo);
 			setKeywordSet(res.data.qinfo.keyword);
 		});
-	};
-	// const getOptionCluster = (qid) => {
-	// 	axios
-	// 		.get(`${process.env.REACT_APP_BACK_END}/question/load/cluster?qid=` + qid)
-	// 		.then(async (res) => {
-	// 			setSimilarOptions(res.data.cluster);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// };
+	}, [navigate, qid]);
 
-	// const getOptionByCluster = (cluserId) => {
-	// 	axios
-	// 		.get(`${process.env.REACT_APP_BACK_END}/question/load/optionbycluster?qid=` + qid)
-	// 		.then((res) => {
-	// 			cluster.set(res.data.cluster);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// };
-
-	const reset = () => {
-		navigate("/");
-	};
-
-	useEffect(() => {
-		if (isLoggedIn) {
-			// getOptionCluster(qid);
-			getOptionList(qid);
-		} else {
-			navigate("/login");
-		}
-	}, []);
-
-	const filterOptions = (keyword) => {
-		setAnsList(
-			options
-				.filter((op) => op.is_answer)
-				.filter((option) => {
-					return option.keyWords.includes(keyword);
-				})
-		);
-		setDistList(
-			options
-				.filter((op) => !op.is_answer)
-				.filter((option) => {
-					return option.keyWords.includes(keyword);
-				})
-		);
-	};
-	const resetFilter = () => {
-		setAnsList(options.filter((op) => op.is_answer));
-		setDistList(options.filter((op) => !op.is_answer));
-	};
-
-	const proceedStep = () => {
-		let visibleList = isAnswer ? ansList : disList;
+	const proceedStep = useCallback(() => {
+		const visibleList = isAnswer ? ansList : disList;
 
 		if (visibleList.length > 0) {
 			setPageStat(false);
@@ -128,323 +59,292 @@ const OptionCreate = (props) => {
 
 			axios
 				.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
-					optionData: optionData,
+					optionData,
 					similarOptions: [],
 				})
 				.then(() => {
-					reset();
+					navigate("/");
 				});
 		}
-	};
+	},[ansList, cid, disList, isAnswer, keywords, navigate, option, qid, uid]);
 
-	const addToCluster = (id) => {
-		let arr = similarOptions;
-		if (arr.includes(id)) {
+	const addToCluster = useCallback((id) => {
+		if (similarOptions.includes(id)) {
 			setSimilarOptions(
-				arr.filter((item) => {
-					return item != id;
-				})
+				similarOptions.filter((item) => item !== id)
 			);
 		} else {
-			arr.push(id);
-			setSimilarOptions(arr);
+			setSimilarOptions([id, ...similarOptions]);
 		}
-	};
+	}, [similarOptions]);
 
-	let keywordList = keywordSet;
+	const submit = useCallback(async () => {
+		const optionData = {
+			author: ObjectID(uid),
+			option_text: option,
+			is_answer: isAnswer,
+			class: ObjectID(cid),
+			qstem: ObjectID(qid),
+			keywords: keywords,
+		};
 
-	if (!keywordList.includes("Common misconception")) {
-		keywordList.push("Common misconception");
+		await axios
+			.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
+				optionData: optionData,
+				similarOptions: similarOptions,
+			})
+		navigate("/");
+		
+	},[cid, isAnswer, keywords, navigate, option, qid, similarOptions, uid])
+
+	if (!keywordSet.includes("Common misconception")) {
+		keywordSet.push("Common misconception");
 	}
-	if (!keywordList.includes("Form similar to answer")) {
-		keywordList.push("Form similar to answer");
+	if (!keywordSet.includes("Form similar to answer")) {
+		keywordSet.push("Form similar to answer");
+	}
+
+	if (!qinfo) {
+		return null
 	}
 
 	return (
-		<div id="option-create-wrapper">
-			<Link to={"/"} style={{ textDecoration: "none", color: "#000000" }}>
-				<div id="return-button">
-					<i className="fa-solid fa-arrow-left"></i> Return to Question List
-				</div>
-			</Link>
-			<div id="question-content-wrapper">
-				{qinfo && (
-					<div
-						dangerouslySetInnerHTML={{
-							__html: draftToHtml(JSON.parse(qinfo.stem_text)),
-						}}
-						id="question-stem-content"
-					/>
-				)}
-				<div id="question-info">
-					<div
-						id="question-info-toggle"
-						onClick={() => {
-							setInfoVisible(!infoVisible);
-						}}>
-						{infoVisible ? "Hide Question Info" : "Show Question Info"}
-						{infoVisible ? (
-							<i className="fa-solid fa-chevron-up"></i>
-						) : (
-							<i className="fa-solid fa-chevron-down"></i>
-						)}
-					</div>
+		<Container>
+			<Section>
+				<Header>Learning Objective</Header>
+				<p>{qinfo.learning_objective}</p>
 
-					{infoVisible && (
-						<div id="question-info-wrapper">
-							<div className="question-info-container">
-								<div className="header">Learning Objective</div>
-								{qinfo && qinfo.learning_objective}
-							</div>
+				<Header>Explanation</Header>
+				<div dangerouslySetInnerHTML={{
+					__html: draftToHtml(JSON.parse(qinfo.explanation)),
+				}}/>
+			</Section>
 
-							{qinfo &&
-								(qinfo.explanation !== "" ? (
-									<div className="question-info-container">
-										<div className="header">Explanation</div>
-										<div
-											dangerouslySetInnerHTML={{
-												__html: draftToHtml(JSON.parse(qinfo.explanation)),
-											}}></div>
-									</div>
-								) : (
-									<div></div>
-								))}
-						</div>
-					)}
-				</div>
-			</div>
+			<Divider/>
 
 			{pageStat ? ( // Creating Option
-				<div id="options-wrapper">
-					{/* <div id="keywords-wrapper" className="section">
-							<div className="header">Keywords</div>
-							<div id="keywords-container">
-								<div>
-									{keywordSet.map((item, index) => {
-										return (
-											<div
-												className="keyword-item"
-												onClick={() => {
-													filterOptions(item);
-												}}
-												key={index}>
-												{item}
-											</div>
-										);
-									})}
-								</div>
-								<div
-									className="keyword-item reset-item"
-									onClick={() => {
-										resetFilter();
-									}}>
-									Reset Keyword Filter
-								</div>
-							</div>
-						</div> */}
-					<div id="options" className="section">
-						<div id="options-list">
-							<div className="header">List of Options</div>
-							<div className="option-container" id="answer-options-container">
-								<div className="sub-header">Answers</div>
-								{ansList &&
-									ansList.map((item) => (
-										<div id={item._id} className="option-item-wrapper" key={item._id}>
-											<OptionItem optionInfo={item} id={item._id} />
-										</div>
-									))}
-							</div>
-							<div className="option-container" id="distractor-options-container">
-								<div className="sub-header">Distractors</div>
-								{disList &&
-									disList.map((item) => (
-										<div id={item._id} className="option-item-wrapper" key={item._id}>
-											<OptionItem optionInfo={item} id={item._id} />
-										</div>
-									))}
-							</div>
-						</div>
-						<div id="option-create">
-							<div className="header">Create New Option</div>
-							<div className="d-flex radio">
-								<div
-									className={
-										isAnswer === true
-											? "radio-item radio-selected radio-answer"
-											: "radio-answer radio-item"
-									}
-									onClick={() => setIsAnswer(true)}>
-									Answer
-									{/* <label htmlFor="answer">Answer</label>
-									<input
-										type="radio"
-										name="answer"
-										value="answer"
-										checked
-										onChange={() => setIsAnswer(true)}
-									/> */}
-								</div>
-								<div
-									className={
-										isAnswer === false
-											? "radio-item radio-selected radio-distractor"
-											: " radio-distractor radio-item"
-									}
-									onClick={() => setIsAnswer(false)}>
-									Distractor
-									{/* <label htmlFor="distractor">Distractor</label>
-									<input
-										type="radio"
-										name="answer"
-										value="distractor"
-										onChange={() => setIsAnswer(false)}
-									/> */}
-								</div>
-							</div>
-							<div className="d-flex">
-								<TextField
-									fullWidth
-									value={option}
-									onChange={(e) => {
-										setOption(e.target.value);
-									}}
-									inputRef={ref}
-									placeholder="Suggest an answer or distractor for this question"
-								/>
-								{/* <input
-										value={option}
-										onChange={(e) => setOption(e.target.value)}
-										placeholder="Type to create option..."
-										className="objective-input"
-									/> */}
-							</div>
+				<>
+					<Section>
+						<Question dangerouslySetInnerHTML={{__html: draftToHtml(JSON.parse(qinfo.stem_text))}}/>
+						{ansList.map((item) => (
+							<OptionItem optionInfo={item} key={item._id} />
+						))}
+						{disList.map((item) => (
+							<OptionItem optionInfo={item} key={item._id} />
+						))}
+					</Section>
 
-							<div className="d-flex">
-								<Autocomplete
-									fullWidth
-									multiple
-									id="tags-outlined"
-									options={keywordList}
-									freeSolo
-									onChange={(e, value) => {
-										setKeywords(value);
-									}}
-									renderTags={(value, getTagProps) =>
-										value.map((option, index) => (
-											<Chip variant="outlined" label={option} {...getTagProps({ index })} />
-										))
-									}
-									renderInput={(params) => (
-										<TextField
-											{...params}
-											placeholder="Select categories for your option or add your own"
-										/>
-									)}
-								/>
+					<Divider/>
+
+					<Section>
+						<Instruction>Create New Option</Instruction>
+						<Radio>
+							<div
+								className={
+									isAnswer === true
+										? "radio-item radio-selected radio-answer"
+										: "radio-answer radio-item"
+								}
+								onClick={() => setIsAnswer(true)}>
+								Answer
 							</div>
-						</div>
-					</div>
-					<button
-						className="proceed-button"
-						onClick={() => {
-							if (option !== "") {
-								proceedStep();
-							} else {
-								ref.current.focus();
+							<div
+								className={
+									isAnswer === false
+										? "radio-item radio-selected radio-distractor"
+										: " radio-distractor radio-item"
+								}
+								onClick={() => setIsAnswer(false)}>
+								Distractor
+							</div>
+						</Radio>
+						<TextField
+							fullWidth
+							value={option}
+							onChange={(e) => {
+								setOption(e.target.value);
+							}}
+							style={{marginBottom: 12}}
+							inputRef={ref}
+							placeholder="Suggest an answer or distractor for this question"
+						/>
+
+						<Autocomplete
+							fullWidth
+							multiple
+							options={keywordSet}
+							freeSolo
+							style={{marginBottom: 12}}
+							onChange={(e, value) => {
+								setKeywords(value);
+							}}
+							renderTags={(value, getTagProps) =>
+								value.map((option, index) => (
+									<Chip variant="outlined" label={option} {...getTagProps({ index })} />
+								))
 							}
-						}}>
-						Next
-					</button>
-				</div>
+							renderInput={(params) => (
+								<TextField
+									{...params}
+									placeholder="Select categories for your option or add your own"
+								/>
+							)}
+						/>
+
+						<ProceedButton
+							onClick={() => {
+								if (option !== "") {
+									proceedStep();
+								} else {
+									ref.current.focus();
+								}
+							}}>
+							Next
+						</ProceedButton>
+					</Section>
+				</>
 			) : (
 				// Adding Clusters
-				<div id="clustering-wrapper">
-					<div className="section" id="my-option">
-						<div className="header">Your option</div>
+				<>
+					<Section>
+						<Header>Your option</Header>
+						<OptionItem optionInfo={{
+							option_text: option,
+							keyWords: keywords,
+							is_answer: isAnswer,
+						}}/>
+					</Section>
 
-						<div
-							className={
-								isAnswer ? "answer-wrapper option-item" : "distractor-wrapper option-item"
-							}>
-							<div className="option-components">
-								<div className="option-text">{option}</div>
-								<div className="tags">
-									{keywords.map((item, index) => {
-										return (
-											<div className="keyword-item" key={index}>
-												{item}
-											</div>
-										);
-									})}
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="section">
-						<div className="header">
-							Select any options below that represent that same idea as your own option.
-						</div>
+					<Divider/>
 
-						<div id="set-cluster">
-							<div>Suggested Options</div>
-							{isAnswer
-								? ansList.map((item, index) => {
-										return (
-											<div key={index}>
-												<OptionItem
-													optionInfo={item}
-													id={item._id}
-													onClick={() => {
-														addToCluster(item._id);
-													}}
-												/>
-											</div>
-										);
-								  })
-								: disList.map((item, index) => {
-										return (
-											<div key={index}>
-												<OptionItem
-													optionInfo={item}
-													id={item._id}
-													onClick={() => {
-														addToCluster(item._id);
-													}}
-												/>
-											</div>
-										);
-								  })}
-						</div>
-						{/* )} */}
-					</div>
+					<Section>
+						<Instruction>
+							Select all options that are similar to your option.
+						</Instruction>
 
-					<button
-						className="proceed-button"
-						onClick={() => {
-							const optionData = {
-								author: ObjectID(uid),
-								option_text: option,
-								is_answer: isAnswer,
-								class: ObjectID(cid),
-								qstem: ObjectID(qid),
-								keywords: keywords,
-							};
+						{(isAnswer ? ansList : disList).map((item, index) => {
+							return (
+								<OptionItem
+									key={index}
+									optionInfo={item}
+									id={item._id}
+									onClick={() => {
+										addToCluster(item._id);
+									}}
+									isSelected={similarOptions.includes(item._id)}
+								/>
+							);
+						})}
 
-							axios
-								.post(`${process.env.REACT_APP_BACK_END}/question/option/create`, {
-									optionData: optionData,
-									similarOptions: similarOptions,
-								})
-								.then(() => {
-									reset();
-								});
-						}}>
-						Submit
-					</button>
-				</div>
+						<ProceedButton
+							onClick={submit}>
+							Submit
+						</ProceedButton>
+					</Section>
+				</>
 			)}
-		</div>
+		</Container>
 	);
 };
+
+const Container = styled.div`
+	background-color: white;
+	box-shadow: rgba(0, 0, 0, 0.25) 0 4px 4px;
+	padding: 36px;
+	border-radius: 8px;
+	min-height: 90%;
+	height: fit-content;
+`
+
+const Section = styled.div`
+	margin-bottom: 28px;
+`
+
+const Header = styled.div`
+	font-weight: 700;
+	color: #3d73dd;
+`
+
+const Question = styled.div`
+	font-size: 18px;
+	position: relative;
+	padding-left: 24px;
+	margin-bottom: 14px;
+
+	&::before {
+		content: 'Q. ';
+		color: #3d73dd;
+		font-weight: bold;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	p {
+		margin: 0;
+	}
+`
+
+const Radio = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: row;
+	margin-bottom: 12px;
+
+	.radio-item {
+		padding: 8px 12px;
+		border: 2px solid;
+		border-radius: 20px;
+		font-weight: 700;
+		cursor: pointer;
+		margin-right: 16px;
+		&:hover {
+			background-color: #e7e7e7;
+		}
+	}
+	.radio-answer {
+		border-color: green;
+		color: green;
+		&.radio-selected {
+			background-color: green;
+			color: white;
+		}
+	}
+	.radio-distractor {
+		border-color: rgb(166, 9, 9);
+		color: rgb(166, 9, 9);
+		&.radio-selected {
+			background-color: rgb(166, 9, 9);
+			color: white;
+		}
+	}
+`
+
+const Instruction = styled.div`
+	font-size: 22px;
+	margin-bottom: 8px;
+	font-weight: bold;
+`
+
+const ProceedButton = styled.button`
+	border: none;
+	height: 48px;
+	width: 100%;
+	background-color: #3d73dd;
+	color: white;
+	font-size: 18px;
+	font-weight: bold;
+	border-radius: 8px;
+	place-self: end;
+	cursor: pointer;
+`
+
+const Divider = styled.div`
+	height: 1px;
+	width: calc(100% - 24px);
+	margin: auto;
+	background-color: #e0e0e0;
+	margin-bottom: 28px;
+`
 
 export default OptionCreate;
