@@ -1,48 +1,48 @@
-import axios from "axios";
-import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import { enrollClass } from "../../features/authentication/userSlice";
+import axios from "axios"
+import React, { useCallback, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router"
+import { enrollClass } from "../../features/authentication/userSlice"
 
 const PageNotFound = () => {
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
 	const uid = useSelector((state) => state.userInfo?.userInfo?._id);
 
-	const checkValidUser = useCallback(() => {
-		axios
-			.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`, {
-				cid: "invalid",
-				uid: uid,
-			})
-			.then((res) => {
-				console.log("RES:", res.data);
-				if (!res.data.enrolled) {
-					console.log("case3");
-					navigate("/enroll");
-				} else {
-					axios
-						.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + res.data.cid)
-						.then((res2) => {
-							dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType }));
-							if (res2.data.cType) {
-								console.log("case4");
-								navigate("/");
-							} else {
-								console.log("case5");
-								navigate("/qlist");
-							}
-						});
-				}
-			});
-	}, [dispatch, navigate, uid]);
+    const checkValidUser = useCallback(() => {
+		axios.post(`${process.env.REACT_APP_BACK_END}/auth/check/inclass`,{
+			cid: "invalid",
+			uid: uid
+		})
+		.then((res) => {
+			console.log("RES:", res.data)
+			if(!res.data.enrolled){
+                console.log("case3")
+                navigate('/enroll')
+            } else {
+                axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=`+res.data.cid)
+                    .then((res2) => {
+                        dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType}));
+                        if(res2.data.cType){
+                            console.log("case4")
+                            navigate('/'+res.data.cid)
+                        } else {
+                            console.log("case5")
+                            navigate('/'+res.data.cid+'/qlist')
+                        }
+                    })
+            }
+		})
+	},[dispatch, navigate, uid])
 
 	useEffect(() => {
 		checkValidUser();
 	}, [checkValidUser]);
+    
+    return(
+        <div>Page Not Found 404</div>
+    )
+}
 
-	return <div>Page Not Found 404</div>;
-};
-
-export default PageNotFound;
+export default PageNotFound

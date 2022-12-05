@@ -5,7 +5,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
 import Navbar from "./components/Navbar/Navbar";
 import Admin from "./pages/Admin/Admin";
-import Create from "./pages/Create/Create";
 import Enroll from "./pages/Enroll/Enroll";
 import Kakao from "./pages/Kakao/Kakao";
 import Login from "./pages/Login/Login";
@@ -35,18 +34,20 @@ function App() {
 			<Main>
 				<ScrollView>
 					<Routes>
-						{cType && <Route path="/" element={<QuestionListOption classType={cType} />} />}
-						<Route path="/qlist" element={<QuestionList classType={cType} />} />
+						{cType && <Route path="/:cid" element={<QuestionListOption classType={cType} />} />}
+						<Route path="/:cid/qlist" element={<QuestionList classType={cType} />} />
 						<Route path="/kakaologin" element={<Kakao classType={cType} />} />
-						<Route path="/question/:id" element={<Question classType={cType} />} />
-						<Route path="/create" element={<Create />} />
-						<Route path="/createstem" element={<StemCreate classType={cType} />} />
+						<Route path="/:cid/question/:id" element={<Question classType={cType} />} />
+						<Route path="/:cid/createstem" element={<StemCreate classType={cType} />} />
 						{cType && (
-							<Route path="/question/:id/create" element={<OptionCreate classType={cType} />} />
+							<Route
+								path="/:cid/question/:id/create"
+								element={<OptionCreate classType={cType} />}
+							/>
 						)}
 						<Route path="/login" element={<Login classType={cType} />} />
 						<Route path="/enroll" element={<Enroll classType={cType} />} />
-						<Route path="/mypage" element={<MyPage classType={cType} />} />
+						<Route path="/:cid/mypage" element={<MyPage classType={cType} />} />
 						{isAdmin && <Route path="/:cid/admin" element={<Admin classType={cType} />} />}
 						<Route path="*" element={<PageNotFound />} />
 					</Routes>

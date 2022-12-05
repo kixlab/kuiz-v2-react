@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
@@ -10,12 +10,16 @@ function Navbar(props) {
 	const isLoggedIn = useSelector((state) => state.userInfo.isLoggedIn);
 
 	const moveToCreateStem = useCallback(() => {
-		navigate("/createstem");
-	}, [navigate]);
+		navigate("/" + cid + "/createstem");
+	}, [cid, navigate]);
 
 	const moveToCreateOption = useCallback(() => {
-		navigate("/");
-	}, [navigate]);
+		navigate("/" + cid);
+	}, [cid, navigate]);
+
+	useEffect(() => {
+		console.log("login:", isLoggedIn ? "true" : "false");
+	}, [isLoggedIn]);
 
 	return (
 		<Container>
