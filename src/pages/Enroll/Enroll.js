@@ -27,10 +27,9 @@ const Enroll = (props) => {
 				const newInfo = { ...userInfo };
 				newInfo["classes"] = [res.data.cid];
 				dispatch(loginUser(newInfo));
-				navigate("/");
+				navigate("/" + res.data.cid);
 			});
 	};
-
 	return (
 		<div id="enroll">
 			<div id="introduction">Enter your class code:</div>

@@ -42,8 +42,8 @@ const OptionCreate = (props) => {
 		});
 	}, [navigate, qid]);
 
-	const proceedStep = useCallback(() => {
-		const visibleList = isAnswer ? ansList : disList;
+	const proceedStep = () => {
+		let visibleList = isAnswer ? ansList : disList;
 
 		if (visibleList.length > 0) {
 			setPageStat(false);
@@ -66,7 +66,7 @@ const OptionCreate = (props) => {
 					navigate("/");
 				});
 		}
-	},[ansList, cid, disList, isAnswer, keywords, navigate, option, qid, uid]);
+	};
 
 	const addToCluster = useCallback((id) => {
 		if (similarOptions.includes(id)) {

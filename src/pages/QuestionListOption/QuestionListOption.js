@@ -20,6 +20,11 @@ const QuestionListOption = (props) => {
 			.then((res) => {
 				if (res.data.inclass) {
 					axios.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + cid).then((res2) => {
+						// dispatch(enrollClass({ cid: cid, cType: res2.data.cType }));
+						// if (!res2.data.cType) {
+						// 	console.log("case2");
+						// 	navigate("/" + res.data.cid + "/qlist");
+						// }
 						getQuestionList(cid);
 					});
 				} else {
@@ -29,6 +34,15 @@ const QuestionListOption = (props) => {
 						axios
 							.get(`${process.env.REACT_APP_BACK_END}/auth/class/type?cid=` + res.data.cid)
 							.then((res2) => {
+								// dispatch(enrollClass({ cid: res.data.cid, cType: res2.data.cType }));
+								// if (res2.data.cType) {
+								// 	console.log("case4");
+								// 	navigate("/" + res.data.cid);
+								// } else {
+								// 	console.log("case5");
+								// 	navigate("/" + res.data.cid + "/qlist");
+								// }
+								// console.log("CIDtogetQ:", res.data.cid);
 								getQuestionList(res.data.cid);
 							});
 					}
@@ -52,7 +66,6 @@ const QuestionListOption = (props) => {
 
 	return (
 		<div id="question-list">
-
 			<div id="question-list-header">
 				<div> Question</div>
 				<div> # of Options</div>

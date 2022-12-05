@@ -141,8 +141,8 @@ function QstemEditor(props) {
 						},
 						similarOptions: [],
 					})
-					.then(() => {
-						navigate("/question/" + res.data.data + "/create");
+					.then((res2) => {
+						navigate("/" + cid + "/question/" + res.data.data + "/create");
 					});
 			});
 	};
