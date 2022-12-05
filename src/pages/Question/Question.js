@@ -12,6 +12,7 @@ const ObjectID = require("bson-objectid");
 
 const Question = (props) => {
 	const qid = useParams().id;
+	const cid = useParams().cid;
 	const [optionSet, setOptionSet] = useState([]);
 	const [options, setOptions] = useState([]);
 
