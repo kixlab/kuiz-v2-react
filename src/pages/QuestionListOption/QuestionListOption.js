@@ -48,7 +48,7 @@ const QuestionListOption = (props) => {
 					}
 				}
 			});
-	},[cid, navigate, uid]);
+	}, [cid, navigate, uid]);
 
 	const [questionList, setQuestionList] = useState([]);
 
@@ -75,7 +75,7 @@ const QuestionListOption = (props) => {
 				{questionList
 					.map((question, i) => (
 						<Link
-							to={"/question/" + question._id + "/create"}
+							to={"/" + cid + "/question/" + question._id + "/create"}
 							key={question._id}
 							style={{ textDecoration: "none", color: "#000000" }}>
 							<div id="question-list-wrapper">
