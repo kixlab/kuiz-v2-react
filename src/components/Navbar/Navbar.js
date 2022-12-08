@@ -31,7 +31,7 @@ function Navbar(props) {
 				<Menu>
 					<MenuButton onClick={moveToCreateStem}>Create Question</MenuButton>
 					<MenuButton onClick={moveToCreateOption}>Create Options</MenuButton>
-					<MenuButton onClick={() => navigate("/mypage")}>My Page</MenuButton>
+					<MenuButton onClick={() => navigate(`/${cid}/mypage`)}>My Page</MenuButton>
 				</Menu>
 			</>}
 		</Container>
