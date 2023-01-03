@@ -17,23 +17,28 @@ function Navbar(props) {
 		navigate("/" + cid);
 	}, [cid, navigate]);
 
+	const moveToSolveQuestion = useCallback(() => {
+		navigate("/" + cid + "/qlist");
+	}, [cid, navigate]);
+
 	useEffect(() => {
 		console.log("login:", isLoggedIn ? "true" : "false");
 	}, [isLoggedIn]);
 
 	return (
 		<Container>
-			<Logo onClick={(e) => navigate("/" + cid)}>
-				KUIZ
-			</Logo>
-			{isLoggedIn && <>
-				<ProfileImage src={profile} />
-				<Menu>
-					<MenuButton onClick={moveToCreateStem}>Create Question</MenuButton>
-					<MenuButton onClick={moveToCreateOption}>Create Options</MenuButton>
-					<MenuButton onClick={() => navigate(`/${cid}/mypage`)}>My Page</MenuButton>
-				</Menu>
-			</>}
+			<Logo onClick={(e) => navigate("/" + cid)}>KUIZ</Logo>
+			{isLoggedIn && (
+				<>
+					<ProfileImage src={profile} />
+					<Menu>
+						<MenuButton onClick={moveToCreateStem}>Create Question</MenuButton>
+						<MenuButton onClick={moveToCreateOption}>Create Options</MenuButton>
+						<MenuButton onClick={moveToSolveQuestion}>Solve Question</MenuButton>
+						<MenuButton onClick={() => navigate(`/${cid}/mypage`)}>My Page</MenuButton>
+					</Menu>
+				</>
+			)}
 		</Container>
 	);
 }
@@ -45,19 +50,19 @@ const Container = styled.div`
 	align-items: center;
 	box-shadow: rgb(0 0 0 / 25%) 0 4px 4px;
 	background: white;
-`
+`;
 
 const Menu = styled.div`
 	place-self: start;
 	display: grid;
 	width: 100%;
-`
+`;
 
 const Logo = styled.div`
 	font-size: 48px;
 	font-weight: 900;
 	text-align: center;
-`
+`;
 
 const MenuButton = styled.button`
 	border: none;
@@ -71,7 +76,7 @@ const MenuButton = styled.button`
 	&:hover {
 		background: #f5f5f5;
 	}
-`
+`;
 
 const ProfileImage = styled.img`
 	border-radius: 50%;
@@ -81,6 +86,6 @@ const ProfileImage = styled.img`
 	justify-self: center;
 	margin-top: 40px;
 	margin-bottom: 25px;
-`
+`;
 
 export default Navbar;

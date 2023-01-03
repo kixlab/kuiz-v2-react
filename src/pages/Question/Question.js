@@ -153,9 +153,12 @@ const Question = (props) => {
 					<div className="objective-container">
 						Learning Objective : {qinfo && qinfo.learning_objective}
 					</div>
-					<div>{qinfo.explanation}</div>
+					<div
+						dangerouslySetInnerHTML={{
+							__html: draftToHtml(JSON.parse(qinfo.explanation)),
+						}}></div>
 
-					<div className="section">
+					{/* <div className="section">
 						<div className="header">Review Other Options</div>
 						<div className="view-mode-wrapper" style={{ display: "flex" }}>
 							<div
@@ -200,10 +203,10 @@ const Question = (props) => {
 								})}
 							</div>
 						)}
-					</div>
+					</div> */}
 				</div>
 			) : (
-				<div id="question-explanation">
+				<div id="question-interactions">
 					<button id="hide-answer" onClick={() => checkAnswer()} disabled={!isSolved}>
 						Check Answer
 					</button>
@@ -211,9 +214,7 @@ const Question = (props) => {
 						Shuffle Answers
 					</button>
 
-					<button id="report-error" onClick={() => shuffleOptions()}>
-						Report Question Error
-					</button>
+					<button id="report-error">Report Question Error</button>
 				</div>
 			)}
 
