@@ -144,4 +144,27 @@
 
 		cursor: pointer;
 	}
+
+	#question-interactions {
+		display: flex;
+		button {
+			margin-right: 24px;
+			background: none;
+			border: none;
+			height: 48px;
+			width: 200px;
+			border: #3d73dd 2px solid;
+			color: #3d73dd;
+			font-weight: 500;
+			font-size: 14px;
+			border-radius: 8px;
+			cursor: pointer;
+
+			&:disabled {
+				border: rgb(191, 191, 191) 2px solid;
+				color: rgb(191, 191, 191);
+				cursor: default;
+			}
+		}
+	}
 }
